@@ -34,9 +34,9 @@
 // parameter of the ExecuteCloudScript API.
 // (https://api.playfab.com/Documentation/Client/method/ExecuteCloudScript)
 // "context" contains additional information when the Cloud Script function is called from a PlayStream action.
-//这是第二版本
 handlers.helloWorld = function (args, context) {
     
+
     // The pre-defined "currentPlayerId" variable is initialized to the PlayFab ID of the player logged-in on the game client. 
     // Cloud Script handles authenticating the player automatically.
     var message = "Hello " + currentPlayerId + "!";
@@ -48,7 +48,7 @@ handlers.helloWorld = function (args, context) {
     var inputValue = null;
     if (args && args.inputValue)
         inputValue = args.inputValue;
-    log.debug("helloWorld:", { input: args.inputValue });
+    log.debug("helloWorld: I See you and See??", { input: args.inputValue });
 
     // The value you return from a Cloud Script function is passed back 
     // to the game client in the ExecuteCloudScript API response, along with any log statements
