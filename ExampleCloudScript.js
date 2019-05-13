@@ -4,10 +4,12 @@ handlers.AddFriend = function (args, context) {
         return { Create: false, id: 102 };
     }
     server.AddFriend(args);
+    /*
     server.AddFriend({
-        FriendPlayFabId: currentPlayerId,
-        PlayFabId: args.FriendPlayFabId
+        FriendPlayFabId:currentPlayerId,
+        PlayFabId:args.FriendPlayFabId
     });
+*/
     return { Create: true, id: 102 };
 };
 var AddFriendResult = /** @class */ (function () {
