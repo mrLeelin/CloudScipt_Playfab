@@ -1,0 +1,15 @@
+
+# Sublime text 3 project file
+*.sublime-project
+*.sublime-workspace
+
+Bats/
+Scripts/
+Ts/
+TsToJs.bat
+.vscode/
+
+# Excel temporary
+~$*.xls*
+
+
