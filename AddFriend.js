@@ -17,7 +17,7 @@ handlers.AddFriend = function (args, context) {
                 continue;
             }
             if (info.FriendPlayFabId == args.FriendPlayFabId) {
-                return { id: 102, Create: false, ErrorCode: 101, FriendId: "0" };
+                return { id: 1002, Create: false, ErrorCode: 101, FriendId: "0" };
             }
         }
     }
