@@ -11,9 +11,12 @@ set tsDIR=%DIR%%tsROOT%
 
 echo %tsDIR%
 
+echo Move  Start
+for /r %tsDIR%  %%i in (*.js) do (
 
-for /r %tsDIR%  %%i in (*.ts) do (
-    tsc %%i   
+    echo Create js script. Name: %%i
+    move %%i %DIR%
 )
-
+echo Move  Finished
 pause
+
