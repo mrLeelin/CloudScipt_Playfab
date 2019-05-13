@@ -1,10 +1,9 @@
 echo off & color 0A
 
-set tsROOT=Ts
-
+set tsROOT=\Ts
+rem cd ..
 rem Get Root folder path
-set DIR= %~dp0
-
+set DIR=%cd%
 
 rem Get ts folder path
 set tsDIR=%DIR%%tsROOT%

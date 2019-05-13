@@ -1,19 +1,24 @@
 echo off & color 0A
 
-set tsROOT=Ts
+set  BuildPath=Bats\TsToJs.bat
+set  MovePath=Bats\MoveJsToRoot.bat
 
 rem Get Root folder path
 set DIR= %~dp0
 
+echo Create Start
 
-rem Get ts folder path
-set tsDIR=%DIR%%tsROOT%
+call %DIR%%BuildPath%
 
-echo %tsDIR%
+echo Create Over
 
+echo  Move Start
+set DIR= %~dp0
+echo %DIR%%MovePath%
 
-for /r %tsDIR%  %%i in (*.ts) do (
-    tsc %%i   
-)
+call %DIR%%MovePath%
+
+echo   Move Over
+
 
 pause
