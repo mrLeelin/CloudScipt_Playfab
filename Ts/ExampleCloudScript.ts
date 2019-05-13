@@ -9,11 +9,12 @@ handlers.AddFriend=function (args:PlayFabServerModels.AddFriendRequest,context):
         return{ Create:false,id:102};
     }
     server.AddFriend(args)
+    /*
     server.AddFriend({
         FriendPlayFabId:currentPlayerId,
         PlayFabId:args.FriendPlayFabId
     });
-
+*/
     return {Create:true,id:102}
 }
 
