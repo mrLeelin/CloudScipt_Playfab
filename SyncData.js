@@ -10,23 +10,25 @@ function syncClicntToService(args) {
     }
     var keys = args["Keys"];
     var Values = args["Values"];
+    var entityId = args["EntityId"];
+    var entityType = args["EntityType"];
     var ret = {};
     for (var i = 0; i < count; i++) {
         var key = keys[i];
         var data = Values[i];
         var status_1 = data.Status;
         if (status_1 == 101) {
-            var sData = setObjects(key, data);
+            var sData = setObjects(entityId, entityType, key, data);
             ret[key] = sData;
         }
         else if (status_1 == 103) {
             //Update data
-            var sData = getObjects(key);
+            var sData = getObjects(entityId, entityType, key);
             if (data.TimeStamp != sData.TimeStamp) {
                 log.error("TimeStamp is not equal. C:{}.S{}", data.TimeStamp);
                 return;
             }
-            sData = setObjects(key, data);
+            sData = setObjects(entityId, entityType, key, data);
             ret[key] = sData;
         }
         else {
@@ -44,22 +46,21 @@ function GetTimeStamp() {
     var time = server.GetTime({});
     return 0;
 }
-function setObjects(key, value) {
-    var entityKey = GetEntityKey();
+function setObjects(id, type, key, value) {
+    //let entityKey:PlayFabAuthenticationModels.EntityKey= GetEntityKey();   
     value.Status = 104;
     value.TimeStamp = GetTimeStamp();
     var setObj = {
         ObjectName: key,
         DataObject: value,
     };
-    log.info("EntityKey:" + entityKey.Id);
-    var response = entity.SetObjects({ Entity: entityKey, Objects: [setObj] });
+    var response = entity.SetObjects({ Entity: { Id: id, Type: type }, Objects: [setObj] });
     return value;
 }
-function getObjects(key) {
-    var entityKey = GetEntityKey();
+function getObjects(id, type, key) {
+    //let entityKey:PlayFabAuthenticationModels.EntityKey= GetEntityKey();
     var response = entity.GetObjects({
-        Entity: entityKey,
+        Entity: { Id: id, Type: type },
     });
     var obj = response.Objects[key];
     if (obj == null) {

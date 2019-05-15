@@ -31,7 +31,9 @@ function syncClicntToService(args:any):ISyncClientToServiceResult{
 
     let keys:string[]=args["Keys"];
     let Values:any[]=args["Values"];
-  
+    let entityId:string=args["EntityId"];
+    let entityType:string=args["EntityType"];
+
     let ret:{[key:string]:IData;}={};
 
     for (let i = 0; i < count; i++) {      
@@ -39,17 +41,17 @@ function syncClicntToService(args:any):ISyncClientToServiceResult{
         let data:IData=Values[i];
         let status:number=data.Status;
         if(status==101){
-            let sData:IData=setObjects(key,data);
+            let sData:IData=setObjects(entityId,entityType, key,data);
             ret[key]=sData;
         }else if(status==103){
            //Update data
-           let sData:IData=getObjects(key);
+           let sData:IData=getObjects(entityId,entityType,key);
            if(data.TimeStamp!=sData.TimeStamp){
  
              log.error("TimeStamp is not equal. C:{}.S{}",data.TimeStamp);
              return ;
            }          
-           sData=setObjects(key,data);
+           sData=setObjects(entityId,entityType, key,data);
            ret[key]=sData;
         }else{
             log.error("you sync Data Status:{}",status);
@@ -63,6 +65,7 @@ function syncClicntToService(args:any):ISyncClientToServiceResult{
 function GetEntityKey():PlayFabAuthenticationModels.EntityKey{
 
     let result= entity.GetEntityToken({});
+    
     return result.Entity;
  } 
 
@@ -73,26 +76,25 @@ function GetEntityKey():PlayFabAuthenticationModels.EntityKey{
      return 0;
  }
 
- function setObjects(key:string,value:IData):IData{
-    let entityKey:PlayFabAuthenticationModels.EntityKey= GetEntityKey();   
+ function setObjects( id:string,type:string, key:string,value:IData):IData{
+    //let entityKey:PlayFabAuthenticationModels.EntityKey= GetEntityKey();   
     value.Status=104;
     value.TimeStamp=GetTimeStamp();
     let setObj:PlayFabDataModels.SetObject={
         ObjectName:key,
         DataObject:value,
     }
-    log.info("EntityKey:"+entityKey.Id);
-    let response:PlayFabDataModels.SetObjectsResponse=  entity.SetObjects({Entity:entityKey,Objects:[setObj]});
+    let response:PlayFabDataModels.SetObjectsResponse=  entity.SetObjects({Entity:{Id:id,Type:type},Objects:[setObj]});
     return value;
 }
 
 
-function getObjects(key:string):IData{
+function getObjects(id:string,type:string, key:string):IData{
 
-    let entityKey:PlayFabAuthenticationModels.EntityKey= GetEntityKey();
+    //let entityKey:PlayFabAuthenticationModels.EntityKey= GetEntityKey();
     
     let response:PlayFabDataModels.GetObjectsResponse= entity.GetObjects({
-        Entity:entityKey,
+        Entity:{Id:id,Type:type},
     })
     let obj:PlayFabDataModels.ObjectResult=response.Objects[key];
     if(obj==null)
