@@ -1,23 +1,48 @@
 
-import helper = require('./CSExtension');
 
 handlers.GetFriends=getFriends;
 handlers.AddFriend=addFriend;
 handlers.GetAccorePlayer=getLimitPlayer;
 
 
+  enum Func_Code{
+
+    SC_ADD_FRIEND=1002,
+    SC_GET_FRIEND=1003,
+    SC_GET_LIMITPLAYER=1004,
+}
+
+interface IAddFriendResult{
+    id:number;
+    Create:boolean;
+    //101 已经有此好友
+    ErrorCode:number;
+}
+
+interface IGetFriendsResult{
+    id:number;
+    Count:number;
+    Names:string[];
+    Levels:number[];
+    Images:string[];
+    IsGift:boolean[];
+    FriendIds:string[];
+}
+
+
+
 function getFriends(args:any,context):IGetFriendsResult {
     
     let result=server.GetFriendsList({PlayFabId:currentPlayerId});
     let ret:IGetFriendsResult;
-    ret.id=helper.Fun_Code.SC_GET_FRIEND;
+    ret.id=Func_Code.SC_GET_FRIEND;
     ret.Count=result.Friends.length;
 
     for (const f of result.Friends) {
         ret.Names.push(f.TitleDisplayName);
-        ret.Levels.push(helper.CSExtension.GetPlayerLevel(f.FriendPlayFabId));
-        ret.Images.push(helper.CSExtension.GetPlayerImage(f.FriendPlayFabId));
-        ret.IsGift.push(helper.CSExtension.GetPlayerIsGift(currentPlayerId,f.FriendPlayFabId));
+        ret.Levels.push(GetPlayerLevel(f.FriendPlayFabId));
+        ret.Images.push(GetPlayerImage(f.FriendPlayFabId));
+        ret.IsGift.push(GetPlayerIsGift(currentPlayerId,f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
 
@@ -31,7 +56,7 @@ function addFriend(args:PlayFabServerModels.AddFriendRequest,context):IAddFriend
     if(isFriend(currentPlayerId,args.FriendPlayFabId)){
 
         return{
-            id:helper.Fun_Code.SC_ADD_FRIEND,
+            id:Func_Code.SC_ADD_FRIEND,
             Create:false,
             ErrorCode:101           
         };
@@ -45,7 +70,7 @@ function addFriend(args:PlayFabServerModels.AddFriendRequest,context):IAddFriend
     });
 
     return {
-        id:helper.Fun_Code.SC_ADD_FRIEND,
+        id:Func_Code.SC_ADD_FRIEND,
         Create:true,
         ErrorCode:0
     };
@@ -54,12 +79,12 @@ function addFriend(args:PlayFabServerModels.AddFriendRequest,context):IAddFriend
 
 function  getLimitPlayer(args:any,context):IGetFriendsResult{
 
-    let id:string= helper.CSExtension.GetGlobalTitleData("AllPlayersSegmentId");
+    let id:string= GetGlobalTitleData("AllPlayersSegmentId");
     
     let segmentRequest=server.GetPlayersInSegment({SegmentId:id});
 
     let ret:IGetFriendsResult;
-    ret.id=helper.Fun_Code.SC_GET_LIMITPLAYER;
+    ret.id=Func_Code.SC_GET_LIMITPLAYER;
     ret.Count=0;
     if(segmentRequest.PlayerProfiles.length<=0){       
         return ret;
@@ -68,9 +93,9 @@ function  getLimitPlayer(args:any,context):IGetFriendsResult{
 
     for (const p of segmentRequest.PlayerProfiles) {
         ret.FriendIds.push(p.PlayerId);
-        ret.Images.push(helper.CSExtension.GetPlayerImage(p.PlayerId));
+        ret.Images.push(GetPlayerImage(p.PlayerId));
         ret.Names.push(p.DisplayName);
-        ret.Levels.push(helper.CSExtension.GetPlayerLevel(p.PlayerId));
+        ret.Levels.push(GetPlayerLevel(p.PlayerId));
     }
     return ret;
 }
@@ -93,20 +118,33 @@ function isFriend(self:string,other:string):boolean {
 
 
 
-
-interface IAddFriendResult{
-    id:number;
-    Create:boolean;
-    //101 已经有此好友
-    ErrorCode:number;
+function GetGlobalTitleData(key:string) :string{
+    let keys:string[];
+    keys=[key];
+    let result= server.GetTitleInternalData({Keys:keys});
+    let ret:string;
+    for (const k in result.Data) {
+        if (result.Data.hasOwnProperty(k)) {
+            ret = result.Data[k];
+            break;
+        }
+    }
+    if(ret==""){
+        log.error("you get global title id is invaid .Id:"+key);
+    }
+    return ret;
 }
 
-interface IGetFriendsResult{
-    id:number;
-    Count:number;
-    Names:string[];
-    Levels:number[];
-    Images:string[];
-    IsGift:boolean[];
-    FriendIds:string[];
+function GetPlayerLevel(id:string):number{
+    //TODO
+    return 0;
 }
+
+function GetPlayerImage(id:string):string{
+    return "";
+}
+
+function GetPlayerIsGift(self:string,target:string):boolean{
+    return false;
+}
+
