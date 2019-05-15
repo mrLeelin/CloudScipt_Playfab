@@ -32,7 +32,7 @@ function syncClicntToService(args:any):ISyncClientToServiceResult{
     let keys:string[]=args["Keys"];
     let Values:any[]=args["Values"];
   
-    let ret:{[key:string]:IData};
+    let ret:{[key:string]:IData;}={};
 
     for (let i = 0; i < count; i++) {      
         let key:string=keys[i];
@@ -81,7 +81,7 @@ function GetEntityKey():PlayFabAuthenticationModels.EntityKey{
         ObjectName:key,
         DataObject:value,
     }
-    log.info("EntityKey:"+entityKey);
+    log.info("EntityKey:"+entityKey.Id);
     let response:PlayFabDataModels.SetObjectsResponse=  entity.SetObjects({Entity:entityKey,Objects:[setObj]});
     return value;
 }

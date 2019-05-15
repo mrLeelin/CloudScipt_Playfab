@@ -10,7 +10,7 @@ function syncClicntToService(args) {
     }
     var keys = args["Keys"];
     var Values = args["Values"];
-    var ret;
+    var ret = {};
     for (var i = 0; i < count; i++) {
         var key = keys[i];
         var data = Values[i];
@@ -52,7 +52,7 @@ function setObjects(key, value) {
         ObjectName: key,
         DataObject: value,
     };
-    log.info("EntityKey:" + entityKey);
+    log.info("EntityKey:" + entityKey.Id);
     var response = entity.SetObjects({ Entity: entityKey, Objects: [setObj] });
     return value;
 }
