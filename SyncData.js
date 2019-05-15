@@ -44,12 +44,8 @@ function GetEntityKey() {
 }
 function GetTimeStamp() {
     var time = server.GetTime({});
-    var d = new Date(time.Time);
-    log.info("Get Data :" + d.getDate());
-    log.info("Get Time:" + d.getTime());
-    log.info("Get UtcData" + d.getUTCDate());
-    var mt = d.getFullYear() + d.getMonth() + d.getDay() + d.getHours() + d.getMinutes() + d.getSeconds();
-    log.info("Get Mark time:" + mt);
+    var d = Date.parse(time.Time);
+    log.info("Get Mark time:" + d / 1000);
     return 0;
 }
 function setObjects(id, type, key, value) {
