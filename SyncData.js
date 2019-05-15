@@ -48,10 +48,10 @@ function setObjects(key, value) {
     var entityKey = GetEntityKey();
     value.Status = 104;
     value.TimeStamp = GetTimeStamp();
-    var setObj;
-    log.debug(key);
-    setObj.ObjectName = key;
-    setObj.DataObject = value;
+    var setObj = {
+        ObjectName: key,
+        DataObject: value,
+    };
     var response = entity.SetObjects({ Entity: entityKey, Objects: [setObj] });
     return value;
 }

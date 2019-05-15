@@ -77,10 +77,10 @@ function GetEntityKey():PlayFabAuthenticationModels.EntityKey{
     let entityKey:PlayFabAuthenticationModels.EntityKey= GetEntityKey();   
     value.Status=104;
     value.TimeStamp=GetTimeStamp();
-    let setObj:PlayFabDataModels.SetObject;
-    log.debug(key);
-    setObj.ObjectName=key;
-    setObj.DataObject=value;
+    let setObj:PlayFabDataModels.SetObject={
+        ObjectName:key,
+        DataObject:value,
+    }
     let response:PlayFabDataModels.SetObjectsResponse=  entity.SetObjects({Entity:entityKey,Objects:[setObj]});
     return value;
 }
