@@ -2,6 +2,8 @@
 
 handlers.SyncClientToService=syncClicntToService;
 
+const SYNC_VERSION:string="__SYNC_VERSION__"
+
 enum Func_Code{
     SC_SYNC_CLIENTTOSERVICE=1005,
 }
@@ -58,6 +60,12 @@ function syncClicntToService(args:any):ISyncClientToServiceResult{
             return;
         }
     }
+
+    server.UpdateUserInternalData({
+        PlayFabId:currentPlayerId,
+        Data:{SYNC_VERSION:GetTimeStamp().toString()}
+    })
+    
     return {id:Func_Code.SC_SYNC_CLIENTTOSERVICE,Datas:ret};
 }
 
@@ -71,12 +79,9 @@ function GetEntityKey():PlayFabAuthenticationModels.EntityKey{
 
  function GetTimeStamp():number{
 
-   let time:PlayFabServerModels.GetTimeResult= server.GetTime({});
-   
+   let time:PlayFabServerModels.GetTimeResult= server.GetTime({});  
    let d:number= Date.parse(time.Time);
-   
-   log.info("Get Mark time:"+d/1000);
-     return 0;
+     return d;
  }
 
  function setObjects( id:string,type:string, key:string,value:IData):IData{
