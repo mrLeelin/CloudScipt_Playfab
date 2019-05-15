@@ -16,7 +16,6 @@ function syncClicntToService(args) {
         var data = Values[i];
         var status_1 = data.Status;
         if (status_1 == 101) {
-            log.debug("Cur {}...Key .+" + key, key);
             var sData = setObjects(key, data);
             ret[key] = sData;
         }
@@ -50,8 +49,10 @@ function setObjects(key, value) {
     value.Status = 104;
     value.TimeStamp = GetTimeStamp();
     var setObj;
+    log.debug(key);
     setObj.ObjectName = key;
     setObj.DataObject = value;
+    var response = entity.SetObjects({ Entity: entityKey, Objects: [setObj] });
     return value;
 }
 function getObjects(key) {

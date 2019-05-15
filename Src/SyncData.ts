@@ -39,7 +39,6 @@ function syncClicntToService(args:any):ISyncClientToServiceResult{
         let data:IData=Values[i];
         let status:number=data.Status;
         if(status==101){
-            log.debug("Cur {}...Key .+"+key,key);
             let sData:IData=setObjects(key,data);
             ret[key]=sData;
         }else if(status==103){
@@ -79,8 +78,10 @@ function GetEntityKey():PlayFabAuthenticationModels.EntityKey{
     value.Status=104;
     value.TimeStamp=GetTimeStamp();
     let setObj:PlayFabDataModels.SetObject;
+    log.debug(key);
     setObj.ObjectName=key;
     setObj.DataObject=value;
+    let response:PlayFabDataModels.SetObjectsResponse=  entity.SetObjects({Entity:entityKey,Objects:[setObj]});
     return value;
 }
 
