@@ -52,6 +52,7 @@ function setObjects(key, value) {
         ObjectName: key,
         DataObject: value,
     };
+    log.info("EntityKey:" + entityKey);
     var response = entity.SetObjects({ Entity: entityKey, Objects: [setObj] });
     return value;
 }
