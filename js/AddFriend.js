@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var helper = require("./CSExtension");
 handlers.AddFriend = function (args, context) {
     args.PlayFabId = currentPlayerId;
