@@ -48,6 +48,8 @@ function GetTimeStamp() {
     log.info("Get Data :" + d.getDate());
     log.info("Get Time:" + d.getTime());
     log.info("Get UtcData" + d.getUTCDate());
+    var mt = d.getFullYear() + d.getMonth() + d.getDay() + d.getHours() + d.getMinutes() + d.getSeconds();
+    log.info("Get Mark time:" + mt);
     return 0;
 }
 function setObjects(id, type, key, value) {
