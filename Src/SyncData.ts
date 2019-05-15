@@ -39,7 +39,7 @@ function syncClicntToService(args:any):ISyncClientToServiceResult{
         let data:IData=Values[i];
         let status:number=data.Status;
         if(status==101){
-            //New data
+            log.debug("Cur {}...Key .+"+key,key);
             let sData:IData=setObjects(key,data);
             ret[key]=sData;
         }else if(status==103){

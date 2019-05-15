@@ -16,7 +16,7 @@ function syncClicntToService(args) {
         var data = Values[i];
         var status_1 = data.Status;
         if (status_1 == 101) {
-            //New data
+            log.debug("Cur {}...Key .+" + key, key);
             var sData = setObjects(key, data);
             ret[key] = sData;
         }
