@@ -72,7 +72,10 @@ function GetEntityKey():PlayFabAuthenticationModels.EntityKey{
  function GetTimeStamp():number{
 
    let time:PlayFabServerModels.GetTimeResult= server.GetTime({});
-   
+   let d:Date= new Date(time.Time);
+   log.info("Get Data :"+d.getDate());
+   log.info("Get Time:"+d.getTime());
+   log.info("Get UtcData"+d.getUTCDate());
      return 0;
  }
 
