@@ -3,7 +3,7 @@
 handlers.SyncClientToService=syncClicntToService;
 
 enum Func_Code{
-    SC_SYNC_CLIENTTOSERVICE,
+    SC_SYNC_CLIENTTOSERVICE=1005,
 }
 
  interface IData{

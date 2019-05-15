@@ -1,7 +1,7 @@
 handlers.SyncClientToService = syncClicntToService;
 var Func_Code;
 (function (Func_Code) {
-    Func_Code[Func_Code["SC_SYNC_CLIENTTOSERVICE"] = 0] = "SC_SYNC_CLIENTTOSERVICE";
+    Func_Code[Func_Code["SC_SYNC_CLIENTTOSERVICE"] = 1005] = "SC_SYNC_CLIENTTOSERVICE";
 })(Func_Code || (Func_Code = {}));
 function syncClicntToService(args) {
     var count = args["Count"];
