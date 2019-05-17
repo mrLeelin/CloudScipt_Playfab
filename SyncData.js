@@ -38,10 +38,10 @@ var CurrencyType;
 })(CurrencyType || (CurrencyType = {}));
 function compareDataVersions(args) {
     var localVersion = args["Local"];
-    var sValue = server.GetPlayerStatistics({
+    var sValue = server.GetUserInternalData({
         PlayFabId: currentPlayerId,
-        StatisticNames: [SYNC_VERSION]
-    }).Statistics;
+        Keys: [SYNC_VERSION]
+    }).Data;
     if (!sValue.hasOwnProperty(SYNC_VERSION)) {
         log.info("you Remote is not key");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
@@ -49,7 +49,7 @@ function compareDataVersions(args) {
     /*
         let data: PlayFabServerModels.UserDataRecord = result.Data[SYNC_VERSION];
         */
-    var remoteVersion = sValue[0].Value;
+    var remoteVersion = parseInt(sValue[SYNC_VERSION].Value);
     if (remoteVersion <= 0) {
         log.error("you not get remote Version");
         return null;

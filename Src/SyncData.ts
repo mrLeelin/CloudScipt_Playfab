@@ -81,12 +81,11 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
 
     let localVersion: number = args["Local"];
 
-    let sValue: PlayFabServerModels.StatisticValue[] = server.GetPlayerStatistics({
+    let sValue: {[key:string]: PlayFabServerModels.UserDataRecord}= server.GetUserInternalData({
         PlayFabId: currentPlayerId,
-        StatisticNames: [SYNC_VERSION]
-    }).Statistics;
+        Keys:[SYNC_VERSION]
+    }).Data;
 
-    
     if (!sValue.hasOwnProperty(SYNC_VERSION)) {
         log.info("you Remote is not key");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
@@ -94,7 +93,7 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
     /*
         let data: PlayFabServerModels.UserDataRecord = result.Data[SYNC_VERSION];
         */
-    let remoteVersion: number = sValue[0].Value;
+    let remoteVersion: number = parseInt(sValue[SYNC_VERSION].Value);
     if (remoteVersion <= 0) {
         log.error("you not get remote Version");
         return null;
