@@ -272,15 +272,16 @@ function setCurrencyData(clientToServer, data) {
     for (var i = 0; i < type.length; i++) {
         var t = type[i];
         changeType.push(t);
-        if (result.VirtualCurrency.hasOwnProperty(t.toString())) {
-            var number = result.VirtualCurrency[t.toString()];
+        var cName = CurrencyType[t].toString();
+        if (result.VirtualCurrency.hasOwnProperty(cName)) {
+            var number = result.VirtualCurrency[cName];
             var selfN = count[i];
             var n = selfN - number;
             if (n > 0) {
                 changeCount.push(server.AddUserVirtualCurrency({
                     PlayFabId: currentPlayerId,
                     Amount: n,
-                    VirtualCurrency: t.toString()
+                    VirtualCurrency: cName
                 }).Balance);
             }
             else {
@@ -288,7 +289,7 @@ function setCurrencyData(clientToServer, data) {
                 changeCount.push(server.SubtractUserVirtualCurrency({
                     PlayFabId: currentPlayerId,
                     Amount: n,
-                    VirtualCurrency: t.toString()
+                    VirtualCurrency: cName
                 }).Balance);
             }
         }
@@ -296,7 +297,7 @@ function setCurrencyData(clientToServer, data) {
             changeCount.push(server.AddUserVirtualCurrency({
                 PlayFabId: currentPlayerId,
                 Amount: count[i],
-                VirtualCurrency: t.toString()
+                VirtualCurrency: cName
             }).Balance);
         }
     }
