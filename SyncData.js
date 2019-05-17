@@ -122,7 +122,7 @@ function syncData(args) {
 function get(entityId, entityType, key) {
     switch (key) {
         case KEY_Level:
-            return getObjects(entityId, entityType, key);
+        //     return getObjects(entityId, entityType, key);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
@@ -141,7 +141,7 @@ function get(entityId, entityType, key) {
 function set(clientToServer, entityId, entityType, key, data) {
     switch (key) {
         case KEY_Level:
-            return setObjects(clientToServer, entityId, entityType, key, data);
+        // return setObjects(clientToServer, entityId, entityType, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
@@ -369,15 +369,31 @@ function getDiamonds() {
     return 0;
 }
 function getLevel() {
-    var entityKey = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo.TitlePlayerAccount;
-    log.info("Server EntityKey:" + entityKey.Id);
-    log.info("Server EntityType:" + entityKey.Type);
-    var data = getObjects(entityKey.Id, entityKey.Type, KEY_Level);
-    var sValue = JSON.parse(data.Progress);
+    /*
+    let entityKey:PlayFabDataModels.EntityKey=
+     server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo.TitleInfo.TitlePlayerAccount;
+     log.info("Server EntityKey:"+entityKey.Id);
+     log.info("Server EntityType:"+entityKey.Type);
+     
+     let data:IData=getObjects(entityKey.Id,entityKey.Type,KEY_Level);
+
+    let sValue:any= JSON.parse(data.Progress);
+ 
     if (!sValue.hasOwnProperty("Level")) {
         return 0;
     }
     return sValue["Level"];
+    */
+    var data = server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId,
+        Keys: [KEY_Level]
+    }).Data;
+    var dValue = JSON.parse(data[KEY_Level].Value);
+    var value = JSON.stringify(dValue.Progress);
+    if (!value.hasOwnProperty("Level")) {
+        return 0;
+    }
+    return value["Level"];
 }
 function getImage() {
     return server.GetPlayerProfile({ PlayFabId: currentPlayerId }).PlayerProfile.AvatarUrl;

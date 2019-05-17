@@ -61,7 +61,7 @@ interface ISyncClientToServiceResult {
     id: number;
     Datas: { [key: string]: IData };
     TimeStamp: number;
-    ClientToServer:boolean;
+    ClientToServer: boolean;
 }
 interface ICompareDataVersionsResult {
     id: number;
@@ -81,9 +81,9 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
 
     let localVersion: number = args["Local"];
 
-    let sValue: {[key:string]: PlayFabServerModels.UserDataRecord}= server.GetUserInternalData({
+    let sValue: { [key: string]: PlayFabServerModels.UserDataRecord } = server.GetUserInternalData({
         PlayFabId: currentPlayerId,
-        Keys:[SYNC_VERSION]
+        Keys: [SYNC_VERSION]
     }).Data;
 
     if (!sValue.hasOwnProperty(SYNC_VERSION)) {
@@ -164,12 +164,12 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         PlayFabId: currentPlayerId,
         Data: s
     });
-    return { 
+    return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
-        Datas: ret, 
+        Datas: ret,
         TimeStamp: tS,
-        ClientToServer:args.ClientToServer
-     };
+        ClientToServer: args.ClientToServer
+    };
 }
 
 
@@ -178,12 +178,12 @@ function get(entityId: string, entityType: string, key: string): IData {
 
     switch (key) {
         case KEY_Level:
-            return getObjects(entityId, entityType, key);
+        //     return getObjects(entityId, entityType, key);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
-        case KEY_SpecialGameData:       
+        case KEY_SpecialGameData:
         case KEY_ItemEffect:
             return getTitleData(key);
         case KEY_Currency:
@@ -199,12 +199,12 @@ function set(clientToServer: boolean, entityId: string, entityType: string, key:
 
     switch (key) {
         case KEY_Level:
-         return setObjects(clientToServer, entityId, entityType, key, data);
+        // return setObjects(clientToServer, entityId, entityType, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
-        case KEY_GeneralGameData:           
+        case KEY_GeneralGameData:
         case KEY_AchievementData:
-        case KEY_SpecialGameData:      
+        case KEY_SpecialGameData:
         case KEY_ItemEffect:
             return setTitleData(clientToServer, key, data);
         case KEY_Currency:
@@ -291,7 +291,7 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
     if (!clientToServer) {
         return getTitleData(key);
     }
-    let userData: { [key: string]: string } = {};  
+    let userData: { [key: string]: string } = {};
     data.Status = Data_Status.Sync_Data;
     userData[key] = JSON.stringify(data);
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
@@ -379,7 +379,7 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
                         VirtualCurrency: cName
                     }).Balance);
             }
-            else{
+            else {
                 // ==0
                 changeCount.push(0);
             }
@@ -406,7 +406,7 @@ function getAccountInfo(id: string, type: string): IData {
         Entity: { Id: id, Type: type }
     }).Profile;
 
-    let account:PlayFabServerModels.UserTitleInfo=server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo.TitleInfo;
+    let account: PlayFabServerModels.UserTitleInfo = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo;
 
     let info: { [key: string]: any } = {}
     info["playerID"] = currentPlayerId;
@@ -452,8 +452,8 @@ function setAccountInfo(clinetToService: boolean, id: string, type: string, data
 function getCoins(): number {
 
     let coin: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    let key:string=CurrencyType[CurrencyType.CO];
-    if (coin.hasOwnProperty(key)){
+    let key: string = CurrencyType[CurrencyType.CO];
+    if (coin.hasOwnProperty(key)) {
         return coin[key];
     }
     return 0;
@@ -461,7 +461,7 @@ function getCoins(): number {
 
 function getDiamonds(): number {
     let di: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    let key:string=CurrencyType[CurrencyType.DI];
+    let key: string = CurrencyType[CurrencyType.DI];
     if (di.hasOwnProperty(key)) {
         return di[key];
     }
@@ -470,6 +470,7 @@ function getDiamonds(): number {
 
 function getLevel(): number {
 
+    /*
     let entityKey:PlayFabDataModels.EntityKey= 
      server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo.TitleInfo.TitlePlayerAccount;
      log.info("Server EntityKey:"+entityKey.Id);
@@ -483,6 +484,20 @@ function getLevel(): number {
         return 0;
     }
     return sValue["Level"];
+    */
+
+    let data:{[key:string]:PlayFabServerModels.UserDataRecord}= server.GetUserReadOnlyData({
+        PlayFabId: currentPlayerId,
+        Keys:[KEY_Level]
+    }).Data;
+    
+    let dValue:IData= JSON.parse(data[KEY_Level].Value);
+    let value:any= JSON.stringify(dValue.Progress);
+    if(!value.hasOwnProperty("Level")){
+        return 0;
+    }
+
+    return value["Level"];
 }
 function getImage(): string {
 
