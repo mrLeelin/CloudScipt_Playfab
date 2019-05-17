@@ -95,9 +95,11 @@ function syncData(args) {
         }
         else if (status_1 == Data_Status.Update_Data) {
             var sData = get(entityId, entityType, key);
-            log.debug("TimeStamp . key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
-            if (data.TimeStamp != sData.TimeStamp) {
-                log.debug("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
+            if (sData != null) {
+                log.debug("TimeStamp . key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
+                if (data.TimeStamp != sData.TimeStamp) {
+                    log.debug("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
+                }
             }
             sData = set(clientToServer, entityId, entityType, key, data);
             ret[key] = sData;
