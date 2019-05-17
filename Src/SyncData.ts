@@ -177,13 +177,13 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
 function get(entityId: string, entityType: string, key: string): IData {
 
     switch (key) {
+        case KEY_Level:
+            return getObjects(entityId, entityType, key);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
-            //return getObjects(entityId, entityType, key);
         case KEY_AchievementData:
-        case KEY_SpecialGameData:
-        case KEY_Level:
+        case KEY_SpecialGameData:       
         case KEY_ItemEffect:
             return getTitleData(key);
         case KEY_Currency:
@@ -198,13 +198,13 @@ function set(clientToServer: boolean, entityId: string, entityType: string, key:
 
 
     switch (key) {
+        case KEY_Level:
+         return setObjects(clientToServer, entityId, entityType, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
-        case KEY_GeneralGameData:
-           // return setObjects(clientToServer, entityId, entityType, key, data);
+        case KEY_GeneralGameData:           
         case KEY_AchievementData:
-        case KEY_SpecialGameData:
-        case KEY_Level:
+        case KEY_SpecialGameData:      
         case KEY_ItemEffect:
             return setTitleData(clientToServer, key, data);
         case KEY_Currency:
@@ -406,14 +406,14 @@ function getAccountInfo(id: string, type: string): IData {
         Entity: { Id: id, Type: type }
     }).Profile;
 
-    let playerProfile: PlayFabServerModels.PlayerProfileModel = server.GetPlayerProfile({ PlayFabId: currentPlayerId }).PlayerProfile;
+    let account:PlayFabServerModels.UserTitleInfo=server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo.TitleInfo;
 
     let info: { [key: string]: any } = {}
     info["playerID"] = currentPlayerId;
     info["displayName"] = profile.DisplayName;
     info["avatarUrl"] = profile.AvatarUrl;
-    info["firstLoginTime"] = 0;
-    info["lastLoginTime"] = playerProfile.LastLogin;
+    info["firstLoginTime"] = account.FirstLogin;
+    info["lastLoginTime"] = account.LastLogin;
     info["email"] = "";
     info["identities"] = [];
     info["m_status"] = 0;
@@ -470,15 +470,19 @@ function getDiamonds(): number {
 
 function getLevel(): number {
 
-    let result:any= server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId,
-        Keys: [KEY_Level]
-    }).Data;
-    if (!result.hasOwnProperty(KEY_Level)) {
+    let entityKey:PlayFabDataModels.EntityKey= 
+     server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo.TitleInfo.TitlePlayerAccount;
+     log.info("Server EntityKey:"+entityKey.Id);
+     log.info("Server EntityType:"+entityKey.Type);
+     
+     let data:IData=getObjects(entityKey.Id,entityKey.Type,KEY_Level);
+
+    let sValue:any= JSON.parse(data.Progress);
+ 
+    if (!sValue.hasOwnProperty("Level")) {
         return 0;
     }
-    let json: any = JSON.parse(result[KEY_Level].Value);
-    return json["Level"];
+    return sValue["Level"];
 }
 function getImage(): string {
 

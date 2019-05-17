@@ -121,13 +121,13 @@ function syncData(args) {
 }
 function get(entityId, entityType, key) {
     switch (key) {
+        case KEY_Level:
+            return getObjects(entityId, entityType, key);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
-        //return getObjects(entityId, entityType, key);
         case KEY_AchievementData:
         case KEY_SpecialGameData:
-        case KEY_Level:
         case KEY_ItemEffect:
             return getTitleData(key);
         case KEY_Currency:
@@ -140,13 +140,13 @@ function get(entityId, entityType, key) {
 }
 function set(clientToServer, entityId, entityType, key, data) {
     switch (key) {
+        case KEY_Level:
+            return setObjects(clientToServer, entityId, entityType, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
-        // return setObjects(clientToServer, entityId, entityType, key, data);
         case KEY_AchievementData:
         case KEY_SpecialGameData:
-        case KEY_Level:
         case KEY_ItemEffect:
             return setTitleData(clientToServer, key, data);
         case KEY_Currency:
@@ -319,13 +319,13 @@ function getAccountInfo(id, type) {
     var profile = entity.GetProfile({
         Entity: { Id: id, Type: type }
     }).Profile;
-    var playerProfile = server.GetPlayerProfile({ PlayFabId: currentPlayerId }).PlayerProfile;
+    var account = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo;
     var info = {};
     info["playerID"] = currentPlayerId;
     info["displayName"] = profile.DisplayName;
     info["avatarUrl"] = profile.AvatarUrl;
-    info["firstLoginTime"] = 0;
-    info["lastLoginTime"] = playerProfile.LastLogin;
+    info["firstLoginTime"] = account.FirstLogin;
+    info["lastLoginTime"] = account.LastLogin;
     info["email"] = "";
     info["identities"] = [];
     info["m_status"] = 0;
@@ -369,15 +369,15 @@ function getDiamonds() {
     return 0;
 }
 function getLevel() {
-    var result = server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId,
-        Keys: [KEY_Level]
-    }).Data;
-    if (!result.hasOwnProperty(KEY_Level)) {
+    var entityKey = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo.TitlePlayerAccount;
+    log.info("Server EntityKey:" + entityKey.Id);
+    log.info("Server EntityType:" + entityKey.Type);
+    var data = getObjects(entityKey.Id, entityKey.Type, KEY_Level);
+    var sValue = JSON.parse(data.Progress);
+    if (!sValue.hasOwnProperty("Level")) {
         return 0;
     }
-    var json = JSON.parse(result[KEY_Level].Value);
-    return json["Level"];
+    return sValue["Level"];
 }
 function getImage() {
     return server.GetPlayerProfile({ PlayFabId: currentPlayerId }).PlayerProfile.AvatarUrl;
