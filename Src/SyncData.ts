@@ -160,13 +160,13 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     }
     log.info("Sync Successful");
     let tS: number = GetTimeStamp();
-    let s:{[ket:string]:string}={};
-    s[SYNC_VERSION]=tS.toString();
-        
-    
+    let s: { [ket: string]: string } = {};
+    s[SYNC_VERSION] = tS.toString();
+
+
     server.UpdateUserInternalData({
         PlayFabId: currentPlayerId,
-        Data:s    
+        Data: s
     });
     return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
 }
@@ -290,8 +290,8 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
     if (!clientToServer) {
         return getTitleData(key);
     }
-    let userData:{[key:string]:string}={};
-    userData[key]=JSON.stringify(data);
+    let userData: { [key: string]: string } = {};
+    userData[key] = JSON.stringify(data);
     data.Status = Data_Status.Sync_Data;
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
@@ -337,7 +337,6 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
 
     let cR: { [key: string]: any } = JSON.parse(data.Progress);
     if (!cR.hasOwnProperty("cts") || !cR.hasOwnProperty("quatity")) {
-
         log.error("you currency not 'cts' or 'quatity' property");
         return null;
     }
@@ -352,10 +351,10 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
     let changeType: CurrencyType[] = [];
     let changeCount: number[] = [];
     for (let i = 0; i < type.length; i++) {
-        let t: CurrencyType =  type[i];
+        let t: CurrencyType = type[i];
         changeType.push(t);
-        let cName:string=CurrencyType[t].toString();
-        
+        let cName: string = CurrencyType[t].toString();
+
         if (result.VirtualCurrency.hasOwnProperty(cName)) {
 
             let number: number = result.VirtualCurrency[cName];
@@ -370,7 +369,7 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
                     VirtualCurrency: cName
                 }).Balance);
 
-            } else if(n<0){
+            } else if (n < 0) {
                 n = Math.abs(n);
                 changeCount.push(
                     server.SubtractUserVirtualCurrency({
@@ -479,9 +478,9 @@ function getImage(): string {
     return server.GetPlayerProfile({ PlayFabId: currentPlayerId }).PlayerProfile.AvatarUrl;
 }
 
-function rmStrUnderLine(str:string):string{
+function rmStrUnderLine(str: string): string {
 
-    let strs:string[]=str.split('_');
-    
+    let strs: string[] = str.split('_');
+
     return strs.join("");
 }
