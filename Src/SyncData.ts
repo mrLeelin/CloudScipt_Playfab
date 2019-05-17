@@ -293,7 +293,9 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
         return getTitleData(key);
     }
 
-    log.info("Title Data Key:"+key);
+     log.info("Title Data Key:"+key);
+     key= key.replace('_',"");
+     log.info("Change  Title Data Key:"+key);
     data.Status = Data_Status.Sync_Data;
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,

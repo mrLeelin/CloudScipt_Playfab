@@ -227,6 +227,8 @@ function setTitleData(clientToServer, key, data) {
         return getTitleData(key);
     }
     log.info("Title Data Key:" + key);
+    key = key.replace('_', "");
+    log.info("Change  Title Data Key:" + key);
     data.Status = Data_Status.Sync_Data;
     var result = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
