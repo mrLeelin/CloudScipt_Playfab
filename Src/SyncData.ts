@@ -290,9 +290,9 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
     if (!clientToServer) {
         return getTitleData(key);
     }
-    let userData: { [key: string]: string } = {};
-    userData[key] = JSON.stringify(data);
+    let userData: { [key: string]: string } = {};  
     data.Status = Data_Status.Sync_Data;
+    userData[key] = JSON.stringify(data);
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Data: userData
@@ -353,7 +353,6 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
     for (let i = 0; i < type.length; i++) {
         let t: CurrencyType = type[i];
         changeType.push(t);
-        changeCount[i]=0;
         let cName: string = CurrencyType[t].toString();
 
         if (result.VirtualCurrency.hasOwnProperty(cName)) {
@@ -378,6 +377,10 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
                         Amount: n,
                         VirtualCurrency: cName
                     }).Balance);
+            }
+            else{
+                // ==0
+                changeCount.push(0);
             }
         } else {
             changeCount.push(

@@ -223,8 +223,8 @@ function setTitleData(clientToServer, key, data) {
         return getTitleData(key);
     }
     var userData = {};
-    userData[key] = JSON.stringify(data);
     data.Status = Data_Status.Sync_Data;
+    userData[key] = JSON.stringify(data);
     var result = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Data: userData
@@ -274,7 +274,6 @@ function setCurrencyData(clientToServer, data) {
     for (var i = 0; i < type.length; i++) {
         var t = type[i];
         changeType.push(t);
-        changeCount[i] = 0;
         var cName = CurrencyType[t].toString();
         if (result.VirtualCurrency.hasOwnProperty(cName)) {
             var number = result.VirtualCurrency[cName];
@@ -294,6 +293,10 @@ function setCurrencyData(clientToServer, data) {
                     Amount: n,
                     VirtualCurrency: cName
                 }).Balance);
+            }
+            else {
+                // ==0
+                changeCount.push(0);
             }
         }
         else {
