@@ -178,7 +178,7 @@ function get(entityId: string, entityType: string, key: string): IData {
 
     switch (key) {
         case KEY_Level:
-        //     return getObjects(entityId, entityType, key);
+            return getObjects(entityId, entityType, key);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
@@ -199,7 +199,7 @@ function set(clientToServer: boolean, entityId: string, entityType: string, key:
 
     switch (key) {
         case KEY_Level:
-        // return setObjects(clientToServer, entityId, entityType, key, data);
+           return setObjects(clientToServer, entityId, entityType, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
@@ -470,7 +470,7 @@ function getDiamonds(): number {
 
 function getLevel(): number {
 
-    /*
+    
     let entityKey:PlayFabDataModels.EntityKey= 
      server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo.TitleInfo.TitlePlayerAccount;
      log.info("Server EntityKey:"+entityKey.Id);
@@ -484,8 +484,9 @@ function getLevel(): number {
         return 0;
     }
     return sValue["Level"];
-    */
+    
 
+    /*
     let data:{[key:string]:PlayFabServerModels.UserDataRecord}= server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Keys:[KEY_Level]
@@ -498,6 +499,7 @@ function getLevel(): number {
     }
 
     return value["Level"];
+    */
 }
 function getImage(): string {
 
