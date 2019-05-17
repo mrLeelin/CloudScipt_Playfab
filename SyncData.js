@@ -96,7 +96,6 @@ function syncData(args) {
         else if (status_1 == Data_Status.Update_Data) {
             var sData = get(entityId, entityType, key);
             if (sData != null) {
-                log.debug("TimeStamp . key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 if (data.TimeStamp != sData.TimeStamp) {
                     log.debug("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
@@ -223,7 +222,6 @@ function setTitleData(clientToServer, key, data) {
     if (!clientToServer) {
         return getTitleData(key);
     }
-    log.info("Title Data Key:" + key);
     var userData = {};
     userData[key] = JSON.stringify(data);
     data.Status = Data_Status.Sync_Data;

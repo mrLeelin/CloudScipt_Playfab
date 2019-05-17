@@ -147,7 +147,6 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         } else if (status == Data_Status.Update_Data) {
             let sData: IData = get(entityId, entityType, key);
             if (sData != null) {
-                log.debug("TimeStamp . key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 if (data.TimeStamp != sData.TimeStamp) {
                     log.debug("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
@@ -291,9 +290,6 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
     if (!clientToServer) {
         return getTitleData(key);
     }
-
-  log.info("Title Data Key:"+key);
-
     let userData:{[key:string]:string}={};
     userData[key]=JSON.stringify(data);
     data.Status = Data_Status.Sync_Data;
