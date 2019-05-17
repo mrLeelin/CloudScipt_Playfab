@@ -111,14 +111,11 @@ function syncData(args) {
     }
     log.info("Sync Successful");
     var tS = GetTimeStamp();
-    var s = {
-        Value: tS,
-        StatisticName: rmStrUnderLine(SYNC_VERSION),
-    };
-    server.UpdatePlayerStatistics({
+    var s = {};
+    s[SYNC_VERSION] = tS.toString();
+    server.UpdateUserInternalData({
         PlayFabId: currentPlayerId,
-        ForceUpdate: true,
-        Statistics: [s],
+        Data: s
     });
     return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
 }

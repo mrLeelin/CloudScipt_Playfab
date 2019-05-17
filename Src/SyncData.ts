@@ -161,14 +161,13 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     }
     log.info("Sync Successful");
     let tS: number = GetTimeStamp();
-    let s:PlayFabServerModels.StatisticUpdate={
-        Value:tS,
-        StatisticName:rmStrUnderLine(SYNC_VERSION),
-    };
-    server.UpdatePlayerStatistics({
+    let s:{[ket:string]:string}={};
+    s[SYNC_VERSION]=tS.toString();
+        
+    
+    server.UpdateUserInternalData({
         PlayFabId: currentPlayerId,
-        ForceUpdate: true,
-        Statistics: [s],
+        Data:s    
     });
     return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
 }
