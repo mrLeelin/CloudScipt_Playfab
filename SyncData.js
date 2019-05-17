@@ -42,10 +42,6 @@ function compareDataVersions(args) {
         PlayFabId: currentPlayerId,
         StatisticNames: [SYNC_VERSION]
     }).Statistics;
-    if (sValue == null || sValue.length != 1) {
-        log.info("you Remote Version  is none");
-        return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
-    }
     if (!sValue.hasOwnProperty(SYNC_VERSION)) {
         log.info("you Remote is not key");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
