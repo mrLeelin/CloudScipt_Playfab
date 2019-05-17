@@ -452,27 +452,29 @@ function setAccountInfo(clinetToService: boolean, id: string, type: string, data
 function getCoins(): number {
 
     let coin: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    if (coin.hasOwnProperty("Co")) {
-        return coin["Co"];
+    let key:string=CurrencyType[CurrencyType.CO];
+    if (coin.hasOwnProperty(key)){
+        return coin[key];
     }
     return 0;
 }
 
 function getDiamonds(): number {
     let di: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    if (di.hasOwnProperty("Di")) {
-        return di["Di"];
+    let key:string=CurrencyType[CurrencyType.DI];
+    if (di.hasOwnProperty(key)) {
+        return di[key];
     }
     return 0;
 }
 
 function getLevel(): number {
 
-    let result: { [key: string]: PlayFabServerModels.UserDataRecord }; server.GetUserReadOnlyData({
+    let result:any= server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Keys: [KEY_Level]
     }).Data;
-    if (result == null) {
+    if (!result.hasOwnProperty(KEY_Level)) {
         return 0;
     }
     let json: any = JSON.parse(result[KEY_Level].Value);

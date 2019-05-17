@@ -354,25 +354,26 @@ function setAccountInfo(clinetToService, id, type, data) {
 }
 function getCoins() {
     var coin = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    if (coin.hasOwnProperty("Co")) {
-        return coin["Co"];
+    var key = CurrencyType[CurrencyType.CO];
+    if (coin.hasOwnProperty(key)) {
+        return coin[key];
     }
     return 0;
 }
 function getDiamonds() {
     var di = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    if (di.hasOwnProperty("Di")) {
-        return di["Di"];
+    var key = CurrencyType[CurrencyType.DI];
+    if (di.hasOwnProperty(key)) {
+        return di[key];
     }
     return 0;
 }
 function getLevel() {
-    var result;
-    server.GetUserReadOnlyData({
+    var result = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Keys: [KEY_Level]
     }).Data;
-    if (result == null) {
+    if (!result.hasOwnProperty(KEY_Level)) {
         return 0;
     }
     var json = JSON.parse(result[KEY_Level].Value);
