@@ -128,7 +128,7 @@ function get(entityId, entityType, key) {
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
-            return getObjects(entityId, entityType, key);
+        //return getObjects(entityId, entityType, key);
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_Level:
@@ -147,7 +147,7 @@ function set(clientToServer, entityId, entityType, key, data) {
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
-            return setObjects(clientToServer, entityId, entityType, key, data);
+        // return setObjects(clientToServer, entityId, entityType, key, data);
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_Level:
