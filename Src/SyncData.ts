@@ -4,6 +4,7 @@ handlers.SyncData = syncData;
 handlers.CompareDataVersions = compareDataVersions;
 
 const SYNC_VERSION: string = "__SYNC_VERSION__"
+const TIME_STAMP:string="__TIME_STAMP__";
 
 const KEY_GeneralGameData: string = "__GeneralGeneralGameManagerVM__";
 const KEY_QuestData: string = "__QuestManager__";
@@ -187,9 +188,9 @@ function get(entityId: string, entityType: string, key: string): IData {
         case KEY_ItemEffect:
             return getTitleData(key);
         case KEY_Currency:
-            return getCurrencyData();
+            return getCurrencyData(key);
         case KEY_Account:
-            return getAccountInfo(entityId, entityType);
+            return getAccountInfo(entityId, entityType,key);
         default:
             return getTitleData(key);
     }
@@ -208,9 +209,9 @@ function set(clientToServer: boolean, entityId: string, entityType: string, key:
         case KEY_ItemEffect:
             return setTitleData(clientToServer, key, data);
         case KEY_Currency:
-            return setCurrencyData(clientToServer, data);
+            return setCurrencyData(clientToServer,key,data);
         case KEY_Account:
-            return setAccountInfo(clientToServer, entityId, entityType, data);
+            return setAccountInfo(clientToServer, entityId, entityType,key, data);
         default:
             return setTitleData(clientToServer, key, data);
     }
@@ -302,7 +303,7 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
     return data;
 }
 
-function getCurrencyData(): IData {
+function getCurrencyData(key:string): IData {
 
     let result: PlayFabServerModels.GetUserInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
     let cR: { [key: string]: any } = {}
@@ -319,19 +320,24 @@ function getCurrencyData(): IData {
     cR["cts"] = type;
     cR["quatity"] = count;
     cR["m_status"] = 0;
+
+    let t:PlayFabServerModels.UserDataRecord= server.GetUserInternalData({
+        PlayFabId:currentPlayerId,
+        Keys:[key+TIME_STAMP]
+    }).Data[key+TIME_STAMP];
     let data: IData = {
         Status: Data_Status.Sync_Data,
-        TimeStamp: 0,
+        TimeStamp: t==null?0:parseInt(t.Value),
         Progress: JSON.stringify(cR)
     };
     return data;
 
 }
 
-function setCurrencyData(clientToServer: boolean, data: IData): IData {
+function setCurrencyData(clientToServer: boolean,key:string, data: IData): IData {
 
     if (!clientToServer) {
-        return getCurrencyData();
+        return getCurrencyData(key);
     }
     data.Status = Data_Status.Sync_Data;
 
@@ -397,10 +403,18 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
     cR["m_status"] = 0;
     data.Progress = JSON.stringify(cR);
     data.TimeStamp = GetTimeStamp();
+
+    let s:{[key:string]:string}={}
+    s[key+TIME_STAMP]=data.TimeStamp.toString();
+    server.UpdateUserInternalData({
+        PlayFabId:currentPlayerId,
+        Data:s
+    });
+
     return data;
 }
 
-function getAccountInfo(id: string, type: string): IData {
+function getAccountInfo(id: string, type: string,key:string): IData {
 
     let profile: PlayFabProfilesModels.EntityProfileBody = entity.GetProfile({
         Entity: { Id: id, Type: type }
@@ -420,19 +434,23 @@ function getAccountInfo(id: string, type: string): IData {
     info["EntityId"] = id;
     info["EntityType"] = type;
 
+    let t:PlayFabServerModels.UserDataRecord= server.GetUserInternalData({
+        PlayFabId:currentPlayerId,
+        Keys:[key+TIME_STAMP]
+    }).Data[key+TIME_STAMP];
 
     let data: IData = {
-        TimeStamp: 0,
+        TimeStamp: t==null?0:parseInt(t.Value),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };
     return data;
 }
 
-function setAccountInfo(clinetToService: boolean, id: string, type: string, data: IData): IData {
+function setAccountInfo(clinetToService: boolean, id: string, type: string, key:string, data: IData): IData {
 
     if (!clinetToService) {
-        return getAccountInfo(id, type);
+        return getAccountInfo(id,type,key);
     }
     data.Status = Data_Status.Sync_Data;
     let info: { [key: string]: any } = JSON.parse(data.Progress);
@@ -444,6 +462,12 @@ function setAccountInfo(clinetToService: boolean, id: string, type: string, data
     //TODO  Set  Display Name
     data.TimeStamp = GetTimeStamp();
 
+    let s:{[key:string]:string}={}
+    s[key+TIME_STAMP]=data.TimeStamp.toString();
+    server.UpdateUserInternalData({
+        PlayFabId:currentPlayerId,
+        Data:s
+    });
     return data;
 
 }

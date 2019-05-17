@@ -1,6 +1,7 @@
 handlers.SyncData = syncData;
 handlers.CompareDataVersions = compareDataVersions;
 var SYNC_VERSION = "__SYNC_VERSION__";
+var TIME_STAMP = "__TIME_STAMP__";
 var KEY_GeneralGameData = "__GeneralGeneralGameManagerVM__";
 var KEY_QuestData = "__QuestManager__";
 var KEY_AchievementData = "__AchievementManagerVm__";
@@ -131,9 +132,9 @@ function get(entityId, entityType, key) {
         case KEY_ItemEffect:
             return getTitleData(key);
         case KEY_Currency:
-            return getCurrencyData();
+            return getCurrencyData(key);
         case KEY_Account:
-            return getAccountInfo(entityId, entityType);
+            return getAccountInfo(entityId, entityType, key);
         default:
             return getTitleData(key);
     }
@@ -150,9 +151,9 @@ function set(clientToServer, entityId, entityType, key, data) {
         case KEY_ItemEffect:
             return setTitleData(clientToServer, key, data);
         case KEY_Currency:
-            return setCurrencyData(clientToServer, data);
+            return setCurrencyData(clientToServer, key, data);
         case KEY_Account:
-            return setAccountInfo(clientToServer, entityId, entityType, data);
+            return setAccountInfo(clientToServer, entityId, entityType, key, data);
         default:
             return setTitleData(clientToServer, key, data);
     }
@@ -233,31 +234,35 @@ function setTitleData(clientToServer, key, data) {
     data.TimeStamp = result.DataVersion;
     return data;
 }
-function getCurrencyData() {
+function getCurrencyData(key) {
     var result = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var cR = {};
     var type = [];
     var count = [];
-    for (var key in result.VirtualCurrency) {
-        if (result.VirtualCurrency.hasOwnProperty(key)) {
-            var element = result.VirtualCurrency[key];
-            type.push(CurrencyType[key]);
+    for (var key_1 in result.VirtualCurrency) {
+        if (result.VirtualCurrency.hasOwnProperty(key_1)) {
+            var element = result.VirtualCurrency[key_1];
+            type.push(CurrencyType[key_1]);
             count.push(element);
         }
     }
     cR["cts"] = type;
     cR["quatity"] = count;
     cR["m_status"] = 0;
+    var t = server.GetUserInternalData({
+        PlayFabId: currentPlayerId,
+        Keys: [key + TIME_STAMP]
+    }).Data[key + TIME_STAMP];
     var data = {
         Status: Data_Status.Sync_Data,
-        TimeStamp: 0,
+        TimeStamp: t == null ? 0 : parseInt(t.Value),
         Progress: JSON.stringify(cR)
     };
     return data;
 }
-function setCurrencyData(clientToServer, data) {
+function setCurrencyData(clientToServer, key, data) {
     if (!clientToServer) {
-        return getCurrencyData();
+        return getCurrencyData(key);
     }
     data.Status = Data_Status.Sync_Data;
     var cR = JSON.parse(data.Progress);
@@ -313,9 +318,15 @@ function setCurrencyData(clientToServer, data) {
     cR["m_status"] = 0;
     data.Progress = JSON.stringify(cR);
     data.TimeStamp = GetTimeStamp();
+    var s = {};
+    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    server.UpdateUserInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
     return data;
 }
-function getAccountInfo(id, type) {
+function getAccountInfo(id, type, key) {
     var profile = entity.GetProfile({
         Entity: { Id: id, Type: type }
     }).Profile;
@@ -331,16 +342,20 @@ function getAccountInfo(id, type) {
     info["m_status"] = 0;
     info["EntityId"] = id;
     info["EntityType"] = type;
+    var t = server.GetUserInternalData({
+        PlayFabId: currentPlayerId,
+        Keys: [key + TIME_STAMP]
+    }).Data[key + TIME_STAMP];
     var data = {
-        TimeStamp: 0,
+        TimeStamp: t == null ? 0 : parseInt(t.Value),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };
     return data;
 }
-function setAccountInfo(clinetToService, id, type, data) {
+function setAccountInfo(clinetToService, id, type, key, data) {
     if (!clinetToService) {
-        return getAccountInfo(id, type);
+        return getAccountInfo(id, type, key);
     }
     data.Status = Data_Status.Sync_Data;
     var info = JSON.parse(data.Progress);
@@ -350,6 +365,12 @@ function setAccountInfo(clinetToService, id, type, data) {
     });
     //TODO  Set  Display Name
     data.TimeStamp = GetTimeStamp();
+    var s = {};
+    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    server.UpdateUserInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
     return data;
 }
 function getCoins() {
