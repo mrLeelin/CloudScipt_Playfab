@@ -28,6 +28,7 @@ enum Data_Status {
     Delete_Data = 102,
 }
 
+
 enum Server_Data_Status {
     None = 101,
     Equal = 102,
@@ -35,10 +36,10 @@ enum Server_Data_Status {
 }
 
 enum CurrencyType {
-    Co,
-    Di,
-    Ex,
-    En,
+    CO,
+    DI,
+    EX,
+    EN,
     Unkown
 }
 

@@ -30,10 +30,10 @@ var Server_Data_Status;
 })(Server_Data_Status || (Server_Data_Status = {}));
 var CurrencyType;
 (function (CurrencyType) {
-    CurrencyType[CurrencyType["Co"] = 0] = "Co";
-    CurrencyType[CurrencyType["Di"] = 1] = "Di";
-    CurrencyType[CurrencyType["Ex"] = 2] = "Ex";
-    CurrencyType[CurrencyType["En"] = 3] = "En";
+    CurrencyType[CurrencyType["CO"] = 0] = "CO";
+    CurrencyType[CurrencyType["DI"] = 1] = "DI";
+    CurrencyType[CurrencyType["EX"] = 2] = "EX";
+    CurrencyType[CurrencyType["EN"] = 3] = "EN";
     CurrencyType[CurrencyType["Unkown"] = 4] = "Unkown";
 })(CurrencyType || (CurrencyType = {}));
 function compareDataVersions(args) {
