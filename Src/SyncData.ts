@@ -145,6 +145,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
             ret[key] = sData;
         } else if (status == Data_Status.Update_Data) {
             let sData: IData = get(entityId, entityType, key);
+            log.debug("TimeStamp . key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
             if (data.TimeStamp != sData.TimeStamp) {
                 log.debug("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
             }
