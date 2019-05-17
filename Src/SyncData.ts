@@ -79,19 +79,24 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
 
     let localVersion: number = args["Local"];
 
-    let result: PlayFabServerModels.GetUserDataResult = server.GetUserInternalData({
-        PlayFabId: currentPlayerId,
-        Keys: [SYNC_VERSION],
-    });
-    if (result.Data == null) {
-        return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
-    }
-    if (!result.Data.hasOwnProperty(SYNC_VERSION)) {
-        return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
-    }
+   let sValue:PlayFabServerModels.StatisticValue[]=  server.GetPlayerStatistics({
+        PlayFabId:currentPlayerId,
+        StatisticNames:[SYNC_VERSION]
+    }).Statistics;
+   
 
+    if (sValue == null||sValue.length!=1) {
+        log.info("you Remote Version  is none");
+        return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
+    }
+    if (!sValue.hasOwnProperty(SYNC_VERSION)) {
+        log.info("you Remote is not key");
+        return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
+    }
+/*
     let data: PlayFabServerModels.UserDataRecord = result.Data[SYNC_VERSION];
-    let remoteVersion: number = parseInt(data.Value);
+    */
+    let remoteVersion: number = sValue[0].Value;
     if (remoteVersion <= 0) {
         log.error("you not get remote Version");
         return null;
@@ -152,10 +157,11 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     }
     log.info("Sync Successful");
     let tS: number = GetTimeStamp();
-    server.UpdateUserInternalData({
-        PlayFabId: currentPlayerId,
-        Data: { SYNC_VERSION: tS.toString() }
-    })
+    server.UpdatePlayerStatistics({
+        PlayFabId:currentPlayerId,
+        ForceUpdate:true,
+        Statistics:[{StatisticName:SYNC_VERSION,Value:tS}]
+    });
     return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
 }
 

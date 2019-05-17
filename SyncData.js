@@ -38,18 +38,22 @@ var CurrencyType;
 })(CurrencyType || (CurrencyType = {}));
 function compareDataVersions(args) {
     var localVersion = args["Local"];
-    var result = server.GetUserInternalData({
+    var sValue = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
-        Keys: [SYNC_VERSION],
-    });
-    if (result.Data == null) {
+        StatisticNames: [SYNC_VERSION]
+    }).Statistics;
+    if (sValue == null || sValue.length != 1) {
+        log.info("you Remote Version  is none");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
     }
-    if (!result.Data.hasOwnProperty(SYNC_VERSION)) {
+    if (!sValue.hasOwnProperty(SYNC_VERSION)) {
+        log.info("you Remote is not key");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
     }
-    var data = result.Data[SYNC_VERSION];
-    var remoteVersion = parseInt(data.Value);
+    /*
+        let data: PlayFabServerModels.UserDataRecord = result.Data[SYNC_VERSION];
+        */
+    var remoteVersion = sValue[0].Value;
     if (remoteVersion <= 0) {
         log.error("you not get remote Version");
         return null;
@@ -104,9 +108,10 @@ function syncData(args) {
     }
     log.info("Sync Successful");
     var tS = GetTimeStamp();
-    server.UpdateUserInternalData({
+    server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
-        Data: { SYNC_VERSION: tS.toString() }
+        ForceUpdate: true,
+        Statistics: [{ StatisticName: SYNC_VERSION, Value: tS }]
     });
     return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
 }
