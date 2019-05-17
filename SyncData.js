@@ -274,6 +274,7 @@ function setCurrencyData(clientToServer, data) {
     for (var i = 0; i < type.length; i++) {
         var t = type[i];
         changeType.push(t);
+        changeCount[i] = 0;
         var cName = CurrencyType[t].toString();
         if (result.VirtualCurrency.hasOwnProperty(cName)) {
             var number = result.VirtualCurrency[cName];

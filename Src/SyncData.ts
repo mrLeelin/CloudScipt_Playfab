@@ -353,6 +353,7 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
     for (let i = 0; i < type.length; i++) {
         let t: CurrencyType = type[i];
         changeType.push(t);
+        changeCount[i]=0;
         let cName: string = CurrencyType[t].toString();
 
         if (result.VirtualCurrency.hasOwnProperty(cName)) {
