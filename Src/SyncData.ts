@@ -61,6 +61,7 @@ interface ISyncClientToServiceResult {
     id: number;
     Datas: { [key: string]: IData };
     TimeStamp: number;
+    ClientToServer:boolean;
 }
 interface ICompareDataVersionsResult {
     id: number;
@@ -168,7 +169,12 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         PlayFabId: currentPlayerId,
         Data: s
     });
-    return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
+    return { 
+        id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
+        Datas: ret, 
+        TimeStamp: tS,
+        ClientToServer:args.ClientToServer
+     };
 }
 
 

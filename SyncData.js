@@ -116,7 +116,12 @@ function syncData(args) {
         PlayFabId: currentPlayerId,
         Data: s
     });
-    return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
+    return {
+        id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
+        Datas: ret,
+        TimeStamp: tS,
+        ClientToServer: args.ClientToServer
+    };
 }
 function get(entityId, entityType, key) {
     switch (key) {
