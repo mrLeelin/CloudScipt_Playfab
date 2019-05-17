@@ -163,7 +163,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     let tS: number = GetTimeStamp();
     let s:PlayFabServerModels.StatisticUpdate={
         Value:tS,
-        StatisticName:SYNC_VERSION,
+        StatisticName:rmStrUnderLine(SYNC_VERSION),
     };
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
@@ -294,7 +294,7 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
     }
 
      log.info("Title Data Key:"+key);
-     key= key.replace('_',"");
+     key= rmStrUnderLine(key);
      log.info("Change  Title Data Key:"+key);
     data.Status = Data_Status.Sync_Data;
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
@@ -483,4 +483,9 @@ function getImage(): string {
     return server.GetPlayerProfile({ PlayFabId: currentPlayerId }).PlayerProfile.AvatarUrl;
 }
 
+function rmStrUnderLine(str:string):string{
 
+    let strs:string[]=str.split('_');
+    
+    return strs.join("");
+}
