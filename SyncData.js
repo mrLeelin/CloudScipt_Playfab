@@ -227,12 +227,12 @@ function setTitleData(clientToServer, key, data) {
         return getTitleData(key);
     }
     log.info("Title Data Key:" + key);
-    key = rmStrUnderLine(key);
-    log.info("Change  Title Data Key:" + key);
+    var userData = {};
+    userData[key] = JSON.stringify(data);
     data.Status = Data_Status.Sync_Data;
     var result = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: { key: JSON.stringify(data) }
+        Data: userData
     });
     data.TimeStamp = result.DataVersion;
     return data;

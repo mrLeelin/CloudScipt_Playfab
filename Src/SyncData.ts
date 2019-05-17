@@ -293,13 +293,14 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
         return getTitleData(key);
     }
 
-     log.info("Title Data Key:"+key);
-     key= rmStrUnderLine(key);
-     log.info("Change  Title Data Key:"+key);
+  log.info("Title Data Key:"+key);
+
+    let userData:{[key:string]:string}={};
+    userData[key]=JSON.stringify(data);
     data.Status = Data_Status.Sync_Data;
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: { key:JSON.stringify(data) }
+        Data: userData
     });
     data.TimeStamp = result.DataVersion;
     return data;
