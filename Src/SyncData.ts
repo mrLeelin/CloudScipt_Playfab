@@ -367,7 +367,7 @@ function setCurrencyData(clientToServer: boolean, data: IData): IData {
                     VirtualCurrency: cName
                 }).Balance);
 
-            } else {
+            } else if(n<0){
                 n = Math.abs(n);
                 changeCount.push(
                     server.SubtractUserVirtualCurrency({
