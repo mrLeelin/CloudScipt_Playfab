@@ -111,10 +111,14 @@ function syncData(args) {
     }
     log.info("Sync Successful");
     var tS = GetTimeStamp();
+    var s = {
+        Value: tS,
+        StatisticName: SYNC_VERSION,
+    };
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         ForceUpdate: true,
-        Statistics: [{ StatisticName: SYNC_VERSION, Value: tS }]
+        Statistics: [s],
     });
     return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
 }
@@ -222,6 +226,7 @@ function setTitleData(clientToServer, key, data) {
     if (!clientToServer) {
         return getTitleData(key);
     }
+    log.info("Title Data Key:" + key);
     data.Status = Data_Status.Sync_Data;
     var result = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,

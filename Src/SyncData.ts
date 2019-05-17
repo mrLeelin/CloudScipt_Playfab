@@ -161,10 +161,14 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     }
     log.info("Sync Successful");
     let tS: number = GetTimeStamp();
+    let s:PlayFabServerModels.StatisticUpdate={
+        Value:tS,
+        StatisticName:SYNC_VERSION,
+    };
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         ForceUpdate: true,
-        Statistics: [{ StatisticName: SYNC_VERSION, Value: tS }]
+        Statistics: [s],
     });
     return { id: Func_Code.SC_SYNC_CLIENTTOSERVICE, Datas: ret, TimeStamp: tS };
 }
@@ -289,10 +293,11 @@ function setTitleData(clientToServer: boolean, key: string, data: IData): IData 
         return getTitleData(key);
     }
 
+    log.info("Title Data Key:"+key);
     data.Status = Data_Status.Sync_Data;
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: { key: JSON.stringify(data) }
+        Data: { key:JSON.stringify(data) }
     });
     data.TimeStamp = result.DataVersion;
     return data;
