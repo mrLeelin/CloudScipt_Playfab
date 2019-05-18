@@ -123,7 +123,7 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
 function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult {
 
     let count: number = args.Count;
-    if (count <= 0) {
+    if (args.ClientToServer&&count <= 0) {
         return;
     }
 
@@ -144,7 +144,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     if(!args.ClientToServer){
         let datas:{[key:string]:IData}=getDatasForCientTimeStamp(args.MaxClientTimeStamp,entityId,entityType);
         log.info("Server To Client Successful. ");
-        
+
         return {
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: datas,

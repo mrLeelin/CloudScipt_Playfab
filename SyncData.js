@@ -73,7 +73,7 @@ function compareDataVersions(args) {
 }
 function syncData(args) {
     var count = args.Count;
-    if (count <= 0) {
+    if (args.ClientToServer && count <= 0) {
         return;
     }
     var tS = GetTimeStamp();
