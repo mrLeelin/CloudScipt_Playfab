@@ -103,10 +103,8 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
     if (localVersion == remoteVersion) {
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.Equal };
     }
-
     let userInfo:PlayFabServerModels.UserAccountInfo = server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo;
-
-    log.info("Last Login.  :"+userInfo.TitleInfo.LastLogin);
+    log.info("Test Time:"+userInfo.TitleInfo.LastLogin+"  Tick:+"+new Date(userInfo.TitleInfo.LastLogin).getTime());
     return {
         id: Func_Code.SC_SYNC_COMPARE,
         TimeStamp: remoteVersion,
