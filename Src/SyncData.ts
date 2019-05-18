@@ -143,6 +143,8 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
 
     if(!args.ClientToServer){
         let datas:{[key:string]:IData}=getDatasForCientTimeStamp(args.MaxClientTimeStamp,entityId,entityType);
+        log.info("Server To Client Successful. ");
+        
         return {
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: datas,

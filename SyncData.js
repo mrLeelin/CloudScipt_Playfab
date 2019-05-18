@@ -89,6 +89,7 @@ function syncData(args) {
     var entityType = args.EntityType;
     if (!args.ClientToServer) {
         var datas = getDatasForCientTimeStamp(args.MaxClientTimeStamp, entityId, entityType);
+        log.info("Server To Client Successful. ");
         return {
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: datas,
