@@ -71,7 +71,7 @@ interface ICompareDataVersionsResult {
     DisplayName?: string;
     Level?: number;
     Image?: string;
-    LastLoginTime?: string;
+    LastLoginTime?: number;
     Status: Server_Data_Status;
     Coins?: number;
     Diamonds?: number;
@@ -104,12 +104,12 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.Equal };
     }
     let userInfo:PlayFabServerModels.UserAccountInfo = server.GetUserAccountInfo({PlayFabId:currentPlayerId}).UserInfo;
-    log.info("Test Time:"+userInfo.TitleInfo.LastLogin+"  Tick:+"+new Date(userInfo.TitleInfo.LastLogin).getTime());
+    
     return {
         id: Func_Code.SC_SYNC_COMPARE,
         TimeStamp: remoteVersion,
         DisplayName: userInfo.TitleInfo.DisplayName,
-        LastLoginTime: userInfo.TitleInfo.LastLogin,
+        LastLoginTime: new Date(userInfo.TitleInfo.LastLogin).getTime(),
         Status: Server_Data_Status.Unequal,
         Coins: getCoins(),
         Diamonds: getDiamonds(),
