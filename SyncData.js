@@ -58,12 +58,13 @@ function compareDataVersions(args) {
     if (localVersion == remoteVersion) {
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.Equal };
     }
-    var profileResult = server.GetPlayerProfile({ PlayFabId: currentPlayerId });
+    var userInfo = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo;
+    log.info("Last Login.  :" + userInfo.TitleInfo.LastLogin);
     return {
         id: Func_Code.SC_SYNC_COMPARE,
         TimeStamp: remoteVersion,
-        DisplayName: profileResult.PlayerProfile.DisplayName,
-        LastLoginTime: profileResult.PlayerProfile.LastLogin,
+        DisplayName: userInfo.TitleInfo.DisplayName,
+        LastLoginTime: userInfo.TitleInfo.LastLogin,
         Status: Server_Data_Status.Unequal,
         Coins: getCoins(),
         Diamonds: getDiamonds(),
@@ -74,7 +75,12 @@ function compareDataVersions(args) {
 function syncData(args) {
     var count = args.Count;
     if (args.ClientToServer && count <= 0) {
-        return;
+        return {
+            id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
+            Datas: null,
+            TimeStamp: 0,
+            ClientToServer: args.ClientToServer
+        };
     }
     var tS = GetTimeStamp();
     var s = {};
@@ -432,7 +438,7 @@ function getLevel() {
     */
 }
 function getImage() {
-    return server.GetPlayerProfile({ PlayFabId: currentPlayerId }).PlayerProfile.AvatarUrl;
+    return server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo.AvatarUrl;
 }
 function rmStrUnderLine(str) {
     var strs = str.split('_');
