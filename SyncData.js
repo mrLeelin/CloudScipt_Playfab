@@ -352,16 +352,13 @@ function setCurrencyData(key, data) {
     return data;
 }
 function getAccountInfo(id, type, key) {
-    var profile = entity.GetProfile({
-        Entity: { Id: id, Type: type }
-    }).Profile;
     var account = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo;
     var info = {};
     info["playerID"] = currentPlayerId;
-    info["displayName"] = profile.DisplayName;
-    info["avatarUrl"] = profile.AvatarUrl;
-    info["firstLoginTime"] = account.FirstLogin;
-    info["lastLoginTime"] = account.LastLogin;
+    info["displayName"] = account.DisplayName;
+    info["avatarUrl"] = account.AvatarUrl;
+    info["firstLoginTime"] = new Date(account.FirstLogin).getTime();
+    info["lastLoginTime"] = new Date(account.LastLogin).getTime();
     info["email"] = "";
     info["identities"] = [];
     info["m_status"] = 0;

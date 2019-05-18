@@ -446,18 +446,14 @@ function setCurrencyData(key:string, data: IData): IData {
 
 function getAccountInfo(id: string, type: string,key:string): IData {
 
-    let profile: PlayFabProfilesModels.EntityProfileBody = entity.GetProfile({
-        Entity: { Id: id, Type: type }
-    }).Profile;
-
     let account: PlayFabServerModels.UserTitleInfo = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo;
 
     let info: { [key: string]: any } = {}
-    info["playerID"] = currentPlayerId;
-    info["displayName"] = profile.DisplayName;
-    info["avatarUrl"] = profile.AvatarUrl;
-    info["firstLoginTime"] = account.FirstLogin;
-    info["lastLoginTime"] = account.LastLogin;
+    info["playerID"] = currentPlayerId;  
+    info["displayName"] = account.DisplayName;
+    info["avatarUrl"] = account.AvatarUrl;
+    info["firstLoginTime"] = new Date(account.FirstLogin).getTime();
+    info["lastLoginTime"] =  new Date(account.LastLogin).getTime();
     info["email"] = "";
     info["identities"] = [];
     info["m_status"] = 0;
