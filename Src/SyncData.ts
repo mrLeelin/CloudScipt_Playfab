@@ -56,6 +56,7 @@ interface ISyncClientToServiceRequest {
     EntityId: string;
     EntityType: string;
     ClientToServer: boolean;
+    MaxClientTimeStamp:number;
 
 }
 interface ISyncClientToServiceResult {
@@ -126,11 +127,30 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         return;
     }
 
+    let tS: number = GetTimeStamp();
+    let s: { [ket: string]: string } = {};
+    s[SYNC_VERSION] = tS.toString();
+    server.UpdateUserInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
+
     let keys: string[] = args.Keys;
     let Values: IData[] = args.Values;
     let entityId: string = args.EntityId;
     let entityType: string = args.EntityType;
-    let clientToServer: boolean = args.ClientToServer;
+
+
+    if(!args.ClientToServer){
+        let datas:{[key:string]:IData}=getDatasForCientTimeStamp(args.MaxClientTimeStamp,entityId,entityType);
+        return {
+            id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
+            Datas: datas,
+            TimeStamp: tS,
+            ClientToServer: args.ClientToServer
+        };
+    }
+
     let ret: { [key: string]: IData; } = {};
 
     for (let i = 0; i < count; i++) {
@@ -139,16 +159,16 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         let status: number = data.Status;
 
         if (status == Data_Status.New_Data) {
-            let sData: IData = set(clientToServer, entityId, entityType, key, data);
+            let sData: IData = set( entityId, entityType, key, data);
             ret[key] = sData;
         } else if (status == Data_Status.Update_Data) {
             let sData: IData = get(entityId, entityType, key);
             if (sData != null) {
                 if (data.TimeStamp != sData.TimeStamp) {
-                    log.debug("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
+                    log.info("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
             }
-            sData = set(clientToServer, entityId, entityType, key, data);
+            sData = set(entityId, entityType, key, data);
             ret[key] = sData;
         } else {
             log.error("you sync Data Status :" + status);
@@ -156,15 +176,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         }
     }
     log.info("Sync Successful");
-    let tS: number = GetTimeStamp();
-    let s: { [ket: string]: string } = {};
-    s[SYNC_VERSION] = tS.toString();
 
-
-    server.UpdateUserInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
     return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
         Datas: ret,
@@ -195,26 +207,49 @@ function get(entityId: string, entityType: string, key: string): IData {
             return getTitleData(key);
     }
 }
-function set(clientToServer: boolean, entityId: string, entityType: string, key: string, data: IData): IData {
+function set(entityId: string, entityType: string, key: string, data: IData): IData {
 
 
     switch (key) {
         case KEY_Level:
-           return setObjects(clientToServer, entityId, entityType, key, data);
+           return setObjects(entityId, entityType, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
-            return setTitleData(clientToServer, key, data);
+            return setTitleData(key, data);
         case KEY_Currency:
-            return setCurrencyData(clientToServer,key,data);
+            return setCurrencyData(key,data);
         case KEY_Account:
-            return setAccountInfo(clientToServer, entityId, entityType,key, data);
+            return setAccountInfo(entityId, entityType,key, data);
         default:
-            return setTitleData(clientToServer, key, data);
+            return setTitleData(key, data);
     }
+}
+
+function getDatasForCientTimeStamp(cT:number,entityId:string,entityType:string):{[key:string]:IData}{
+
+    let datas:{[keys:string]:IData}={};
+    let keys:string[]=[
+        KEY_GeneralGameData,
+        KEY_Account,
+        KEY_AchievementData,
+        KEY_Currency,
+        KEY_Inventory,
+        KEY_ItemEffect,
+        KEY_Level,
+        KEY_QuestData,
+        KEY_SpecialGameData,
+    ];
+    for (const key of keys) {
+        let data:IData=get(entityId,entityType,key);
+        if(data.TimeStamp>cT){
+           datas[key]=data;
+        }
+    }
+    return datas;
 }
 
 function GetTimeStamp(): number {
@@ -224,22 +259,17 @@ function GetTimeStamp(): number {
     return d;
 }
 
-function setObjects(clientToService: boolean, id: string, type: string, key: string, data: IData): IData {
+function setObjects( id: string, type: string, key: string, data: IData): IData {
 
-    if (!clientToService) {
-        //Server To Client
-        let d: IData = getObjects(id, type, key);
-        return d;
-    }
     //Client To Server
     data.Status = Data_Status.Sync_Data;
+    data.TimeStamp = GetTimeStamp();
     //data.TimeStamp = GetTimeStamp();
     let setObj: PlayFabDataModels.SetObject = {
         ObjectName: key,
         DataObject: data,
     }
-    let response: PlayFabDataModels.SetObjectsResponse = entity.SetObjects({ Entity: { Id: id, Type: type }, Objects: [setObj] });
-    data.TimeStamp = response.ProfileVersion;
+    let response: PlayFabDataModels.SetObjectsResponse = entity.SetObjects({ Entity: { Id: id, Type: type }, Objects: [setObj] });  
     return data;
 }
 
@@ -287,19 +317,16 @@ function getTitleData(key: string): IData {
     return JSON.parse(dValue.Value) as IData;
 }
 
-function setTitleData(clientToServer: boolean, key: string, data: IData): IData {
+function setTitleData( key: string, data: IData): IData {
 
-    if (!clientToServer) {
-        return getTitleData(key);
-    }
     let userData: { [key: string]: string } = {};
     data.Status = Data_Status.Sync_Data;
+    data.TimeStamp = GetTimeStamp();
     userData[key] = JSON.stringify(data);
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Data: userData
-    });
-    data.TimeStamp = result.DataVersion;
+    });  
     return data;
 }
 
@@ -334,11 +361,8 @@ function getCurrencyData(key:string): IData {
 
 }
 
-function setCurrencyData(clientToServer: boolean,key:string, data: IData): IData {
+function setCurrencyData(key:string, data: IData): IData {
 
-    if (!clientToServer) {
-        return getCurrencyData(key);
-    }
     data.Status = Data_Status.Sync_Data;
 
 
@@ -447,11 +471,9 @@ function getAccountInfo(id: string, type: string,key:string): IData {
     return data;
 }
 
-function setAccountInfo(clinetToService: boolean, id: string, type: string, key:string, data: IData): IData {
+function setAccountInfo( id: string, type: string, key:string, data: IData): IData {
 
-    if (!clinetToService) {
-        return getAccountInfo(id,type,key);
-    }
+
     data.Status = Data_Status.Sync_Data;
     let info: { [key: string]: any } = JSON.parse(data.Progress);
     server.UpdateAvatarUrl({
@@ -536,3 +558,5 @@ function rmStrUnderLine(str: string): string {
 
     return strs.join("");
 }
+
+

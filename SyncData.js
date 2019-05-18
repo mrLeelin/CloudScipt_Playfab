@@ -76,28 +76,43 @@ function syncData(args) {
     if (count <= 0) {
         return;
     }
+    var tS = GetTimeStamp();
+    var s = {};
+    s[SYNC_VERSION] = tS.toString();
+    server.UpdateUserInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
     var keys = args.Keys;
     var Values = args.Values;
     var entityId = args.EntityId;
     var entityType = args.EntityType;
-    var clientToServer = args.ClientToServer;
+    if (!args.ClientToServer) {
+        var datas = getDatasForCientTimeStamp(args.MaxClientTimeStamp, entityId, entityType);
+        return {
+            id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
+            Datas: datas,
+            TimeStamp: tS,
+            ClientToServer: args.ClientToServer
+        };
+    }
     var ret = {};
     for (var i = 0; i < count; i++) {
         var key = keys[i];
         var data = Values[i];
         var status_1 = data.Status;
         if (status_1 == Data_Status.New_Data) {
-            var sData = set(clientToServer, entityId, entityType, key, data);
+            var sData = set(entityId, entityType, key, data);
             ret[key] = sData;
         }
         else if (status_1 == Data_Status.Update_Data) {
             var sData = get(entityId, entityType, key);
             if (sData != null) {
                 if (data.TimeStamp != sData.TimeStamp) {
-                    log.debug("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
+                    log.info("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
             }
-            sData = set(clientToServer, entityId, entityType, key, data);
+            sData = set(entityId, entityType, key, data);
             ret[key] = sData;
         }
         else {
@@ -106,13 +121,6 @@ function syncData(args) {
         }
     }
     log.info("Sync Successful");
-    var tS = GetTimeStamp();
-    var s = {};
-    s[SYNC_VERSION] = tS.toString();
-    server.UpdateUserInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
     return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
         Datas: ret,
@@ -139,45 +147,62 @@ function get(entityId, entityType, key) {
             return getTitleData(key);
     }
 }
-function set(clientToServer, entityId, entityType, key, data) {
+function set(entityId, entityType, key, data) {
     switch (key) {
         case KEY_Level:
-            return setObjects(clientToServer, entityId, entityType, key, data);
+            return setObjects(entityId, entityType, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
-            return setTitleData(clientToServer, key, data);
+            return setTitleData(key, data);
         case KEY_Currency:
-            return setCurrencyData(clientToServer, key, data);
+            return setCurrencyData(key, data);
         case KEY_Account:
-            return setAccountInfo(clientToServer, entityId, entityType, key, data);
+            return setAccountInfo(entityId, entityType, key, data);
         default:
-            return setTitleData(clientToServer, key, data);
+            return setTitleData(key, data);
     }
+}
+function getDatasForCientTimeStamp(cT, entityId, entityType) {
+    var datas = {};
+    var keys = [
+        KEY_GeneralGameData,
+        KEY_Account,
+        KEY_AchievementData,
+        KEY_Currency,
+        KEY_Inventory,
+        KEY_ItemEffect,
+        KEY_Level,
+        KEY_QuestData,
+        KEY_SpecialGameData,
+    ];
+    for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
+        var key = keys_1[_i];
+        var data = get(entityId, entityType, key);
+        if (data.TimeStamp > cT) {
+            datas[key] = data;
+        }
+    }
+    return datas;
 }
 function GetTimeStamp() {
     var time = server.GetTime({});
     var d = Date.parse(time.Time);
     return d;
 }
-function setObjects(clientToService, id, type, key, data) {
-    if (!clientToService) {
-        //Server To Client
-        var d = getObjects(id, type, key);
-        return d;
-    }
+function setObjects(id, type, key, data) {
     //Client To Server
     data.Status = Data_Status.Sync_Data;
+    data.TimeStamp = GetTimeStamp();
     //data.TimeStamp = GetTimeStamp();
     var setObj = {
         ObjectName: key,
         DataObject: data,
     };
     var response = entity.SetObjects({ Entity: { Id: id, Type: type }, Objects: [setObj] });
-    data.TimeStamp = response.ProfileVersion;
     return data;
 }
 function getObjects(id, type, key) {
@@ -220,18 +245,15 @@ function getTitleData(key) {
     var dValue = data.Data[key];
     return JSON.parse(dValue.Value);
 }
-function setTitleData(clientToServer, key, data) {
-    if (!clientToServer) {
-        return getTitleData(key);
-    }
+function setTitleData(key, data) {
     var userData = {};
     data.Status = Data_Status.Sync_Data;
+    data.TimeStamp = GetTimeStamp();
     userData[key] = JSON.stringify(data);
     var result = server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Data: userData
     });
-    data.TimeStamp = result.DataVersion;
     return data;
 }
 function getCurrencyData(key) {
@@ -260,10 +282,7 @@ function getCurrencyData(key) {
     };
     return data;
 }
-function setCurrencyData(clientToServer, key, data) {
-    if (!clientToServer) {
-        return getCurrencyData(key);
-    }
+function setCurrencyData(key, data) {
     data.Status = Data_Status.Sync_Data;
     var cR = JSON.parse(data.Progress);
     if (!cR.hasOwnProperty("cts") || !cR.hasOwnProperty("quatity")) {
@@ -353,10 +372,7 @@ function getAccountInfo(id, type, key) {
     };
     return data;
 }
-function setAccountInfo(clinetToService, id, type, key, data) {
-    if (!clinetToService) {
-        return getAccountInfo(id, type, key);
-    }
+function setAccountInfo(id, type, key, data) {
     data.Status = Data_Status.Sync_Data;
     var info = JSON.parse(data.Progress);
     server.UpdateAvatarUrl({
