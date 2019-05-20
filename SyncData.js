@@ -11,11 +11,6 @@ var KEY_Level = "__ProgressKey__";
 var KEY_Inventory = "__InventoryDefaultImpSaveData__";
 var KEY_Currency = "__VirtualCurrencyKey__";
 var KEY_Account = "__SimpleAccount__";
-var Func_Code;
-(function (Func_Code) {
-    Func_Code[Func_Code["SC_SYNC_CLIENTTOSERVICE"] = 1005] = "SC_SYNC_CLIENTTOSERVICE";
-    Func_Code[Func_Code["SC_SYNC_COMPARE"] = 1006] = "SC_SYNC_COMPARE";
-})(Func_Code || (Func_Code = {}));
 var Data_Status;
 (function (Data_Status) {
     Data_Status[Data_Status["New_Data"] = 101] = "New_Data";
@@ -39,7 +34,7 @@ var CurrencyType;
 })(CurrencyType || (CurrencyType = {}));
 function compareDataVersions(args) {
     var localVersion = args["Local"];
-    var sValue = server.GetUserInternalData({
+    var sValue = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Keys: [SYNC_VERSION]
     }).Data;
@@ -67,8 +62,8 @@ function compareDataVersions(args) {
         Status: Server_Data_Status.Unequal,
         Coins: getCoins(),
         Diamonds: getDiamonds(),
-        Level: getLevel(),
-        Image: getImage()
+        Level: getLevel(currentPlayerId),
+        Image: getImage(currentPlayerId)
     };
 }
 function syncData(args) {
@@ -84,7 +79,7 @@ function syncData(args) {
     var tS = GetTimeStamp();
     var s = {};
     s[SYNC_VERSION] = tS.toString();
-    server.UpdateUserInternalData({
+    server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
     });
@@ -137,7 +132,7 @@ function syncData(args) {
 function get(entityId, entityType, key) {
     switch (key) {
         case KEY_Level:
-            return getObjects(entityId, entityType, key);
+            return getLevelInfo(key);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
@@ -156,7 +151,7 @@ function get(entityId, entityType, key) {
 function set(entityId, entityType, key, data) {
     switch (key) {
         case KEY_Level:
-            return setObjects(entityId, entityType, key, data);
+            return setLevelInfo(key, data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
@@ -236,7 +231,7 @@ function getObjects(id, type, key) {
     return data;
 }
 function getTitleData(key) {
-    var data = server.GetUserReadOnlyData({
+    var data = server.GetUserPublisherReadOnlyData({
         PlayFabId: currentPlayerId,
         Keys: [key]
     });
@@ -256,7 +251,7 @@ function setTitleData(key, data) {
     data.Status = Data_Status.Sync_Data;
     data.TimeStamp = GetTimeStamp();
     userData[key] = JSON.stringify(data);
-    var result = server.UpdateUserReadOnlyData({
+    var result = server.UpdateUserPublisherReadOnlyData({
         PlayFabId: currentPlayerId,
         Data: userData
     });
@@ -277,7 +272,7 @@ function getCurrencyData(key) {
     cR["cts"] = type;
     cR["quatity"] = count;
     cR["m_status"] = 0;
-    var t = server.GetUserInternalData({
+    var t = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Keys: [key + TIME_STAMP]
     }).Data[key + TIME_STAMP];
@@ -345,7 +340,7 @@ function setCurrencyData(key, data) {
     data.TimeStamp = GetTimeStamp();
     var s = {};
     s[key + TIME_STAMP] = data.TimeStamp.toString();
-    server.UpdateUserInternalData({
+    server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
     });
@@ -364,7 +359,7 @@ function getAccountInfo(id, type, key) {
     info["m_status"] = 0;
     info["EntityId"] = id;
     info["EntityType"] = type;
-    var t = server.GetUserInternalData({
+    var t = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Keys: [key + TIME_STAMP]
     }).Data[key + TIME_STAMP];
@@ -386,57 +381,45 @@ function setAccountInfo(id, type, key, data) {
     data.TimeStamp = GetTimeStamp();
     var s = {};
     s[key + TIME_STAMP] = data.TimeStamp.toString();
-    server.UpdateUserInternalData({
+    server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
     });
     return data;
 }
-function getCoins() {
-    var coin = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    var key = CurrencyType[CurrencyType.CO];
-    if (coin.hasOwnProperty(key)) {
-        return coin[key];
+function getLevelInfo(key) {
+    var statistics = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: [key] }).Statistics;
+    var level = 0;
+    if (statistics != null && statistics.length > 0) {
+        level = statistics[0].Value;
     }
-    return 0;
-}
-function getDiamonds() {
-    var di = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    var key = CurrencyType[CurrencyType.DI];
-    if (di.hasOwnProperty(key)) {
-        return di[key];
-    }
-    return 0;
-}
-function getLevel() {
-    var entityKey = server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo.TitlePlayerAccount;
-    log.info("Server EntityKey:" + entityKey.Id);
-    log.info("Server EntityType:" + entityKey.Type);
-    var data = getObjects(entityKey.Id, entityKey.Type, KEY_Level);
-    var sValue = JSON.parse(data.Progress);
-    if (!sValue.hasOwnProperty("Level")) {
-        return 0;
-    }
-    return sValue["Level"];
-    /*
-    let data:{[key:string]:PlayFabServerModels.UserDataRecord}= server.GetUserReadOnlyData({
+    var info = {};
+    info["Level"] = level;
+    info["Status"] = 0;
+    var t = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys:[KEY_Level]
-    }).Data;
-    
-    let dValue:IData= JSON.parse(data[KEY_Level].Value);
-    let value:any= JSON.stringify(dValue.Progress);
-    if(!value.hasOwnProperty("Level")){
-        return 0;
-    }
-
-    return value["Level"];
-    */
+        Keys: [key + TIME_STAMP]
+    }).Data[key + TIME_STAMP];
+    var data = {
+        TimeStamp: t == null ? 0 : parseInt(t.Value),
+        Status: Data_Status.Sync_Data,
+        Progress: JSON.stringify(info),
+    };
+    return data;
 }
-function getImage() {
-    return server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo.AvatarUrl;
-}
-function rmStrUnderLine(str) {
-    var strs = str.split('_');
-    return strs.join("");
+function setLevelInfo(key, data) {
+    data.Status = Data_Status.Sync_Data;
+    var info = JSON.parse(data.Progress);
+    server.UpdatePlayerStatistics({
+        PlayFabId: currentPlayerId,
+        Statistics: [{ StatisticName: key, Value: parseInt(info["Level"]) }]
+    });
+    data.TimeStamp = GetTimeStamp();
+    var s = {};
+    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    server.UpdateUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
+    return data;
 }
