@@ -219,7 +219,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Keys: [KEY_HeartFriends]
     }).Data;
     let dH: IRecordHeart;
-    if (rData != null) {
+    if (rData.hasOwnProperty(KEY_HeartFriends)) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     } else {
         dH.Id = [];

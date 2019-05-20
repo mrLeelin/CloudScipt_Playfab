@@ -151,7 +151,7 @@ function sendGiftToFrined(args) {
         Keys: [KEY_HeartFriends]
     }).Data;
     var dH;
-    if (rData != null) {
+    if (rData.hasOwnProperty(KEY_HeartFriends)) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     }
     else {
