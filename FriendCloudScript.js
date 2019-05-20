@@ -192,14 +192,9 @@ function getPlayerGiftCount() {
         PlayFabId: currentPlayerId,
         Keys: [KEY_SendGift, KEY_GiveGift]
     }).Data;
-    for (var key in sData) {
-        if (sData.hasOwnProperty(key)) {
-            var element = sData[key];
-            log.debug(element.Value);
-        }
-        log.debug(key + "   Key");
-    }
+    log.debug("Sdata   " + (sData == null));
     if (sData == null || (!(sData.hasOwnProperty(KEY_SendGift) || !sData.hasOwnProperty(KEY_GiveGift)))) {
+        log.debug("Key:" + KEY_SendGift);
         var d = {};
         d[KEY_SendGift] = selfSendCount;
         d[KEY_GiveGift] = selfGiveCount;

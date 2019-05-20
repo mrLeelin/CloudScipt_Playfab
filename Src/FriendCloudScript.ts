@@ -266,15 +266,10 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
         Keys: [KEY_SendGift, KEY_GiveGift]
     }).Data;
 
-    for (const key in sData) {
-        if (sData.hasOwnProperty(key)) {
-            const element = sData[key];
-            log.debug(element.Value);
-        }
-        log.debug(key+"   Key");
-    }
 
+    log.debug("Sdata   "+(sData==null));
     if (sData == null || (!(sData.hasOwnProperty(KEY_SendGift) || !sData.hasOwnProperty(KEY_GiveGift)))) {
+        log.debug("Key:"+KEY_SendGift);
         let d:{[key:string]:string}={}
         d[KEY_SendGift]=selfSendCount;
         d[KEY_GiveGift]=selfGiveCount;
