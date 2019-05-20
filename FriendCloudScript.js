@@ -1,6 +1,6 @@
 handlers.GetFriends = getFriends;
 handlers.AddFriend = addFriend;
-handlers.GetAccorePlayer = getLimitPlayer;
+handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
 var SendGiftCode;
 (function (SendGiftCode) {
@@ -10,7 +10,7 @@ var SendGiftCode;
 })(SendGiftCode || (SendGiftCode = {}));
 function getFriends(args, context) {
     var result = server.GetFriendsList({ PlayFabId: currentPlayerId });
-    var ret;
+    var ret = {};
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
@@ -48,7 +48,7 @@ function addFriend(args, context) {
 function getLimitPlayer(args, context) {
     var id = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
     var segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
-    var ret;
+    var ret = {};
     ret.id = Func_Code.SC_GET_LIMITPLAYER;
     ret.Count = 0;
     if (segmentRequest.PlayerProfiles.length <= 0) {

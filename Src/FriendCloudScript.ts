@@ -2,7 +2,7 @@
 
 handlers.GetFriends = getFriends;
 handlers.AddFriend = addFriend;
-handlers.GetAccorePlayer = getLimitPlayer;
+handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart=sendGiftToFrined;
 
 
@@ -52,7 +52,7 @@ interface IRecordHeart {
 function getFriends(args: any, context): IGetFriendsResult {
 
     let result = server.GetFriendsList({ PlayFabId: currentPlayerId });
-    let ret: IGetFriendsResult;
+    let ret: IGetFriendsResult=<IGetFriendsResult>{};
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
@@ -102,7 +102,7 @@ function getLimitPlayer(args: any, context): IGetFriendsResult {
 
     let segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
 
-    let ret: IGetFriendsResult;
+    let ret: IGetFriendsResult=<IGetFriendsResult>{};
     ret.id = Func_Code.SC_GET_LIMITPLAYER;
     ret.Count = 0;
     if (segmentRequest.PlayerProfiles.length <= 0) {
