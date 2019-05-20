@@ -53,6 +53,11 @@ function getFriends(args: any, context): IGetFriendsResult {
 
     let result = server.GetFriendsList({ PlayFabId: currentPlayerId });
     let ret: IGetFriendsResult=<IGetFriendsResult>{};
+    ret.Names=[]
+    ret.Levels=[]
+    ret.Images=[]
+    ret.IsGift=[]
+    ret.FriendIds=[]
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
@@ -105,6 +110,10 @@ function getLimitPlayer(args: any, context): IGetFriendsResult {
     let ret: IGetFriendsResult=<IGetFriendsResult>{};
     ret.id = Func_Code.SC_GET_LIMITPLAYER;
     ret.Count = 0;
+    ret.FriendIds=[]
+    ret.Images=[]
+    ret.Levels=[]
+    ret.Names=[]
     if (segmentRequest.PlayerProfiles.length <= 0) {
         return ret;
     }

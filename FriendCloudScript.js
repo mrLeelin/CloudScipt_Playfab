@@ -11,6 +11,11 @@ var SendGiftCode;
 function getFriends(args, context) {
     var result = server.GetFriendsList({ PlayFabId: currentPlayerId });
     var ret = {};
+    ret.Names = [];
+    ret.Levels = [];
+    ret.Images = [];
+    ret.IsGift = [];
+    ret.FriendIds = [];
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
@@ -51,6 +56,10 @@ function getLimitPlayer(args, context) {
     var ret = {};
     ret.id = Func_Code.SC_GET_LIMITPLAYER;
     ret.Count = 0;
+    ret.FriendIds = [];
+    ret.Images = [];
+    ret.Levels = [];
+    ret.Names = [];
     if (segmentRequest.PlayerProfiles.length <= 0) {
         return ret;
     }
