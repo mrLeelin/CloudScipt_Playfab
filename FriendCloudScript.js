@@ -2,14 +2,6 @@ handlers.GetFriends = getFriends;
 handlers.AddFriend = addFriend;
 handlers.GetAccorePlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
-var KEY_SendGift = "__SendGift__";
-var KEY_GiveGift = "__GiveGift__";
-var KEY_GlobalLimitLevel = "LimitLevel";
-var KEY_GlobalSendGiftCount = "GlobalSendGiftCount";
-var KEY_GlobalGiveGiftCount = "GlobalGiveGiftCount";
-var KEY_AllPlayersSegmentId = "AllPlayersSegmentId";
-var KEY_StatisticsHeartCount = "__HeartCount__";
-var KEY_HeartFriends = "__HeartFriends__";
 var SendGiftCode;
 (function (SendGiftCode) {
     SendGiftCode[SendGiftCode["FriendMax"] = 101] = "FriendMax";
@@ -54,7 +46,7 @@ function addFriend(args, context) {
     };
 }
 function getLimitPlayer(args, context) {
-    var id = GetGlobalTitleData(KEY_AllPlayersSegmentId);
+    var id = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
     var segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
     var ret;
     ret.id = Func_Code.SC_GET_LIMITPLAYER;

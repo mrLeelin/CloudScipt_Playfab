@@ -3,18 +3,6 @@
 handlers.SyncData = syncData;
 handlers.CompareDataVersions = compareDataVersions;
 
-const SYNC_VERSION: string = "__SYNC_VERSION__"
-const TIME_STAMP: string = "__TIME_STAMP__";
-
-const KEY_GeneralGameData: string = "__GeneralGeneralGameManagerVM__";
-const KEY_QuestData: string = "__QuestManager__";
-const KEY_AchievementData: string = "__AchievementManagerVm__";
-const KEY_SpecialGameData: string = "__BlackCatDataVm__";
-const KEY_ItemEffect: string = "__EffectKey__";
-const KEY_Level: string = "__ProgressKey__";
-const KEY_Inventory: string = "__InventoryDefaultImpSaveData__";
-const KEY_Currency: string = "__VirtualCurrencyKey__";
-const KEY_Account: string = "__SimpleAccount__";
 
 
 enum Data_Status {
@@ -81,17 +69,17 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
 
     let sValue: { [key: string]: PlayFabServerModels.UserDataRecord } = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [SYNC_VERSION]
+        Keys: [KEY_SYNC_VERSION]
     }).Data;
 
-    if (!sValue.hasOwnProperty(SYNC_VERSION)) {
+    if (!sValue.hasOwnProperty(KEY_SYNC_VERSION)) {
         log.info("you Remote is not key");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
     }
     /*
         let data: PlayFabServerModels.UserDataRecord = result.Data[SYNC_VERSION];
         */
-    let remoteVersion: number = parseInt(sValue[SYNC_VERSION].Value);
+    let remoteVersion: number = parseInt(sValue[KEY_SYNC_VERSION].Value);
     if (remoteVersion <= 0) {
         log.error("you not get remote Version");
         return null;
@@ -129,7 +117,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
 
     let tS: number = GetTimeStamp();
     let s: { [ket: string]: string } = {};
-    s[SYNC_VERSION] = tS.toString();
+    s[KEY_SYNC_VERSION] = tS.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
@@ -352,8 +340,8 @@ function getCurrencyData(key: string): IData {
 
     let t: PlayFabServerModels.UserDataRecord = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [key + TIME_STAMP]
-    }).Data[key + TIME_STAMP];
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data[key + KEY_TIME_STAMP];
     let data: IData = {
         Status: Data_Status.Sync_Data,
         TimeStamp: t == null ? 0 : parseInt(t.Value),
@@ -432,7 +420,7 @@ function setCurrencyData(key: string, data: IData): IData {
 
 
     let s: { [key: string]: string } = {}
-    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
@@ -459,8 +447,8 @@ function getAccountInfo(id: string, type: string, key: string): IData {
 
     let t: PlayFabServerModels.UserDataRecord = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [key + TIME_STAMP]
-    }).Data[key + TIME_STAMP];
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data[key + KEY_TIME_STAMP];
 
     let data: IData = {
         TimeStamp: t == null ? 0 : parseInt(t.Value),
@@ -483,7 +471,7 @@ function setAccountInfo(id: string, type: string, key: string, data: IData): IDa
     //TODO  Set  Display Name
     data.TimeStamp = GetTimeStamp();
     let s: { [key: string]: string } = {}
-    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
@@ -508,8 +496,8 @@ function getLevelInfo( key: string): IData {
 
     let t: PlayFabServerModels.UserDataRecord = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [key + TIME_STAMP]
-    }).Data[key + TIME_STAMP];
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data[key + KEY_TIME_STAMP];
 
     let data: IData = {
         TimeStamp: t == null ? 0 : parseInt(t.Value),
@@ -527,7 +515,7 @@ function setLevelInfo( key: string, data: IData): IData {
     });
     data.TimeStamp = GetTimeStamp();
     let s: { [key: string]: string } = {};
-    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s

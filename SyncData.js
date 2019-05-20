@@ -1,16 +1,5 @@
 handlers.SyncData = syncData;
 handlers.CompareDataVersions = compareDataVersions;
-var SYNC_VERSION = "__SYNC_VERSION__";
-var TIME_STAMP = "__TIME_STAMP__";
-var KEY_GeneralGameData = "__GeneralGeneralGameManagerVM__";
-var KEY_QuestData = "__QuestManager__";
-var KEY_AchievementData = "__AchievementManagerVm__";
-var KEY_SpecialGameData = "__BlackCatDataVm__";
-var KEY_ItemEffect = "__EffectKey__";
-var KEY_Level = "__ProgressKey__";
-var KEY_Inventory = "__InventoryDefaultImpSaveData__";
-var KEY_Currency = "__VirtualCurrencyKey__";
-var KEY_Account = "__SimpleAccount__";
 var Data_Status;
 (function (Data_Status) {
     Data_Status[Data_Status["New_Data"] = 101] = "New_Data";
@@ -36,16 +25,16 @@ function compareDataVersions(args) {
     var localVersion = args["Local"];
     var sValue = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [SYNC_VERSION]
+        Keys: [KEY_SYNC_VERSION]
     }).Data;
-    if (!sValue.hasOwnProperty(SYNC_VERSION)) {
+    if (!sValue.hasOwnProperty(KEY_SYNC_VERSION)) {
         log.info("you Remote is not key");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
     }
     /*
         let data: PlayFabServerModels.UserDataRecord = result.Data[SYNC_VERSION];
         */
-    var remoteVersion = parseInt(sValue[SYNC_VERSION].Value);
+    var remoteVersion = parseInt(sValue[KEY_SYNC_VERSION].Value);
     if (remoteVersion <= 0) {
         log.error("you not get remote Version");
         return null;
@@ -78,7 +67,7 @@ function syncData(args) {
     }
     var tS = GetTimeStamp();
     var s = {};
-    s[SYNC_VERSION] = tS.toString();
+    s[KEY_SYNC_VERSION] = tS.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
@@ -274,8 +263,8 @@ function getCurrencyData(key) {
     cR["m_status"] = 0;
     var t = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [key + TIME_STAMP]
-    }).Data[key + TIME_STAMP];
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data[key + KEY_TIME_STAMP];
     var data = {
         Status: Data_Status.Sync_Data,
         TimeStamp: t == null ? 0 : parseInt(t.Value),
@@ -339,7 +328,7 @@ function setCurrencyData(key, data) {
     data.Progress = JSON.stringify(cR);
     data.TimeStamp = GetTimeStamp();
     var s = {};
-    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
@@ -361,8 +350,8 @@ function getAccountInfo(id, type, key) {
     info["EntityType"] = type;
     var t = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [key + TIME_STAMP]
-    }).Data[key + TIME_STAMP];
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data[key + KEY_TIME_STAMP];
     var data = {
         TimeStamp: t == null ? 0 : parseInt(t.Value),
         Status: Data_Status.Sync_Data,
@@ -380,7 +369,7 @@ function setAccountInfo(id, type, key, data) {
     //TODO  Set  Display Name
     data.TimeStamp = GetTimeStamp();
     var s = {};
-    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s
@@ -398,8 +387,8 @@ function getLevelInfo(key) {
     info["Status"] = 0;
     var t = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
-        Keys: [key + TIME_STAMP]
-    }).Data[key + TIME_STAMP];
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data[key + KEY_TIME_STAMP];
     var data = {
         TimeStamp: t == null ? 0 : parseInt(t.Value),
         Status: Data_Status.Sync_Data,
@@ -416,7 +405,7 @@ function setLevelInfo(key, data) {
     });
     data.TimeStamp = GetTimeStamp();
     var s = {};
-    s[key + TIME_STAMP] = data.TimeStamp.toString();
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
         Data: s

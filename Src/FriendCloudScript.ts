@@ -5,14 +5,6 @@ handlers.AddFriend = addFriend;
 handlers.GetAccorePlayer = getLimitPlayer;
 handlers.SendHeart=sendGiftToFrined;
 
-const KEY_SendGift: string = "__SendGift__";
-const KEY_GiveGift: string = "__GiveGift__";
-const KEY_GlobalLimitLevel:string="LimitLevel";
-const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";
-const KEY_GlobalGiveGiftCount: string = "GlobalGiveGiftCount";
-const KEY_AllPlayersSegmentId: string = "AllPlayersSegmentId";
-const KEY_StatisticsHeartCount: string = "__HeartCount__";
-const KEY_HeartFriends: string = "__HeartFriends__";
 
 
 
@@ -106,7 +98,7 @@ function addFriend(args: PlayFabServerModels.AddFriendRequest, context): IAddFri
 
 function getLimitPlayer(args: any, context): IGetFriendsResult {
 
-    let id: string = GetGlobalTitleData(KEY_AllPlayersSegmentId);
+    let id: string = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
 
     let segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
 
