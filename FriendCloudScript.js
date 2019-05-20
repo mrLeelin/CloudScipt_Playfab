@@ -116,6 +116,7 @@ function sendGiftToFrined(args) {
     if (giftCount.SendGiftCount <= 0) {
         return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.SelfMax };
     }
+    log.info("FriendId: " + fId);
     var fData = server.GetUserReadOnlyData({
         PlayFabId: fId,
         Keys: [KEY_GiveGift]

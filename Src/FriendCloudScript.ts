@@ -182,6 +182,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.SelfMax };
     }
 
+    log.info("FriendId: "+fId);
     let fData = server.GetUserReadOnlyData({
         PlayFabId: fId,
         Keys: [KEY_GiveGift]

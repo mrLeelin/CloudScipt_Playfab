@@ -7,4 +7,4 @@
 
 2、 **use "npm install -g typescript"  install typeScript**
 
-3、""this project  compile use Vs Code.""
+3、**this project  compile use Vs Code.**
