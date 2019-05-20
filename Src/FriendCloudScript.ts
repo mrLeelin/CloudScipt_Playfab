@@ -267,10 +267,12 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
     }).Data;
 
     if (sData == null || (!(sData.hasOwnProperty(KEY_SendGift) || !sData.hasOwnProperty(KEY_GiveGift)))) {
-        //First
+        let d:{[key:string]:string}={}
+        d[KEY_SendGift]=selfSendCount;
+        d[KEY_GiveGift]=selfGiveCount;
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
-            Data: { KEY_SendGift: selfSendCount, KEY_GiveGift: selfGiveCount }
+            Data: d
         });
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
