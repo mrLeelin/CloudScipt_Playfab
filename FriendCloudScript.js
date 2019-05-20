@@ -150,7 +150,7 @@ function sendGiftToFrined(args) {
         PlayFabId: currentPlayerId,
         Keys: [KEY_HeartFriends]
     }).Data;
-    var dH;
+    var dH = {};
     if (rData.hasOwnProperty(KEY_HeartFriends)) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     }

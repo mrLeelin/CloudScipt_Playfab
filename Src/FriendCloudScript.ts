@@ -218,7 +218,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         PlayFabId: currentPlayerId,
         Keys: [KEY_HeartFriends]
     }).Data;
-    let dH: IRecordHeart;
+    let dH: IRecordHeart=<IRecordHeart>{};
     if (rData.hasOwnProperty(KEY_HeartFriends)) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     } else {
