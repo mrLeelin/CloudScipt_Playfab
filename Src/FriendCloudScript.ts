@@ -213,7 +213,8 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Data: {[KEY_GiveGift]:(--fGiveCount).toString()},
     });
     //Send
-    //往邮箱里写入一条数据TODO
+    //往邮箱里写入一条数据
+    SendToEmail(fId);
 
     //记录一下
 
@@ -365,6 +366,7 @@ function GetPlayerIsGift(self: string, target: string): boolean {
    }
     return true;
 }
+
 
 
 

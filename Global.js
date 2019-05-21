@@ -1,6 +1,5 @@
 var KEY_SendGift = "__SendGift__";
 var KEY_GiveGift = "__GiveGift__";
-var KEY_GlobalLimitLevel = "LimitLevel";
 var KEY_StatisticsHeartCount = "__HeartCount__";
 var KEY_HeartFriends = "__HeartFriends__";
 var KEY_SYNC_VERSION = "__SYNC_VERSION__";
@@ -17,6 +16,7 @@ var KEY_Account = "__SimpleAccount__";
 var KEY_GlobalSendGiftCount = "GlobalSendGiftCount";
 var KEY_GlobalGiveGiftCount = "GlobalGiveGiftCount";
 var KEY_GlobalAllPlayersSegmentId = "AllPlayersSegmentId";
+var KEY_GlobalLimitLevel = "GlobalLimitLevel";
 var Func_Code;
 (function (Func_Code) {
     Func_Code[Func_Code["SC_ADD_FRIEND"] = 1002] = "SC_ADD_FRIEND";
@@ -89,19 +89,12 @@ function getRandomArrayElements(arr, count) {
 function isSameDay(one, two) {
     var A = new Date(one);
     var B = new Date(two);
-    dateToString(new Date(one)) == dateToString(new Date(two));
     return A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0);
-}
-function dateToString(date) {
-    var y = date.getFullYear();
-    var m = date.getMonth() + 1;
-    var d = date.getDay();
-    var str = y + '-' + m + '-' + d;
-    log.debug("Time:" + str);
-    return str;
 }
 function GetTimeStamp() {
     var time = server.GetTime({});
     var d = Date.parse(time.Time);
     return d;
+}
+function SendToEmail(id) {
 }

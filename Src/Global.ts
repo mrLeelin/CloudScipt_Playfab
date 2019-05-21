@@ -2,7 +2,7 @@
 
 const KEY_SendGift: string = "__SendGift__";
 const KEY_GiveGift: string = "__GiveGift__";
-const KEY_GlobalLimitLevel:string="LimitLevel";
+
 const KEY_StatisticsHeartCount: string = "__HeartCount__";
 const KEY_HeartFriends: string = "__HeartFriends__";
 
@@ -23,7 +23,7 @@ const KEY_Account: string = "__SimpleAccount__";
 const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";
 const KEY_GlobalGiveGiftCount: string = "GlobalGiveGiftCount";
 const KEY_GlobalAllPlayersSegmentId: string = "AllPlayersSegmentId";
-
+const KEY_GlobalLimitLevel:string="GlobalLimitLevel";
 
 
 enum Func_Code {
@@ -178,19 +178,8 @@ function isSameDay(one: number| string, two: number| string) {
 
     let A:Date=new Date(one);
     let B:Date=new Date(two);
-     dateToString(new Date(one))==dateToString(new Date(two));
      return A.setHours(0,0,0,0)==B.setHours(0,0,0,0);
 }
-
-function dateToString(date:Date):string{
-    let y=date.getFullYear();
-    let m=date.getMonth()+1;
-    let d=date.getDay();
-    let str=y+'-'+m+'-'+d;
-    log.debug("Time:"+str);
-    return str;
-}
-
 
 /**
  * 获取当前时间戳
@@ -200,6 +189,14 @@ function GetTimeStamp(): number {
     let time: PlayFabServerModels.GetTimeResult = server.GetTime({});
     let d: number = Date.parse(time.Time);
     return d;
+}
+
+/**
+ * 发送邮箱
+ * @param id 接受的人的ids
+ */
+function SendToEmail(id:string){
+
 }
 
 
