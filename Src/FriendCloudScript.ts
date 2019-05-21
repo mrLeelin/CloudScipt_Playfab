@@ -191,7 +191,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Keys: [KEY_GiveGift]
     }).Data;
     if (fData.hasOwnProperty(KEY_GiveGift)) {
-        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated)))) {
+        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(time,fData[KEY_GiveGift].LastUpdated))) {
             return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.FriendMax };
         }
     }
@@ -203,7 +203,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     });
     //Friend Give --;
     let fGiveCount: number = 0;
-    if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated))) {
+    if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(time, fData[KEY_GiveGift].LastUpdated)) {
         fGiveCount = parseInt(server.GetTitleData({ Keys: [KEY_GlobalGiveGiftCount] }).Data[KEY_GlobalGiveGiftCount]);
     } else {
         fGiveCount = parseInt(fData[KEY_GiveGift].Value);
@@ -295,7 +295,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
 
     log.debug("Time 1:"+new Date(time).toLocaleTimeString()+"Time 2:"+new Date(sData[KEY_SendGift].LastUpdated).toLocaleTimeString());
     log.debug("TimeStamp 1:"+time+"TimeStamp 2:"+new Date(sData[KEY_SendGift].LastUpdated).getTime());
-    if (isSameDay(time, parseInt(sData[KEY_SendGift].LastUpdated))) {
+    if (isSameDay(time, sData[KEY_SendGift].LastUpdated)) {
         log.debug("IsSameDay");
         selfSendCount = sData[KEY_SendGift].Value;
     } else {
@@ -305,7 +305,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
             Data: { [KEY_SendGift]: selfSendCount }
         });
     }
-    if (isSameDay(time, parseInt(sData[KEY_GiveGift].LastUpdated))) {
+    if (isSameDay(time,sData[KEY_GiveGift].LastUpdated)) {
         selfGiveCount = sData[KEY_GiveGift].Value;
     } else {
         server.UpdateUserReadOnlyData({
