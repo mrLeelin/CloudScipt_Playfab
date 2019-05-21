@@ -29,7 +29,7 @@ function getFriends(args, context) {
         var f = _a[_i];
         ret.Names.push(f.TitleDisplayName);
         var str = "";
-        if (typeof f.Profile.AvatarUrl != "undefined") {
+        if (f.Profile.hasOwnProperty("AvatarUrl")) {
             str = f.Profile.AvatarUrl;
         }
         ret.Levels.push(getLevelForProfile(f.Profile));

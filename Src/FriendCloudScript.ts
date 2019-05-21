@@ -78,7 +78,7 @@ function getFriends(args: any, context): IGetFriendsResult {
         ret.Names.push(f.TitleDisplayName);
         
         let str:string="";
-        if(typeof f.Profile.AvatarUrl !="undefined"){
+        if(f.Profile.hasOwnProperty("AvatarUrl")){
             str=f.Profile.AvatarUrl;
         }
         ret.Levels.push(getLevelForProfile(f.Profile));
