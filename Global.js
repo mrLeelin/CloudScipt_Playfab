@@ -50,6 +50,30 @@ function rmStrUnderLine(str) {
 function getImage(id) {
     return server.GetUserAccountInfo({ PlayFabId: id }).UserInfo.TitleInfo.AvatarUrl;
 }
+function getLevelForProfile(profile) {
+    if (profile) {
+        var p = profile;
+        var statistics = p.Statistics;
+        if (statistics.length <= 0)
+            return 0;
+        for (var _i = 0, statistics_1 = statistics; _i < statistics_1.length; _i++) {
+            var iterator = statistics_1[_i];
+            if (iterator.Name == KEY_Level) {
+                return iterator.Value;
+            }
+        }
+    }
+    else if (profile) {
+        var p = profile;
+        var statistics = p.Statistics;
+        if (statistics.hasOwnProperty(KEY_Level)) {
+            return statistics[KEY_Level];
+        }
+        else {
+            return 0;
+        }
+    }
+}
 function getLevel(id) {
     var statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,

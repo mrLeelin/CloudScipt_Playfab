@@ -25,12 +25,24 @@ interface IGetFriendsResult {
     IsGift: boolean[];
     FriendIds: string[];
 }
+interface IGetLimitPlayerResult{
+    id:number;
+    Count?:number;
+    Names?:string[];
+    Levels?:number[];
+    Images?:string[];
+    PlayerIds?:string[];
+    Code:number;
+}
 
 interface ISendGiftResult {
     id: number;
     Code: number;
 }
-
+enum GetLimitPlayerCode{
+    Successful=101,
+    Empty=102,
+}
 enum SendGiftCode {
     FriendMax = 101,
     Successful = 102,
@@ -62,12 +74,10 @@ function getFriends(args: any, context): IGetFriendsResult {
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
-
-
     for (const f of result.Friends) {
         ret.Names.push(f.TitleDisplayName);
-        ret.Levels.push(getLevel(f.FriendPlayFabId));
-        ret.Images.push(getImage(f.FriendPlayFabId));
+        ret.Levels.push(getLevelForProfile(f.Profile));
+        ret.Images.push(f.Profile.AvatarUrl);
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
@@ -102,24 +112,18 @@ function addFriend(args: PlayFabServerModels.AddFriendRequest, context): IAddFri
 
 }
 
-function getLimitPlayer(args: any, context): IGetFriendsResult {
+function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
 
     let id: string = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
 
     let segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
-
-    let ret: IGetFriendsResult=<IGetFriendsResult>{};
-    ret.id = Func_Code.SC_GET_LIMITPLAYER;
-    ret.Count = 0;
-    ret.FriendIds=[]
-    ret.Images=[]
-    ret.Levels=[]
-    ret.Names=[]
-    if (segmentRequest.PlayerProfiles.length <= 0) {
-        return ret;
+    if (segmentRequest.PlayerProfiles.length < 2) {
+        return {
+            id:Func_Code.SC_GET_LIMITPLAYER,
+            Code:GetLimitPlayerCode.Empty
+        };
     }
 
-  
     let data= server.GetTitleData({Keys:[KEY_GlobalLimitLevel]}).Data;
     if(data==null||!data.hasOwnProperty(KEY_GlobalLimitLevel)){
 
@@ -127,9 +131,11 @@ function getLimitPlayer(args: any, context): IGetFriendsResult {
         return;
     }
 
+
     let selfLevel:number=getLevel(currentPlayerId);
     let limitLevel:number=parseInt(data[KEY_GlobalLimitLevel]);
     let profiles:PlayFabServerModels.PlayerProfile[]=[];
+
     for (const iterator of segmentRequest.PlayerProfiles) {
         
          let level:number=0;
@@ -141,21 +147,29 @@ function getLimitPlayer(args: any, context): IGetFriendsResult {
             profiles.push(iterator);
          }
     }
-    if(profiles.length<=1){
-
-        log.error("you check friend is empty");
-        return;
+    if(profiles.length<2){
+        return {
+            id:Func_Code.SC_GET_LIMITPLAYER,
+            Code:GetLimitPlayerCode.Empty
+        };
     }
     if(profiles.length>2){
         profiles=getRandomArrayElements(profiles,2);
     }
-    ret.Count = profiles.length;
 
+    let ret: IGetLimitPlayerResult=<IGetLimitPlayerResult>{};
+    ret.id = Func_Code.SC_GET_LIMITPLAYER;
+    ret.Code=GetLimitPlayerCode.Successful;
+    ret.PlayerIds=[]
+    ret.Images=[]
+    ret.Levels=[]
+    ret.Names=[]
+    ret.Count = profiles.length;
     for (const p of profiles) {
-        ret.FriendIds.push(p.PlayerId);
-        ret.Images.push(getImage(p.PlayerId));
+        ret.PlayerIds.push(p.PlayerId);
+        ret.Images.push(p.AvatarUrl);
         ret.Names.push(p.DisplayName);
-        ret.Levels.push(getLevel(p.PlayerId));
+        ret.Levels.push(getLevelForProfile(p));
     }
     return ret;
 }

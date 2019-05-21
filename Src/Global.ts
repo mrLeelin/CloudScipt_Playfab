@@ -23,7 +23,7 @@ const KEY_Account: string = "__SimpleAccount__";
 const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";
 const KEY_GlobalGiveGiftCount: string = "GlobalGiveGiftCount";
 const KEY_GlobalAllPlayersSegmentId: string = "AllPlayersSegmentId";
-const KEY_GlobalLimitLevel:string="GlobalLimitLevel";
+const KEY_GlobalLimitLevel: string = "GlobalLimitLevel";
 
 
 enum Func_Code {
@@ -45,22 +45,22 @@ enum Func_Code {
  * @param key 
  * @param defValue 
  */
-function recordStatistics(key:string,defValue:number){
-    
-    let statistics= server.GetPlayerStatistics({
-        PlayFabId:currentPlayerId,
-        StatisticNames:[key]
+function recordStatistics(key: string, defValue: number) {
+
+    let statistics = server.GetPlayerStatistics({
+        PlayFabId: currentPlayerId,
+        StatisticNames: [key]
     }).Statistics;
-    let v:number=0;
-    if(statistics==null||statistics.length<=0){
-      v=defValue;
-    }else{
-       v=statistics[0].Value+1;
+    let v: number = 0;
+    if (statistics == null || statistics.length <= 0) {
+        v = defValue;
+    } else {
+        v = statistics[0].Value + 1;
     }
     server.UpdatePlayerStatistics({
-       PlayFabId:currentPlayerId,
-       Statistics:[{StatisticName:key,Value:v}]
-   });
+        PlayFabId: currentPlayerId,
+        Statistics: [{ StatisticName: key, Value: v }]
+    });
 }
 
 /**
@@ -78,28 +78,56 @@ function rmStrUnderLine(str: string): string {
  * 获取 Icon
  * @param id 
  */
-function getImage(id:string): string {
+function getImage(id: string): string {
 
     return server.GetUserAccountInfo({ PlayFabId: id }).UserInfo.TitleInfo.AvatarUrl;
+}
+
+/**
+ * 获取等级从配置文件里。 不调用 server Api
+ * @param profile 
+ */
+function getLevelForProfile(profile: PlayFabServerModels.PlayerProfileModel | PlayFabServerModels.PlayerProfile): number {
+
+    if (<PlayFabServerModels.PlayerProfileModel>profile) {
+        let p: PlayFabServerModels.PlayerProfileModel = <PlayFabServerModels.PlayerProfileModel>profile;
+        let statistics = p.Statistics;
+        if (statistics.length <= 0)
+            return 0;
+        for (const iterator of statistics) {
+            if (iterator.Name == KEY_Level) {
+                return iterator.Value;
+            }
+        }
+    }else if(<PlayFabServerModels.PlayerProfile>profile){
+
+        let p:PlayFabServerModels.PlayerProfile =<PlayFabServerModels.PlayerProfile>profile;
+        let statistics=p.Statistics;
+        if(statistics.hasOwnProperty(KEY_Level)){
+            return statistics[KEY_Level];
+        }else{
+            return 0;
+        }
+    }
 }
 
 /**
  * 获取等级
  * @param id 
  */
-function getLevel(id:string): number {
+function getLevel(id: string): number {
 
 
-    let statistics= server.GetPlayerStatistics({
-        PlayFabId:currentPlayerId,
-        StatisticNames:[KEY_Level]
+    let statistics = server.GetPlayerStatistics({
+        PlayFabId: currentPlayerId,
+        StatisticNames: [KEY_Level]
     }).Statistics;
 
-    if(statistics==null||statistics.length<=0){
+    if (statistics == null || statistics.length <= 0) {
         return 0;
     }
     return statistics[0].Value;
-    
+
     /*
     let entityKey:PlayFabDataModels.EntityKey= 
      server.GetUserAccountInfo({PlayFabId:id}).UserInfo.TitleInfo.TitlePlayerAccount;
@@ -157,7 +185,7 @@ function getDiamonds(): number {
 /**
  * 从数组中随机取出元素
  */
-function getRandomArrayElements<T>(arr:T[], count:number):T[] {
+function getRandomArrayElements<T>(arr: T[], count: number): T[] {
     let shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
     while (i-- > min) {
         index = Math.floor((i + 1) * Math.random());
@@ -174,11 +202,11 @@ function getRandomArrayElements<T>(arr:T[], count:number):T[] {
  * @param one 
  * @param two 
  */
-function isSameDay(one: number| string, two: number| string) {
+function isSameDay(one: number | string, two: number | string) {
 
-    let A:Date=new Date(one);
-    let B:Date=new Date(two);
-     return A.setHours(0,0,0,0)==B.setHours(0,0,0,0);
+    let A: Date = new Date(one);
+    let B: Date = new Date(two);
+    return A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0);
 }
 
 /**
@@ -195,7 +223,7 @@ function GetTimeStamp(): number {
  * 发送邮箱
  * @param id 接受的人的ids
  */
-function SendToEmail(id:string){
+function SendToEmail(id: string) {
 
 }
 

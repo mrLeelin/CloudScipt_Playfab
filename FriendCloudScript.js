@@ -2,6 +2,11 @@ handlers.GetFriends = getFriends;
 handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
+var GetLimitPlayerCode;
+(function (GetLimitPlayerCode) {
+    GetLimitPlayerCode[GetLimitPlayerCode["Successful"] = 101] = "Successful";
+    GetLimitPlayerCode[GetLimitPlayerCode["Empty"] = 102] = "Empty";
+})(GetLimitPlayerCode || (GetLimitPlayerCode = {}));
 var SendGiftCode;
 (function (SendGiftCode) {
     SendGiftCode[SendGiftCode["FriendMax"] = 101] = "FriendMax";
@@ -23,8 +28,8 @@ function getFriends(args, context) {
     for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
         var f = _a[_i];
         ret.Names.push(f.TitleDisplayName);
-        ret.Levels.push(getLevel(f.FriendPlayFabId));
-        ret.Images.push(getImage(f.FriendPlayFabId));
+        ret.Levels.push(getLevelForProfile(f.Profile));
+        ret.Images.push(f.Profile.AvatarUrl);
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
@@ -52,15 +57,11 @@ function addFriend(args, context) {
 function getLimitPlayer(args, context) {
     var id = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
     var segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
-    var ret = {};
-    ret.id = Func_Code.SC_GET_LIMITPLAYER;
-    ret.Count = 0;
-    ret.FriendIds = [];
-    ret.Images = [];
-    ret.Levels = [];
-    ret.Names = [];
-    if (segmentRequest.PlayerProfiles.length <= 0) {
-        return ret;
+    if (segmentRequest.PlayerProfiles.length < 2) {
+        return {
+            id: Func_Code.SC_GET_LIMITPLAYER,
+            Code: GetLimitPlayerCode.Empty
+        };
     }
     var data = server.GetTitleData({ Keys: [KEY_GlobalLimitLevel] }).Data;
     if (data == null || !data.hasOwnProperty(KEY_GlobalLimitLevel)) {
@@ -80,20 +81,29 @@ function getLimitPlayer(args, context) {
             profiles.push(iterator);
         }
     }
-    if (profiles.length <= 1) {
-        log.error("you check friend is empty");
-        return;
+    if (profiles.length < 2) {
+        return {
+            id: Func_Code.SC_GET_LIMITPLAYER,
+            Code: GetLimitPlayerCode.Empty
+        };
     }
     if (profiles.length > 2) {
         profiles = getRandomArrayElements(profiles, 2);
     }
+    var ret = {};
+    ret.id = Func_Code.SC_GET_LIMITPLAYER;
+    ret.Code = GetLimitPlayerCode.Successful;
+    ret.PlayerIds = [];
+    ret.Images = [];
+    ret.Levels = [];
+    ret.Names = [];
     ret.Count = profiles.length;
     for (var _b = 0, profiles_1 = profiles; _b < profiles_1.length; _b++) {
         var p = profiles_1[_b];
-        ret.FriendIds.push(p.PlayerId);
-        ret.Images.push(getImage(p.PlayerId));
+        ret.PlayerIds.push(p.PlayerId);
+        ret.Images.push(p.AvatarUrl);
         ret.Names.push(p.DisplayName);
-        ret.Levels.push(getLevel(p.PlayerId));
+        ret.Levels.push(getLevelForProfile(p));
     }
     return ret;
 }
