@@ -12,6 +12,7 @@ interface IAddFriendResult {
     id: number;
     Create: boolean;
     //101 已经有此好友
+    //102 好友超出上限
     ErrorCode?: number;
 }
 
@@ -100,6 +101,24 @@ function getFriends(args: any, context): IGetFriendsResult {
 function addFriend(args:any, context): IAddFriendResult {
 
     
+    let gData= server.GetTitleData({
+        Keys:[KEY_GlobalFriendCountLimit]
+    }).Data;
+    if(!gData.hasOwnProperty(KEY_GlobalFriendCountLimit)){
+        log.error("you global data is empty.  Key : GlobalFriendCountLimit");
+        return null;
+    }
+    let maxCount:number=parseInt(gData[KEY_GlobalFriendCountLimit]);
+    if(server.GetFriendsList({
+        PlayFabId:currentPlayerId
+    }).Friends.length>maxCount){
+
+        return{
+            id:Func_Code.SC_ADD_FRIEND,
+            Create:false,
+            ErrorCode:102
+        }
+    }
     let fId:string=args["FriendId"];
     if(fId==""){
         log.error("you input friend is is invaild");

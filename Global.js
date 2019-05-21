@@ -17,6 +17,7 @@ var KEY_GlobalSendGiftCount = "GlobalSendGiftCount";
 var KEY_GlobalGiveGiftCount = "GlobalGiveGiftCount";
 var KEY_GlobalAllPlayersSegmentId = "AllPlayersSegmentId";
 var KEY_GlobalLimitLevel = "GlobalLimitLevel";
+var KEY_GlobalFriendCountLimit = "GlobalFriendLimit";
 var Func_Code;
 (function (Func_Code) {
     Func_Code[Func_Code["SC_ADD_FRIEND"] = 1002] = "SC_ADD_FRIEND";

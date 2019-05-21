@@ -24,6 +24,7 @@ const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";
 const KEY_GlobalGiveGiftCount: string = "GlobalGiveGiftCount";
 const KEY_GlobalAllPlayersSegmentId: string = "AllPlayersSegmentId";
 const KEY_GlobalLimitLevel: string = "GlobalLimitLevel";
+const KEY_GlobalFriendCountLimit:string="GlobalFriendLimit";
 
 
 enum Func_Code {
