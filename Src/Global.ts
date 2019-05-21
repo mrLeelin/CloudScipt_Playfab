@@ -176,7 +176,10 @@ function getRandomArrayElements<T>(arr:T[], count:number):T[] {
  */
 function isSameDay(one: number| string, two: number| string) {
 
-   return  dateToString(new Date(one))==dateToString(new Date(two));
+    let A:Date=new Date(one);
+    let B:Date=new Date(two);
+     dateToString(new Date(one))==dateToString(new Date(two));
+     return A.setHours(0,0,0,0)==B.setHours(0,0,0,0);
 }
 
 function dateToString(date:Date):string{

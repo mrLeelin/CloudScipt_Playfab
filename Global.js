@@ -87,7 +87,10 @@ function getRandomArrayElements(arr, count) {
     return shuffled.slice(min);
 }
 function isSameDay(one, two) {
-    return dateToString(new Date(one)) == dateToString(new Date(two));
+    var A = new Date(one);
+    var B = new Date(two);
+    dateToString(new Date(one)) == dateToString(new Date(two));
+    return A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0);
 }
 function dateToString(date) {
     var y = date.getFullYear();
