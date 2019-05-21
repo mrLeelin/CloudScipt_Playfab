@@ -214,12 +214,12 @@ function getPlayerGiftCount() {
         });
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
+    log.debug("Time1:" + GetTimeStamp() + "Time2:" + sData[KEY_SendGift].LastUpdated);
+    log.debug("Time Date 1:" + new Date(GetTimeStamp() + "Time Date 2:" + new Date(sData[KEY_SendGift].LastUpdated)));
     if (isSameDay(GetTimeStamp(), parseInt(sData[KEY_SendGift].LastUpdated))) {
-        log.debug("is same day");
         selfSendCount = sData[KEY_SendGift].Value;
     }
     else {
-        log.debug("is not Same Day");
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
             Data: { KEY_SendGift: selfSendCount }
