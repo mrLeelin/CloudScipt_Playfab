@@ -293,7 +293,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
 
-    log.debug("Time 1:"+new Date(time).toLocaleTimeString()+"Time 2:"+new Date(sData[KEY_SendGift].LastUpdated).toLocaleTimeString());
+    log.debug("Time 1:"+new Date(time).toString()+"Time 2:"+new Date(sData[KEY_SendGift].LastUpdated).toString());
     log.debug("TimeStamp 1:"+time+"TimeStamp 2:"+new Date(sData[KEY_SendGift].LastUpdated).getTime());
     if (isSameDay(time, sData[KEY_SendGift].LastUpdated)) {
         log.debug("IsSameDay");
