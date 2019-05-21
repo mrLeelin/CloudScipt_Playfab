@@ -137,10 +137,16 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
     let profiles:PlayFabServerModels.PlayerProfile[]=[];
 
     for (const iterator of segmentRequest.PlayerProfiles) {
-        
+
+        if(currentPlayerId==iterator.PlayerId)
+        {
+            continue;
+        }
+
         if(isFriend(currentPlayerId,iterator.PlayerId)){
             continue;
         }
+              
          let level:number=0;
          if(iterator.Statistics.hasOwnProperty(KEY_Level)){
              level=iterator.Statistics[KEY_Level];

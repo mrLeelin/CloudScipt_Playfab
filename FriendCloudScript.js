@@ -73,6 +73,9 @@ function getLimitPlayer(args, context) {
     var profiles = [];
     for (var _i = 0, _a = segmentRequest.PlayerProfiles; _i < _a.length; _i++) {
         var iterator = _a[_i];
+        if (currentPlayerId == iterator.PlayerId) {
+            continue;
+        }
         if (isFriend(currentPlayerId, iterator.PlayerId)) {
             continue;
         }
