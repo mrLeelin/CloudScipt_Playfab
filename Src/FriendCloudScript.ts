@@ -5,6 +5,7 @@ handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
 handlers.RmFriend=rmFriend;
+handlers.GetFriendInfo=getFriendInfo;
 
 
 
@@ -20,11 +21,15 @@ interface IGetFriendsResult {
     id: number;
     Count: number;
     SelfSendGiftCount: number;
-    Names: string[];
-    Levels: number[];
-    Images: string[];
-    IsGift: boolean[];
     FriendIds: string[];
+}
+interface IGetFriendInfoResult{
+    id:number;
+    Name:string;
+    Level:number;
+    Image:string;
+    IsGift:boolean;
+    FriendId:string;
 }
 interface IGetLimitPlayerResult {
     id: number;
@@ -79,23 +84,35 @@ function getFriends(args: any, context): IGetFriendsResult {
 
     let result = server.GetFriendsList({ PlayFabId: currentPlayerId });
     let ret: IGetFriendsResult = <IGetFriendsResult>{};
-    ret.Names = []
-    ret.Levels = []
-    ret.Images = []
-    ret.IsGift = []
     ret.FriendIds = []
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (const f of result.Friends) {
-        ret.Names.push(f.TitleDisplayName);
-        ret.Levels.push(getLevel(currentPlayerId));
-        ret.Images.push(getImage(currentPlayerId));
-        ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
-
     return ret;
+}
+function getFriendInfo(args:any):IGetFriendInfoResult{
+
+    let fId:string=args["FriendId"];
+    if(fId==""){
+        log.error("you input friend is is invaild");
+        return null;
+    }
+    let info:IGetFriendInfoResult=<IGetFriendInfoResult>{};
+    
+   let titleInfo=  server.GetUserAccountInfo({
+        PlayFabId:fId
+    }).UserInfo.TitleInfo;
+
+    info.id=Func_Code.SC_GET_FRIENDINFO;
+    info.FriendId=fId;
+    info.Name=titleInfo.DisplayName;
+    info.Image=titleInfo.AvatarUrl;
+    info.Level=getLevel(fId);
+    info.IsGift=GetPlayerIsGift(currentPlayerId,fId);
+    return info;
 }
 
 function addFriend(args:any, context): IAddFriendResult {

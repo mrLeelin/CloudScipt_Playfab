@@ -25,6 +25,7 @@ var Func_Code;
     Func_Code[Func_Code["SC_GET_LIMITPLAYER"] = 1004] = "SC_GET_LIMITPLAYER";
     Func_Code[Func_Code["SC_SEND_GIFT"] = 1005] = "SC_SEND_GIFT";
     Func_Code[Func_Code["SC_RM_FRIEND"] = 1006] = "SC_RM_FRIEND";
+    Func_Code[Func_Code["SC_GET_FRIENDINFO"] = 1007] = "SC_GET_FRIENDINFO";
     Func_Code[Func_Code["SC_SYNC_CLIENTTOSERVICE"] = 2001] = "SC_SYNC_CLIENTTOSERVICE";
     Func_Code[Func_Code["SC_SYNC_COMPARE"] = 2002] = "SC_SYNC_COMPARE";
 })(Func_Code || (Func_Code = {}));

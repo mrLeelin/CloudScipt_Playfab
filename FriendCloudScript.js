@@ -3,6 +3,7 @@ handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
 handlers.RmFriend = rmFriend;
+handlers.GetFriendInfo = getFriendInfo;
 var GetLimitPlayerCode;
 (function (GetLimitPlayerCode) {
     GetLimitPlayerCode[GetLimitPlayerCode["Successful"] = 101] = "Successful";
@@ -23,23 +24,33 @@ var RmFriendCode;
 function getFriends(args, context) {
     var result = server.GetFriendsList({ PlayFabId: currentPlayerId });
     var ret = {};
-    ret.Names = [];
-    ret.Levels = [];
-    ret.Images = [];
-    ret.IsGift = [];
     ret.FriendIds = [];
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
         var f = _a[_i];
-        ret.Names.push(f.TitleDisplayName);
-        ret.Levels.push(getLevel(currentPlayerId));
-        ret.Images.push(getImage(currentPlayerId));
-        ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
     return ret;
+}
+function getFriendInfo(args) {
+    var fId = args["FriendId"];
+    if (fId == "") {
+        log.error("you input friend is is invaild");
+        return null;
+    }
+    var info = {};
+    var titleInfo = server.GetUserAccountInfo({
+        PlayFabId: fId
+    }).UserInfo.TitleInfo;
+    info.id = Func_Code.SC_GET_FRIENDINFO;
+    info.FriendId = fId;
+    info.Name = titleInfo.DisplayName;
+    info.Image = titleInfo.AvatarUrl;
+    info.Level = getLevel(fId);
+    info.IsGift = GetPlayerIsGift(currentPlayerId, fId);
+    return info;
 }
 function addFriend(args, context) {
     var gData = server.GetTitleData({
