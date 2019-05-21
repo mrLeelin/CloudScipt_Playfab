@@ -30,6 +30,8 @@ function getFriends(args, context) {
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
         var f = _a[_i];
+        log.info(f.Profile.AvatarUrl);
+        log.info(f.Profile.Statistics.length.toString());
         ret.FriendIds.push(f.FriendPlayFabId);
     }
     return ret;

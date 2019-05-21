@@ -89,6 +89,8 @@ function getFriends(args: any, context): IGetFriendsResult {
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (const f of result.Friends) {
+        log.info(f.Profile.AvatarUrl);
+        log.info(f.Profile.Statistics.length.toString());
         ret.FriendIds.push(f.FriendPlayFabId);
     }
     return ret;
