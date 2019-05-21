@@ -97,7 +97,7 @@ function getLimitPlayer(args, context) {
     return ret;
 }
 function sendGiftToFrined(args) {
-    var _a;
+    var _a, _b, _c;
     if (!args.hasOwnProperty("FriendId")) {
         log.error("you not friend Id in this api");
         return null;
@@ -125,11 +125,9 @@ function sendGiftToFrined(args) {
             return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.FriendMax };
         }
     }
-    var data = {};
-    data[KEY_SendGift] = (--giftCount.SendGiftCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: data,
+        Data: (_a = {}, _a[KEY_SendGift] = (--giftCount.SendGiftCount).toString(), _a),
     });
     var fGiveCount = 0;
     if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated))) {
@@ -138,11 +136,9 @@ function sendGiftToFrined(args) {
     else {
         fGiveCount = parseInt(fData[KEY_GiveGift].Value);
     }
-    data = {};
-    data[KEY_GiveGift] = (--fGiveCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: fId,
-        Data: data,
+        Data: (_b = {}, _b[KEY_GiveGift] = (--fGiveCount).toString(), _b),
     });
     var rData = server.GetUserData({
         PlayFabId: currentPlayerId,
@@ -178,7 +174,7 @@ function sendGiftToFrined(args) {
     }
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
-        Data: (_a = {}, _a[KEY_HeartFriends] = JSON.stringify(dH), _a)
+        Data: (_c = {}, _c[KEY_HeartFriends] = JSON.stringify(dH), _c)
     });
     recordStatistics(KEY_StatisticsHeartCount, 1);
     return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.Successful };
@@ -210,12 +206,12 @@ function getPlayerGiftCount() {
         });
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
-    log.debug("Time1:" + time + "Time2:" + sData[KEY_SendGift].LastUpdated);
-    log.debug("Time Date 1:" + new Date(time) + "Time Date 2:" + new Date(sData[KEY_SendGift].LastUpdated));
     if (isSameDay(time, parseInt(sData[KEY_SendGift].LastUpdated))) {
+        log.debug("IsSameDay");
         selfSendCount = sData[KEY_SendGift].Value;
     }
     else {
+        log.debug("Is Not Same Day");
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
             Data: { KEY_SendGift: selfSendCount }

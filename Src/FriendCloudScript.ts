@@ -196,11 +196,9 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     }
 
     //Self Send --
-    let data:{[key:string]:string}={}
-    data[KEY_SendGift]=(--giftCount.SendGiftCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: data,
+        Data:{[KEY_SendGift]:(--giftCount.SendGiftCount).toString()},
     });
     //Friend Give --;
     let fGiveCount: number = 0;
@@ -209,11 +207,9 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     } else {
         fGiveCount = parseInt(fData[KEY_GiveGift].Value);
     }
-    data={}
-    data[KEY_GiveGift]=(--fGiveCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: fId,
-        Data: data,
+        Data: {[KEY_GiveGift]:(--fGiveCount).toString()},
     });
     //Send
     //往邮箱里写入一条数据TODO
@@ -296,11 +292,11 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
 
-    log.debug("Time1:"+time+"Time2:"+sData[KEY_SendGift].LastUpdated);
-    log.debug("Time Date 1:"+ new Date(time)+"Time Date 2:"+new Date(sData[KEY_SendGift].LastUpdated));
     if (isSameDay(time, parseInt(sData[KEY_SendGift].LastUpdated))) {
+        log.debug("IsSameDay");
         selfSendCount = sData[KEY_SendGift].Value;
     } else {
+        log.debug("Is Not Same Day")
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
             Data: { KEY_SendGift: selfSendCount }
