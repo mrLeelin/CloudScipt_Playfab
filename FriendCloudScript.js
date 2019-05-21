@@ -2,6 +2,7 @@ handlers.GetFriends = getFriends;
 handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
+handlers.RmFriend = rmFriend;
 var GetLimitPlayerCode;
 (function (GetLimitPlayerCode) {
     GetLimitPlayerCode[GetLimitPlayerCode["Successful"] = 101] = "Successful";
@@ -14,6 +15,11 @@ var SendGiftCode;
     SendGiftCode[SendGiftCode["SelfMax"] = 103] = "SelfMax";
     SendGiftCode[SendGiftCode["AlreadSend"] = 104] = "AlreadSend";
 })(SendGiftCode || (SendGiftCode = {}));
+var RmFriendCode;
+(function (RmFriendCode) {
+    RmFriendCode[RmFriendCode["Successful"] = 101] = "Successful";
+    RmFriendCode[RmFriendCode["Error"] = 102] = "Error";
+})(RmFriendCode || (RmFriendCode = {}));
 function getFriends(args, context) {
     var result = server.GetFriendsList({ PlayFabId: currentPlayerId });
     var ret = {};
@@ -36,22 +42,60 @@ function getFriends(args, context) {
     return ret;
 }
 function addFriend(args, context) {
-    args.PlayFabId = currentPlayerId;
-    if (isFriend(currentPlayerId, args.FriendPlayFabId)) {
+    var fId = args["FriendId"];
+    if (fId == "") {
+        log.error("you input friend is is invaild");
+        return null;
+    }
+    if (isFriend(currentPlayerId, fId)) {
         return {
             id: Func_Code.SC_ADD_FRIEND,
             Create: false,
             ErrorCode: 101
         };
     }
-    server.AddFriend(args);
     server.AddFriend({
-        PlayFabId: args.FriendPlayFabId,
-        FriendPlayFabId: args.PlayFabId
+        PlayFabId: currentPlayerId,
+        FriendPlayFabId: fId
     });
+    if (!isFriend(fId, currentPlayerId)) {
+        server.AddFriend({
+            PlayFabId: fId,
+            FriendPlayFabId: currentPlayerId
+        });
+    }
     return {
         id: Func_Code.SC_ADD_FRIEND,
         Create: true,
+    };
+}
+function rmFriend(args) {
+    var fId = args["FriendId"];
+    if (fId == "") {
+        log.error("you input friend is is invaild");
+        return null;
+    }
+    if (isFriend(currentPlayerId, fId)) {
+        server.RemoveFriend({
+            PlayFabId: currentPlayerId,
+            FriendPlayFabId: fId
+        });
+    }
+    else {
+        return { id: Func_Code.SC_RM_FRIEND, Code: RmFriendCode.Error };
+    }
+    if (isFriend(fId, currentPlayerId)) {
+        server.RemoveFriend({
+            PlayFabId: fId,
+            FriendPlayFabId: currentPlayerId
+        });
+    }
+    else {
+        return { id: Func_Code.SC_RM_FRIEND, Code: RmFriendCode.Error };
+    }
+    return {
+        id: Func_Code.SC_RM_FRIEND,
+        Code: RmFriendCode.Successful
     };
 }
 function getLimitPlayer(args, context) {

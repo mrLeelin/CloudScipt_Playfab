@@ -3,8 +3,8 @@
 handlers.GetFriends = getFriends;
 handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
-handlers.SendHeart=sendGiftToFrined;
-
+handlers.SendHeart = sendGiftToFrined;
+handlers.RmFriend=rmFriend;
 
 
 
@@ -25,29 +25,23 @@ interface IGetFriendsResult {
     IsGift: boolean[];
     FriendIds: string[];
 }
-interface IGetLimitPlayerResult{
-    id:number;
-    Count?:number;
-    Names?:string[];
-    Levels?:number[];
-    Images?:string[];
-    PlayerIds?:string[];
-    Code:number;
+interface IGetLimitPlayerResult {
+    id: number;
+    Count?: number;
+    Names?: string[];
+    Levels?: number[];
+    Images?: string[];
+    PlayerIds?: string[];
+    Code: number;
 }
 
 interface ISendGiftResult {
     id: number;
     Code: number;
 }
-enum GetLimitPlayerCode{
-    Successful=101,
-    Empty=102,
-}
-enum SendGiftCode {
-    FriendMax = 101,
-    Successful = 102,
-    SelfMax = 103,
-    AlreadSend=104,
+interface IRmFriendResult{
+    id:number;
+    Code?:number;
 }
 
 interface IGetPlayGiftCount {
@@ -61,16 +55,34 @@ interface IRecordHeart {
 }
 
 
+enum GetLimitPlayerCode {
+    Successful = 101,
+    Empty = 102,
+}
+enum SendGiftCode {
+    FriendMax = 101,
+    Successful = 102,
+    SelfMax = 103,
+    AlreadSend = 104,
+}
+
+enum RmFriendCode{
+    Successful=101,
+    Error=102,
+}
+
+
+
 
 function getFriends(args: any, context): IGetFriendsResult {
 
     let result = server.GetFriendsList({ PlayFabId: currentPlayerId });
-    let ret: IGetFriendsResult=<IGetFriendsResult>{};
-    ret.Names=[]
-    ret.Levels=[]
-    ret.Images=[]
-    ret.IsGift=[]
-    ret.FriendIds=[]
+    let ret: IGetFriendsResult = <IGetFriendsResult>{};
+    ret.Names = []
+    ret.Levels = []
+    ret.Images = []
+    ret.IsGift = []
+    ret.FriendIds = []
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
@@ -85,11 +97,16 @@ function getFriends(args: any, context): IGetFriendsResult {
     return ret;
 }
 
-function addFriend(args: PlayFabServerModels.AddFriendRequest, context): IAddFriendResult {
+function addFriend(args:any, context): IAddFriendResult {
 
-    args.PlayFabId = currentPlayerId;
+    
+    let fId:string=args["FriendId"];
+    if(fId==""){
+        log.error("you input friend is is invaild");
+        return null;
+    }
 
-    if (isFriend(currentPlayerId, args.FriendPlayFabId)) {
+    if (isFriend(currentPlayerId, fId)) {
 
         return {
             id: Func_Code.SC_ADD_FRIEND,
@@ -98,19 +115,58 @@ function addFriend(args: PlayFabServerModels.AddFriendRequest, context): IAddFri
         };
     }
     //添加好友
-    server.AddFriend(args);
-    //强制互填
     server.AddFriend({
-        PlayFabId: args.FriendPlayFabId,
-        FriendPlayFabId: args.PlayFabId
+        PlayFabId:currentPlayerId,
+        FriendPlayFabId:fId
     });
 
+    if (!isFriend(fId, currentPlayerId)) {
+        //强制互填
+        server.AddFriend({
+            PlayFabId: fId,
+            FriendPlayFabId: currentPlayerId
+        });
+    }
     return {
         id: Func_Code.SC_ADD_FRIEND,
         Create: true,
     };
 
 }
+
+function rmFriend(args:any):IRmFriendResult{
+
+    let fId:string=args["FriendId"];
+    if(fId==""){
+        log.error("you input friend is is invaild");
+        return null;
+    }
+    
+    if(isFriend(currentPlayerId,fId)){
+
+        server.RemoveFriend({
+            PlayFabId:currentPlayerId,
+            FriendPlayFabId:fId
+        })
+    }else{
+        return {id:Func_Code.SC_RM_FRIEND,Code:RmFriendCode.Error};
+    }
+
+    if(isFriend(fId,currentPlayerId)){
+        server.RemoveFriend({
+            PlayFabId:fId,
+            FriendPlayFabId:currentPlayerId
+        });
+    }else{
+        return {id:Func_Code.SC_RM_FRIEND,Code:RmFriendCode.Error};
+    }
+  
+    return {
+        id:Func_Code.SC_RM_FRIEND,
+        Code:RmFriendCode.Successful
+    }
+}
+
 
 function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
 
@@ -119,68 +175,66 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
     let segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
     if (segmentRequest.PlayerProfiles.length < 2) {
         return {
-            id:Func_Code.SC_GET_LIMITPLAYER,
-            Code:GetLimitPlayerCode.Empty
+            id: Func_Code.SC_GET_LIMITPLAYER,
+            Code: GetLimitPlayerCode.Empty
         };
     }
 
-    let data= server.GetTitleData({Keys:[KEY_GlobalLimitLevel]}).Data;
-    if(data==null||!data.hasOwnProperty(KEY_GlobalLimitLevel)){
+    let data = server.GetTitleData({ Keys: [KEY_GlobalLimitLevel] }).Data;
+    if (data == null || !data.hasOwnProperty(KEY_GlobalLimitLevel)) {
 
-        log.error("you not input Global Key. Key:"+KEY_GlobalLimitLevel);
+        log.error("you not input Global Key. Key:" + KEY_GlobalLimitLevel);
         return;
     }
 
 
-    let selfLevel:number=getLevel(currentPlayerId);
-    let limitLevel:number=parseInt(data[KEY_GlobalLimitLevel]);
-    let profiles:PlayFabServerModels.PlayerProfile[]=[];
+    let selfLevel: number = getLevel(currentPlayerId);
+    let limitLevel: number = parseInt(data[KEY_GlobalLimitLevel]);
+    let profiles: PlayFabServerModels.PlayerProfile[] = [];
 
     for (const iterator of segmentRequest.PlayerProfiles) {
 
-        if(currentPlayerId==iterator.PlayerId)
-        {
+        if (currentPlayerId == iterator.PlayerId) {
             continue;
         }
 
-        if(isFriend(currentPlayerId,iterator.PlayerId)){
+        if (isFriend(currentPlayerId, iterator.PlayerId)) {
             continue;
         }
-              
-         let level:number=0;
-         if(iterator.Statistics.hasOwnProperty(KEY_Level)){
-             level=iterator.Statistics[KEY_Level];
-         }
-         if(Math.abs(level-selfLevel)<=limitLevel)
-         {
+
+        let level: number = 0;
+        if (iterator.Statistics.hasOwnProperty(KEY_Level)) {
+            level = iterator.Statistics[KEY_Level];
+        }
+        if (Math.abs(level - selfLevel) <= limitLevel) {
             profiles.push(iterator);
-         }
+        }
     }
-    if(profiles.length<2){
+    if (profiles.length < 2) {
         return {
-            id:Func_Code.SC_GET_LIMITPLAYER,
-            Code:GetLimitPlayerCode.Empty
+            id: Func_Code.SC_GET_LIMITPLAYER,
+            Code: GetLimitPlayerCode.Empty
         };
     }
-    if(profiles.length>2){
-        profiles=getRandomArrayElements(profiles,2);
+    if (profiles.length > 2) {
+        profiles = getRandomArrayElements(profiles, 2);
     }
 
-    let ret: IGetLimitPlayerResult=<IGetLimitPlayerResult>{};
+    let ret: IGetLimitPlayerResult = <IGetLimitPlayerResult>{};
     ret.id = Func_Code.SC_GET_LIMITPLAYER;
-    ret.Code=GetLimitPlayerCode.Successful;
-    ret.PlayerIds=[]
-    ret.Images=[]
-    ret.Levels=[]
-    ret.Names=[]
+    ret.Code = GetLimitPlayerCode.Successful;
+    ret.PlayerIds = []
+    ret.Images = []
+    ret.Levels = []
+    ret.Names = []
     ret.Count = profiles.length;
     for (const p of profiles) {
         ret.PlayerIds.push(p.PlayerId);
-        ret.Images.push(p.AvatarUrl?p.AvatarUrl:"");
+        ret.Images.push(p.AvatarUrl ? p.AvatarUrl : "");
         ret.Names.push(p.DisplayName);
-        let level:number=0;
-        if(p.Statistics.hasOwnProperty(KEY_Level)){
-            level=p.Statistics[KEY_Level];
+        let level: number = 0;
+        if (p.Statistics.hasOwnProperty(KEY_Level)) {
+            level = p.Statistics[KEY_Level];
         }
         ret.Levels.push(level);
     }
@@ -198,15 +252,15 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         log.error("you friend is is invaild.");
         return null;
     }
-    
-    if(!GetPlayerIsGift(currentPlayerId,fId)){
 
-        log.debug("you alread send gift. Id:"+fId);
-        return {id:Func_Code.SC_SEND_GIFT,Code:SendGiftCode.AlreadSend};
+    if (!GetPlayerIsGift(currentPlayerId, fId)) {
+
+        log.debug("you alread send gift. Id:" + fId);
+        return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.AlreadSend };
     }
-    
 
-    let time:number=GetTimeStamp();
+
+    let time: number = GetTimeStamp();
     let giftCount: IGetPlayGiftCount = getPlayerGiftCount();
 
     if (giftCount.SendGiftCount <= 0) {
@@ -218,7 +272,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Keys: [KEY_GiveGift]
     }).Data;
     if (fData.hasOwnProperty(KEY_GiveGift)) {
-        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(time,fData[KEY_GiveGift].LastUpdated))) {
+        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(time, fData[KEY_GiveGift].LastUpdated))) {
             return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.FriendMax };
         }
     }
@@ -226,7 +280,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     //Self Send --
     server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data:{[KEY_SendGift]:(--giftCount.SendGiftCount).toString()},
+        Data: { [KEY_SendGift]: (--giftCount.SendGiftCount).toString() },
     });
     //Friend Give --;
     let fGiveCount: number = 0;
@@ -237,7 +291,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     }
     server.UpdateUserReadOnlyData({
         PlayFabId: fId,
-        Data: {[KEY_GiveGift]:(--fGiveCount).toString()},
+        Data: { [KEY_GiveGift]: (--fGiveCount).toString() },
     });
     //Send
     //往邮箱里写入一条数据
@@ -249,7 +303,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         PlayFabId: currentPlayerId,
         Keys: [KEY_HeartFriends]
     }).Data;
-    let dH: IRecordHeart=<IRecordHeart>{};
+    let dH: IRecordHeart = <IRecordHeart>{};
     if (rData.hasOwnProperty(KEY_HeartFriends)) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     } else {
@@ -275,8 +329,8 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         }
     }
     server.UpdateUserData({
-        PlayFabId:currentPlayerId,
-        Data:{[KEY_HeartFriends]:JSON.stringify(dH)}
+        PlayFabId: currentPlayerId,
+        Data: { [KEY_HeartFriends]: JSON.stringify(dH) }
     })
     //统计一下   
     recordStatistics(KEY_StatisticsHeartCount, 1);
@@ -290,7 +344,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
 
     let selfSendCount: string = "";
     let selfGiveCount: string = "";
-    let time:number=GetTimeStamp();
+    let time: number = GetTimeStamp();
 
     let gData: { [key: string]: string } = server.GetTitleData({
         Keys: [KEY_GlobalSendGiftCount, KEY_GlobalGiveGiftCount]
@@ -309,11 +363,11 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
     }).Data;
 
 
-    
+
     if (!sData.hasOwnProperty(KEY_SendGift) || !sData.hasOwnProperty(KEY_GiveGift)) {
-        let d:{[key:string]:string}={}
-        d[KEY_SendGift]=selfSendCount;
-        d[KEY_GiveGift]=selfGiveCount;
+        let d: { [key: string]: string } = {}
+        d[KEY_SendGift] = selfSendCount;
+        d[KEY_GiveGift] = selfGiveCount;
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
             Data: d
@@ -329,7 +383,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
             Data: { [KEY_SendGift]: selfSendCount }
         });
     }
-    if (isSameDay(time,sData[KEY_GiveGift].LastUpdated)) {
+    if (isSameDay(time, sData[KEY_GiveGift].LastUpdated)) {
         selfGiveCount = sData[KEY_GiveGift].Value;
     } else {
         server.UpdateUserReadOnlyData({
@@ -380,17 +434,17 @@ function GetPlayerIsGift(self: string, target: string): boolean {
         PlayFabId: self,
         Keys: [KEY_HeartFriends]
     }).Data;
-    if(data==null||!data.hasOwnProperty(KEY_HeartFriends)){
+    if (data == null || !data.hasOwnProperty(KEY_HeartFriends)) {
         return true;
     }
-   let dH:IRecordHeart= JSON.parse(data[KEY_HeartFriends].Value);
-   for (let i = 0; i < dH.Id.length; i++) {
-       if(dH.Id[i]==target){
-           if(isSameDay(dH.TimeStamp[i],GetTimeStamp())){
-               return false;
-           }
-       }   
-   }
+    let dH: IRecordHeart = JSON.parse(data[KEY_HeartFriends].Value);
+    for (let i = 0; i < dH.Id.length; i++) {
+        if (dH.Id[i] == target) {
+            if (isSameDay(dH.TimeStamp[i], GetTimeStamp())) {
+                return false;
+            }
+        }
+    }
     return true;
 }
 
