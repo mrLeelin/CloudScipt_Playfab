@@ -170,11 +170,13 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         log.error("you friend is is invaild.");
         return null;
     }
+    /*
     if(!GetPlayerIsGift(currentPlayerId,fId)){
 
         log.error("you alread send gift. Id:"+fId);
         return null;
     }
+    */
 
     let giftCount: IGetPlayGiftCount = getPlayerGiftCount();
 

@@ -108,10 +108,13 @@ function sendGiftToFrined(args) {
         log.error("you friend is is invaild.");
         return null;
     }
-    if (!GetPlayerIsGift(currentPlayerId, fId)) {
-        log.error("you alread send gift. Id:" + fId);
+    /*
+    if(!GetPlayerIsGift(currentPlayerId,fId)){
+
+        log.error("you alread send gift. Id:"+fId);
         return null;
     }
+    */
     var giftCount = getPlayerGiftCount();
     if (giftCount.SendGiftCount <= 0) {
         return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.SelfMax };
