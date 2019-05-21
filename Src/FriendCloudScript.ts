@@ -76,16 +76,7 @@ function getFriends(args: any, context): IGetFriendsResult {
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (const f of result.Friends) {
         ret.Names.push(f.TitleDisplayName);
-        let level:number=0;
-        if( f.Profile.Statistics.length>0){
-            for (const iterator of f.Profile.Statistics) {
-                if(iterator.Name==KEY_Level){
-                    level=iterator.Value;
-                    break;
-                }
-            }
-        }
-        ret.Levels.push(level);
+        ret.Levels.push(getLevel(currentPlayerId));
         ret.Images.push(getImage(currentPlayerId));
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
