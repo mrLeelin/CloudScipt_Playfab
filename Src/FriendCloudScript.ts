@@ -184,7 +184,6 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.SelfMax };
     }
 
-    log.info("FriendId: "+fId);
     let fData = server.GetUserReadOnlyData({
         PlayFabId: fId,
         Keys: [KEY_GiveGift]
@@ -198,7 +197,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     //Self Send --
     server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: { KEY_SendGift: (giftCount.SendGiftCount--).toString() }
+        Data: { KEY_SendGift: (--giftCount.SendGiftCount).toString() }
     });
     //Friend Give --;
     let fGiveCount: number = 0;
@@ -209,7 +208,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     }
     server.UpdateUserReadOnlyData({
         PlayFabId: fId,
-        Data: { KEY_GiveGift: (fGiveCount--).toString() }
+        Data: { KEY_GiveGift: (--fGiveCount).toString() }
     });
     //Send
     //往邮箱里写入一条数据TODO
