@@ -138,6 +138,9 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
 
     for (const iterator of segmentRequest.PlayerProfiles) {
         
+        if(isFriend(currentPlayerId,iterator.PlayerId)){
+            continue;
+        }
          let level:number=0;
          if(iterator.Statistics.hasOwnProperty(KEY_Level)){
              level=iterator.Statistics[KEY_Level];
