@@ -97,6 +97,7 @@ function getLimitPlayer(args, context) {
     return ret;
 }
 function sendGiftToFrined(args) {
+    var _a;
     if (!args.hasOwnProperty("FriendId")) {
         log.error("you not friend Id in this api");
         return null;
@@ -124,9 +125,11 @@ function sendGiftToFrined(args) {
             return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.FriendMax };
         }
     }
+    var data = {};
+    data[KEY_SendGift] = (--giftCount.SendGiftCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: { KEY_SendGift: (--giftCount.SendGiftCount).toString() }
+        Data: data,
     });
     var fGiveCount = 0;
     if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated))) {
@@ -135,9 +138,11 @@ function sendGiftToFrined(args) {
     else {
         fGiveCount = parseInt(fData[KEY_GiveGift].Value);
     }
+    data = {};
+    data[KEY_GiveGift] = (--fGiveCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: fId,
-        Data: { KEY_GiveGift: (--fGiveCount).toString() }
+        Data: data,
     });
     var rData = server.GetUserData({
         PlayFabId: currentPlayerId,
@@ -173,7 +178,7 @@ function sendGiftToFrined(args) {
     }
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
-        Data: { KEY_HeartFriends: JSON.stringify(dH) }
+        Data: (_a = {}, _a[KEY_HeartFriends] = JSON.stringify(dH), _a)
     });
     recordStatistics(KEY_StatisticsHeartCount, 1);
     return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.Successful };

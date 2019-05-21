@@ -196,9 +196,11 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     }
 
     //Self Send --
+    let data:{[key:string]:string}={}
+    data[KEY_SendGift]=(--giftCount.SendGiftCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
-        Data: { KEY_SendGift: (--giftCount.SendGiftCount).toString() }
+        Data: data,
     });
     //Friend Give --;
     let fGiveCount: number = 0;
@@ -207,9 +209,11 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     } else {
         fGiveCount = parseInt(fData[KEY_GiveGift].Value);
     }
+    data={}
+    data[KEY_GiveGift]=(--fGiveCount).toString();
     server.UpdateUserReadOnlyData({
         PlayFabId: fId,
-        Data: { KEY_GiveGift: (--fGiveCount).toString() }
+        Data: data,
     });
     //Send
     //往邮箱里写入一条数据TODO
@@ -247,7 +251,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     }
     server.UpdateUserData({
         PlayFabId:currentPlayerId,
-        Data:{KEY_HeartFriends:JSON.stringify(dH)}
+        Data:{[KEY_HeartFriends]:JSON.stringify(dH)}
     })
     //统计一下   
     recordStatistics(KEY_StatisticsHeartCount, 1);
