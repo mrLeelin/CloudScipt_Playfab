@@ -170,14 +170,15 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         log.error("you friend is is invaild.");
         return null;
     }
-    /*
+    
     if(!GetPlayerIsGift(currentPlayerId,fId)){
 
         log.error("you alread send gift. Id:"+fId);
         return null;
     }
-    */
+    
 
+    let time:number=GetTimeStamp();
     let giftCount: IGetPlayGiftCount = getPlayerGiftCount();
 
     if (giftCount.SendGiftCount <= 0) {
@@ -189,7 +190,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Keys: [KEY_GiveGift]
     }).Data;
     if (fData.hasOwnProperty(KEY_GiveGift)) {
-        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(GetTimeStamp(), parseInt(fData[KEY_GiveGift].LastUpdated)))) {
+        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated)))) {
             return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.FriendMax };
         }
     }
@@ -201,7 +202,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     });
     //Friend Give --;
     let fGiveCount: number = 0;
-    if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(GetTimeStamp(), parseInt(fData[KEY_GiveGift].LastUpdated))) {
+    if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated))) {
         fGiveCount = parseInt(server.GetTitleData({ Keys: [KEY_GlobalGiveGiftCount] }).Data[KEY_GlobalGiveGiftCount]);
     } else {
         fGiveCount = parseInt(fData[KEY_GiveGift].Value);
@@ -228,7 +229,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     }
     if (dH.Id.length <= 0) {
         dH.Id.push(fId);
-        dH.TimeStamp.push(GetTimeStamp());
+        dH.TimeStamp.push(time);
     } else {
         let index: number = 0;
         for (let i = 0; i < dH.Id.length; i++) {
@@ -238,10 +239,10 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         }
         if (index > 0) {
             dH.Id[index] = fId,
-                dH.TimeStamp[index] = GetTimeStamp();
+                dH.TimeStamp[index] = time;
         } else {
             dH.Id.push(fId);
-            dH.TimeStamp.push(GetTimeStamp());
+            dH.TimeStamp.push(time);
         }
     }
     server.UpdateUserData({
@@ -260,6 +261,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
 
     let selfSendCount: string = "";
     let selfGiveCount: string = "";
+    let time:number=GetTimeStamp();
 
     let gData: { [key: string]: string } = server.GetTitleData({
         Keys: [KEY_GlobalSendGiftCount, KEY_GlobalGiveGiftCount]
@@ -290,9 +292,9 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
 
-    log.debug("Time1:"+GetTimeStamp()+"Time2:"+sData[KEY_SendGift].LastUpdated);
-    log.debug("Time Date 1:"+ new Date(GetTimeStamp()+"Time Date 2:"+new Date(sData[KEY_SendGift].LastUpdated)));
-    if (isSameDay(GetTimeStamp(), parseInt(sData[KEY_SendGift].LastUpdated))) {
+    log.debug("Time1:"+time+"Time2:"+sData[KEY_SendGift].LastUpdated);
+    log.debug("Time Date 1:"+ new Date(time)+"Time Date 2:"+new Date(sData[KEY_SendGift].LastUpdated));
+    if (isSameDay(time, parseInt(sData[KEY_SendGift].LastUpdated))) {
         selfSendCount = sData[KEY_SendGift].Value;
     } else {
         server.UpdateUserReadOnlyData({
@@ -300,7 +302,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
             Data: { KEY_SendGift: selfSendCount }
         });
     }
-    if (isSameDay(GetTimeStamp(), parseInt(sData[KEY_GiveGift].LastUpdated))) {
+    if (isSameDay(time, parseInt(sData[KEY_GiveGift].LastUpdated))) {
         selfGiveCount = sData[KEY_GiveGift].Value;
     } else {
         server.UpdateUserReadOnlyData({
@@ -312,12 +314,6 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
 }
 
 
-function isSameDay(one: number, two: number) {
-
-    let A: Date = new Date(one);
-    let B: Date = new Date(two);
-    return (A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0));
-}
 
 function isFriend(self: string, other: string): boolean {
 

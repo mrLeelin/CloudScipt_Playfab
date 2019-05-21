@@ -38,9 +38,7 @@ function addFriend(args, context) {
             ErrorCode: 101
         };
     }
-    //添加好友
     server.AddFriend(args);
-    //强制互填
     server.AddFriend({
         PlayFabId: args.FriendPlayFabId,
         FriendPlayFabId: args.PlayFabId
@@ -108,13 +106,11 @@ function sendGiftToFrined(args) {
         log.error("you friend is is invaild.");
         return null;
     }
-    /*
-    if(!GetPlayerIsGift(currentPlayerId,fId)){
-
-        log.error("you alread send gift. Id:"+fId);
+    if (!GetPlayerIsGift(currentPlayerId, fId)) {
+        log.error("you alread send gift. Id:" + fId);
         return null;
     }
-    */
+    var time = GetTimeStamp();
     var giftCount = getPlayerGiftCount();
     if (giftCount.SendGiftCount <= 0) {
         return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.SelfMax };
@@ -124,18 +120,16 @@ function sendGiftToFrined(args) {
         Keys: [KEY_GiveGift]
     }).Data;
     if (fData.hasOwnProperty(KEY_GiveGift)) {
-        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(GetTimeStamp(), parseInt(fData[KEY_GiveGift].LastUpdated)))) {
+        if (parseInt(fData[KEY_GiveGift].Value) <= 0 && (isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated)))) {
             return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.FriendMax };
         }
     }
-    //Self Send --
     server.UpdateUserReadOnlyData({
         PlayFabId: currentPlayerId,
         Data: { KEY_SendGift: (--giftCount.SendGiftCount).toString() }
     });
-    //Friend Give --;
     var fGiveCount = 0;
-    if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(GetTimeStamp(), parseInt(fData[KEY_GiveGift].LastUpdated))) {
+    if (!fData.hasOwnProperty(KEY_GiveGift) || !isSameDay(time, parseInt(fData[KEY_GiveGift].LastUpdated))) {
         fGiveCount = parseInt(server.GetTitleData({ Keys: [KEY_GlobalGiveGiftCount] }).Data[KEY_GlobalGiveGiftCount]);
     }
     else {
@@ -145,9 +139,6 @@ function sendGiftToFrined(args) {
         PlayFabId: fId,
         Data: { KEY_GiveGift: (--fGiveCount).toString() }
     });
-    //Send
-    //往邮箱里写入一条数据TODO
-    //记录一下
     var rData = server.GetUserData({
         PlayFabId: currentPlayerId,
         Keys: [KEY_HeartFriends]
@@ -162,7 +153,7 @@ function sendGiftToFrined(args) {
     }
     if (dH.Id.length <= 0) {
         dH.Id.push(fId);
-        dH.TimeStamp.push(GetTimeStamp());
+        dH.TimeStamp.push(time);
     }
     else {
         var index = 0;
@@ -173,24 +164,24 @@ function sendGiftToFrined(args) {
         }
         if (index > 0) {
             dH.Id[index] = fId,
-                dH.TimeStamp[index] = GetTimeStamp();
+                dH.TimeStamp[index] = time;
         }
         else {
             dH.Id.push(fId);
-            dH.TimeStamp.push(GetTimeStamp());
+            dH.TimeStamp.push(time);
         }
     }
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
         Data: { KEY_HeartFriends: JSON.stringify(dH) }
     });
-    //统计一下   
     recordStatistics(KEY_StatisticsHeartCount, 1);
     return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.Successful };
 }
 function getPlayerGiftCount() {
     var selfSendCount = "";
     var selfGiveCount = "";
+    var time = GetTimeStamp();
     var gData = server.GetTitleData({
         Keys: [KEY_GlobalSendGiftCount, KEY_GlobalGiveGiftCount]
     }).Data;
@@ -214,9 +205,9 @@ function getPlayerGiftCount() {
         });
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
-    log.debug("Time1:" + GetTimeStamp() + "Time2:" + sData[KEY_SendGift].LastUpdated);
-    log.debug("Time Date 1:" + new Date(GetTimeStamp() + "Time Date 2:" + new Date(sData[KEY_SendGift].LastUpdated)));
-    if (isSameDay(GetTimeStamp(), parseInt(sData[KEY_SendGift].LastUpdated))) {
+    log.debug("Time1:" + time + "Time2:" + sData[KEY_SendGift].LastUpdated);
+    log.debug("Time Date 1:" + new Date(time) + "Time Date 2:" + new Date(sData[KEY_SendGift].LastUpdated));
+    if (isSameDay(time, parseInt(sData[KEY_SendGift].LastUpdated))) {
         selfSendCount = sData[KEY_SendGift].Value;
     }
     else {
@@ -225,7 +216,7 @@ function getPlayerGiftCount() {
             Data: { KEY_SendGift: selfSendCount }
         });
     }
-    if (isSameDay(GetTimeStamp(), parseInt(sData[KEY_GiveGift].LastUpdated))) {
+    if (isSameDay(time, parseInt(sData[KEY_GiveGift].LastUpdated))) {
         selfGiveCount = sData[KEY_GiveGift].Value;
     }
     else {
@@ -235,11 +226,6 @@ function getPlayerGiftCount() {
         });
     }
     return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
-}
-function isSameDay(one, two) {
-    var A = new Date(one);
-    var B = new Date(two);
-    return (A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0));
 }
 function isFriend(self, other) {
     var result = server.GetFriendsList({ PlayFabId: self });

@@ -31,9 +31,6 @@ function compareDataVersions(args) {
         log.info("you Remote is not key");
         return { id: Func_Code.SC_SYNC_COMPARE, Status: Server_Data_Status.None };
     }
-    /*
-        let data: PlayFabServerModels.UserDataRecord = result.Data[SYNC_VERSION];
-        */
     var remoteVersion = parseInt(sValue[KEY_SYNC_VERSION].Value);
     if (remoteVersion <= 0) {
         log.error("you not get remote Version");
@@ -92,7 +89,7 @@ function syncData(args) {
         var data = Values[i];
         var status_1 = data.Status;
         if (status_1 == Data_Status.New_Data) {
-            var sData = set(entityId, entityType, key, data);
+            var sData = set(tS, entityId, entityType, key, data);
             ret[key] = sData;
         }
         else if (status_1 == Data_Status.Update_Data) {
@@ -102,7 +99,7 @@ function syncData(args) {
                     log.info("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
             }
-            sData = set(entityId, entityType, key, data);
+            sData = set(tS, entityId, entityType, key, data);
             ret[key] = sData;
         }
         else {
@@ -137,23 +134,23 @@ function get(entityId, entityType, key) {
             return getTitleData(key);
     }
 }
-function set(entityId, entityType, key, data) {
+function set(time, entityId, entityType, key, data) {
     switch (key) {
         case KEY_Level:
-            return setLevelInfo(key, data);
+            return setLevelInfo(time, key, data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
-            return setTitleData(key, data);
+            return setTitleData(time, key, data);
         case KEY_Currency:
-            return setCurrencyData(key, data);
+            return setCurrencyData(time, key, data);
         case KEY_Account:
-            return setAccountInfo(entityId, entityType, key, data);
+            return setAccountInfo(time, entityId, entityType, key, data);
         default:
-            return setTitleData(key, data);
+            return setTitleData(time, key, data);
     }
 }
 function getDatasForCientTimeStamp(cT, entityId, entityType) {
@@ -178,16 +175,9 @@ function getDatasForCientTimeStamp(cT, entityId, entityType) {
     }
     return datas;
 }
-function GetTimeStamp() {
-    var time = server.GetTime({});
-    var d = Date.parse(time.Time);
-    return d;
-}
-function setObjects(id, type, key, data) {
-    //Client To Server
+function setObjects(time, id, type, key, data) {
     data.Status = Data_Status.Sync_Data;
-    data.TimeStamp = GetTimeStamp();
-    //data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     var setObj = {
         ObjectName: key,
         DataObject: data,
@@ -235,10 +225,10 @@ function getTitleData(key) {
     var dValue = data.Data[key];
     return JSON.parse(dValue.Value);
 }
-function setTitleData(key, data) {
+function setTitleData(time, key, data) {
     var userData = {};
     data.Status = Data_Status.Sync_Data;
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     userData[key] = JSON.stringify(data);
     var result = server.UpdateUserPublisherReadOnlyData({
         PlayFabId: currentPlayerId,
@@ -272,7 +262,7 @@ function getCurrencyData(key) {
     };
     return data;
 }
-function setCurrencyData(key, data) {
+function setCurrencyData(time, key, data) {
     data.Status = Data_Status.Sync_Data;
     var cR = JSON.parse(data.Progress);
     if (!cR.hasOwnProperty("cts") || !cR.hasOwnProperty("quatity")) {
@@ -310,7 +300,6 @@ function setCurrencyData(key, data) {
                 }).Balance);
             }
             else {
-                // ==0
                 changeCount.push(0);
             }
         }
@@ -326,7 +315,7 @@ function setCurrencyData(key, data) {
     cR["quatity"] = changeCount;
     cR["m_status"] = 0;
     data.Progress = JSON.stringify(cR);
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     var s = {};
     s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
@@ -359,15 +348,14 @@ function getAccountInfo(id, type, key) {
     };
     return data;
 }
-function setAccountInfo(id, type, key, data) {
+function setAccountInfo(time, id, type, key, data) {
     data.Status = Data_Status.Sync_Data;
     var info = JSON.parse(data.Progress);
     server.UpdateAvatarUrl({
         PlayFabId: currentPlayerId,
         ImageUrl: info["avatarUrl"]
     });
-    //TODO  Set  Display Name
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     var s = {};
     s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
@@ -396,14 +384,14 @@ function getLevelInfo(key) {
     };
     return data;
 }
-function setLevelInfo(key, data) {
+function setLevelInfo(time, key, data) {
     data.Status = Data_Status.Sync_Data;
     var info = JSON.parse(data.Progress);
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         Statistics: [{ StatisticName: key, Value: parseInt(info["Level"]) }]
     });
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     var s = {};
     s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({

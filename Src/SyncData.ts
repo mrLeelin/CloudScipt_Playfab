@@ -149,7 +149,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         let status: number = data.Status;
 
         if (status == Data_Status.New_Data) {
-            let sData: IData = set(entityId, entityType, key, data);
+            let sData: IData = set( tS,entityId, entityType, key, data);
             ret[key] = sData;
         } else if (status == Data_Status.Update_Data) {
             let sData: IData = get(entityId, entityType, key);
@@ -158,7 +158,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
                     log.info("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
             }
-            sData = set(entityId, entityType, key, data);
+            sData = set(tS,entityId, entityType, key, data);
             ret[key] = sData;
         } else {
             log.error("you sync Data Status :" + status);
@@ -197,25 +197,25 @@ function get(entityId: string, entityType: string, key: string): IData {
             return getTitleData(key);
     }
 }
-function set(entityId: string, entityType: string, key: string, data: IData): IData {
+function set(time:number, entityId: string, entityType: string, key: string, data: IData): IData {
 
 
     switch (key) {
         case KEY_Level:
-            return setLevelInfo(key,data);
+            return setLevelInfo(time,key,data);
         case KEY_QuestData:
         case KEY_Inventory:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
-            return setTitleData(key, data);
+            return setTitleData(time,key, data);
         case KEY_Currency:
-            return setCurrencyData(key, data);
+            return setCurrencyData(time,key, data);
         case KEY_Account:
-            return setAccountInfo(entityId, entityType, key, data);
+            return setAccountInfo(time,entityId, entityType, key, data);
         default:
-            return setTitleData(key, data);
+            return setTitleData(time,key, data);
     }
 }
 
@@ -242,19 +242,12 @@ function getDatasForCientTimeStamp(cT: number, entityId: string, entityType: str
     return datas;
 }
 
-function GetTimeStamp(): number {
 
-    let time: PlayFabServerModels.GetTimeResult = server.GetTime({});
-    let d: number = Date.parse(time.Time);
-    return d;
-}
-
-function setObjects(id: string, type: string, key: string, data: IData): IData {
+function setObjects(time:number, id: string, type: string, key: string, data: IData): IData {
 
     //Client To Server
     data.Status = Data_Status.Sync_Data;
-    data.TimeStamp = GetTimeStamp();
-    //data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     let setObj: PlayFabDataModels.SetObject = {
         ObjectName: key,
         DataObject: data,
@@ -307,11 +300,11 @@ function getTitleData(key: string): IData {
     return JSON.parse(dValue.Value) as IData;
 }
 
-function setTitleData(key: string, data: IData): IData {
+function setTitleData(time:number,key: string, data: IData): IData {
 
     let userData: { [key: string]: string } = {};
     data.Status = Data_Status.Sync_Data;
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     userData[key] = JSON.stringify(data);
     let result: PlayFabServerModels.UpdateUserDataResult = server.UpdateUserPublisherReadOnlyData({
         PlayFabId: currentPlayerId,
@@ -351,7 +344,7 @@ function getCurrencyData(key: string): IData {
 
 }
 
-function setCurrencyData(key: string, data: IData): IData {
+function setCurrencyData(time:number, key: string, data: IData): IData {
 
     data.Status = Data_Status.Sync_Data;
 
@@ -416,7 +409,7 @@ function setCurrencyData(key: string, data: IData): IData {
     cR["quatity"] = changeCount;
     cR["m_status"] = 0;
     data.Progress = JSON.stringify(cR);
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
 
 
     let s: { [key: string]: string } = {}
@@ -458,7 +451,7 @@ function getAccountInfo(id: string, type: string, key: string): IData {
     return data;
 }
 
-function setAccountInfo(id: string, type: string, key: string, data: IData): IData {
+function setAccountInfo( time:number,id: string, type: string, key: string, data: IData): IData {
 
 
     data.Status = Data_Status.Sync_Data;
@@ -469,7 +462,7 @@ function setAccountInfo(id: string, type: string, key: string, data: IData): IDa
     });
 
     //TODO  Set  Display Name
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     let s: { [key: string]: string } = {}
     s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
@@ -506,14 +499,14 @@ function getLevelInfo( key: string): IData {
     };
     return data;
 }
-function setLevelInfo( key: string, data: IData): IData {
+function setLevelInfo( time:number,key: string, data: IData): IData {
     data.Status = Data_Status.Sync_Data;
     let info: { [key: string]: string } = JSON.parse(data.Progress);
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         Statistics: [{ StatisticName: key, Value: parseInt(info["Level"]) }]
     });
-    data.TimeStamp = GetTimeStamp();
+    data.TimeStamp = time;
     let s: { [key: string]: string } = {};
     s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({

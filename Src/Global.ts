@@ -169,3 +169,25 @@ function getRandomArrayElements<T>(arr:T[], count:number):T[] {
 }
 
 
+/**
+ * 是否是同一天
+ * @param one 
+ * @param two 
+ */
+function isSameDay(one: number| string, two: number| string) {
+    let A:Date=new Date(one);
+    let B:Date=new Date(two);
+    return (A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0));
+}
+
+/**
+ * 获取当前时间戳
+ */
+function GetTimeStamp(): number {
+
+    let time: PlayFabServerModels.GetTimeResult = server.GetTime({});
+    let d: number = Date.parse(time.Time);
+    return d;
+}
+
+

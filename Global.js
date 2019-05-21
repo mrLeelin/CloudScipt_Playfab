@@ -19,20 +19,13 @@ var KEY_GlobalGiveGiftCount = "GlobalGiveGiftCount";
 var KEY_GlobalAllPlayersSegmentId = "AllPlayersSegmentId";
 var Func_Code;
 (function (Func_Code) {
-    //Friends
     Func_Code[Func_Code["SC_ADD_FRIEND"] = 1002] = "SC_ADD_FRIEND";
     Func_Code[Func_Code["SC_GET_FRIEND"] = 1003] = "SC_GET_FRIEND";
     Func_Code[Func_Code["SC_GET_LIMITPLAYER"] = 1004] = "SC_GET_LIMITPLAYER";
     Func_Code[Func_Code["SC_SEND_GIFT"] = 1005] = "SC_SEND_GIFT";
-    //Sync
     Func_Code[Func_Code["SC_SYNC_CLIENTTOSERVICE"] = 2001] = "SC_SYNC_CLIENTTOSERVICE";
     Func_Code[Func_Code["SC_SYNC_COMPARE"] = 2002] = "SC_SYNC_COMPARE";
 })(Func_Code || (Func_Code = {}));
-/**
- * 记录一下当前的。
- * @param key
- * @param defValue
- */
 function recordStatistics(key, defValue) {
     var statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
@@ -50,25 +43,13 @@ function recordStatistics(key, defValue) {
         Statistics: [{ StatisticName: key, Value: v }]
     });
 }
-/**
- * 删除下划线
- * @param str
- */
 function rmStrUnderLine(str) {
     var strs = str.split('_');
     return strs.join("");
 }
-/**
- * 获取 Icon
- * @param id
- */
 function getImage(id) {
     return server.GetUserAccountInfo({ PlayFabId: id }).UserInfo.TitleInfo.AvatarUrl;
 }
-/**
- * 获取等级
- * @param id
- */
 function getLevel(id) {
     var statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
@@ -78,34 +59,6 @@ function getLevel(id) {
         return 0;
     }
     return statistics[0].Value;
-    /*
-    let entityKey:PlayFabDataModels.EntityKey=
-     server.GetUserAccountInfo({PlayFabId:id}).UserInfo.TitleInfo.TitlePlayerAccount;
-     log.info("Server EntityKey:"+entityKey.Id);
-     log.info("Server EntityType:"+entityKey.Type);
-     
-     let data:IData=getObjects(entityKey.Id,entityKey.Type,KEY_Level);
-
-    let sValue:any= JSON.parse(data.Progress);
- 
-    if (!sValue.hasOwnProperty("Level")) {
-        return 0;
-    }
-    return sValue["Level"];
-
-    let data:{[key:string]:PlayFabServerModels.UserDataRecord}= server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId,
-        Keys:[KEY_Level]
-    }).Data;
-    
-    let dValue:IData= JSON.parse(data[KEY_Level].Value);
-    let value:any= JSON.stringify(dValue.Progress);
-    if(!value.hasOwnProperty("Level")){
-        return 0;
-    }
-
-    return value["Level"];
-    */
 }
 function getCoins() {
     var coin = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
@@ -123,9 +76,6 @@ function getDiamonds() {
     }
     return 0;
 }
-/**
- * 从数组中随机取出元素
- */
 function getRandomArrayElements(arr, count) {
     var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
     while (i-- > min) {
@@ -135,4 +85,14 @@ function getRandomArrayElements(arr, count) {
         shuffled[i] = temp;
     }
     return shuffled.slice(min);
+}
+function isSameDay(one, two) {
+    var A = new Date(one);
+    var B = new Date(two);
+    return (A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0));
+}
+function GetTimeStamp() {
+    var time = server.GetTime({});
+    var d = Date.parse(time.Time);
+    return d;
 }
