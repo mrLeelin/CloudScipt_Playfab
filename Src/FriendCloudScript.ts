@@ -77,7 +77,7 @@ function getFriends(args: any, context): IGetFriendsResult {
     for (const f of result.Friends) {
         ret.Names.push(f.TitleDisplayName);
         ret.Levels.push(getLevelForProfile(f.Profile));
-        ret.Images.push(f.Profile.AvatarUrl);
+        ret.Images.push(f.Profile.AvatarUrl?f.Profile.AvatarUrl:"");
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
@@ -167,7 +167,7 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
     ret.Count = profiles.length;
     for (const p of profiles) {
         ret.PlayerIds.push(p.PlayerId);
-        ret.Images.push(p.AvatarUrl);
+        ret.Images.push(p.AvatarUrl?p.AvatarUrl:"");
         ret.Names.push(p.DisplayName);
         ret.Levels.push(getLevelForProfile(p));
     }

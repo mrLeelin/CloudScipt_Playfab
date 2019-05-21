@@ -29,7 +29,7 @@ function getFriends(args, context) {
         var f = _a[_i];
         ret.Names.push(f.TitleDisplayName);
         ret.Levels.push(getLevelForProfile(f.Profile));
-        ret.Images.push(f.Profile.AvatarUrl);
+        ret.Images.push(f.Profile.AvatarUrl ? f.Profile.AvatarUrl : "");
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
@@ -101,7 +101,7 @@ function getLimitPlayer(args, context) {
     for (var _b = 0, profiles_1 = profiles; _b < profiles_1.length; _b++) {
         var p = profiles_1[_b];
         ret.PlayerIds.push(p.PlayerId);
-        ret.Images.push(p.AvatarUrl);
+        ret.Images.push(p.AvatarUrl ? p.AvatarUrl : "");
         ret.Names.push(p.DisplayName);
         ret.Levels.push(getLevelForProfile(p));
     }
