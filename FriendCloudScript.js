@@ -28,12 +28,8 @@ function getFriends(args, context) {
     for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
         var f = _a[_i];
         ret.Names.push(f.TitleDisplayName);
-        var str = "";
-        if (f.Profile.hasOwnProperty("AvatarUrl")) {
-            str = f.Profile.AvatarUrl;
-        }
         ret.Levels.push(getLevelForProfile(f.Profile));
-        ret.Images.push(str);
+        ret.Images.push(getImage(currentPlayerId));
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }

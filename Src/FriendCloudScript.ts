@@ -77,12 +77,9 @@ function getFriends(args: any, context): IGetFriendsResult {
     for (const f of result.Friends) {
         ret.Names.push(f.TitleDisplayName);
         
-        let str:string="";
-        if(f.Profile.hasOwnProperty("AvatarUrl")){
-            str=f.Profile.AvatarUrl;
-        }
+   
         ret.Levels.push(getLevelForProfile(f.Profile));
-        ret.Images.push(str);
+        ret.Images.push(getImage(currentPlayerId));
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
     }
