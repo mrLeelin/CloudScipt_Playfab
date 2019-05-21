@@ -87,9 +87,15 @@ function getRandomArrayElements(arr, count) {
     return shuffled.slice(min);
 }
 function isSameDay(one, two) {
-    var A = new Date(one);
-    var B = new Date(two);
-    return (A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0));
+    return dateToString(new Date(one)) == dateToString(new Date(two));
+}
+function dateToString(date) {
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDay();
+    var str = y + '-' + m + '-' + d;
+    log.debug("Time:" + str);
+    return str;
 }
 function GetTimeStamp() {
     var time = server.GetTime({});

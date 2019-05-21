@@ -175,10 +175,18 @@ function getRandomArrayElements<T>(arr:T[], count:number):T[] {
  * @param two 
  */
 function isSameDay(one: number| string, two: number| string) {
-    let A:Date=new Date(one);
-    let B:Date=new Date(two);
-    return (A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0));
+   return  dateToString(new Date(one))==dateToString(new Date(two));
 }
+
+function dateToString(date:Date):string{
+    let y=date.getFullYear();
+    let m=date.getMonth()+1;
+    let d=date.getDay();
+    let str=y+'-'+m+'-'+d;
+    log.debug("Time:"+str);
+    return str;
+}
+
 
 /**
  * 获取当前时间戳

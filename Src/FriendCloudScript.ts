@@ -361,7 +361,7 @@ function GetPlayerIsGift(self: string, target: string): boolean {
     }
    let dH:IRecordHeart= JSON.parse(data[KEY_HeartFriends].Value);
    for (let i = 0; i < dH.Id.length; i++) {
-       if(dH.Id[i]=target){
+       if(dH.Id[i]==target){
            if(isSameDay(dH.TimeStamp[i],GetTimeStamp())){
                return false;
            }

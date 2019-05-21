@@ -271,7 +271,7 @@ function GetPlayerIsGift(self, target) {
     }
     var dH = JSON.parse(data[KEY_HeartFriends].Value);
     for (var i = 0; i < dH.Id.length; i++) {
-        if (dH.Id[i] = target) {
+        if (dH.Id[i] == target) {
             if (isSameDay(dH.TimeStamp[i], GetTimeStamp())) {
                 return false;
             }
