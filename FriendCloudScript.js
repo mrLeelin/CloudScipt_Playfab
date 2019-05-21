@@ -7,6 +7,7 @@ var SendGiftCode;
     SendGiftCode[SendGiftCode["FriendMax"] = 101] = "FriendMax";
     SendGiftCode[SendGiftCode["Successful"] = 102] = "Successful";
     SendGiftCode[SendGiftCode["SelfMax"] = 103] = "SelfMax";
+    SendGiftCode[SendGiftCode["AlreadSend"] = 104] = "AlreadSend";
 })(SendGiftCode || (SendGiftCode = {}));
 function getFriends(args, context) {
     var result = server.GetFriendsList({ PlayFabId: currentPlayerId });
@@ -108,8 +109,8 @@ function sendGiftToFrined(args) {
         return null;
     }
     if (!GetPlayerIsGift(currentPlayerId, fId)) {
-        log.error("you alread send gift. Id:" + fId);
-        return null;
+        log.debug("you alread send gift. Id:" + fId);
+        return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.AlreadSend };
     }
     var time = GetTimeStamp();
     var giftCount = getPlayerGiftCount();
@@ -207,6 +208,8 @@ function getPlayerGiftCount() {
         });
         return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
     }
+    log.debug("Time 1:" + new Date(time).toLocaleTimeString() + "Time 2:" + new Date(sData[KEY_SendGift].LastUpdated).toLocaleTimeString());
+    log.debug("TimeStamp 1:" + time + "TimeStamp 2:" + new Date(sData[KEY_SendGift].LastUpdated).getTime());
     if (isSameDay(time, parseInt(sData[KEY_SendGift].LastUpdated))) {
         log.debug("IsSameDay");
         selfSendCount = sData[KEY_SendGift].Value;
