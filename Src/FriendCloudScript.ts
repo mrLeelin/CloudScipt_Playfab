@@ -299,7 +299,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
         log.debug("Is Not Same Day")
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
-            Data: { KEY_SendGift: selfSendCount }
+            Data: { [KEY_SendGift]: selfSendCount }
         });
     }
     if (isSameDay(time, parseInt(sData[KEY_GiveGift].LastUpdated))) {
@@ -307,7 +307,7 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
     } else {
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
-            Data: { KEY_GiveGift: selfGiveCount }
+            Data: { [KEY_GiveGift]: selfGiveCount }
         });
     }
     return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };

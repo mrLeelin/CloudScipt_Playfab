@@ -180,6 +180,7 @@ function sendGiftToFrined(args) {
     return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.Successful };
 }
 function getPlayerGiftCount() {
+    var _a, _b;
     var selfSendCount = "";
     var selfGiveCount = "";
     var time = GetTimeStamp();
@@ -214,7 +215,7 @@ function getPlayerGiftCount() {
         log.debug("Is Not Same Day");
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
-            Data: { KEY_SendGift: selfSendCount }
+            Data: (_a = {}, _a[KEY_SendGift] = selfSendCount, _a)
         });
     }
     if (isSameDay(time, parseInt(sData[KEY_GiveGift].LastUpdated))) {
@@ -223,7 +224,7 @@ function getPlayerGiftCount() {
     else {
         server.UpdateUserReadOnlyData({
             PlayFabId: currentPlayerId,
-            Data: { KEY_GiveGift: selfGiveCount }
+            Data: (_b = {}, _b[KEY_GiveGift] = selfGiveCount, _b)
         });
     }
     return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
