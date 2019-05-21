@@ -83,33 +83,6 @@ function getImage(id: string): string {
     return server.GetUserAccountInfo({ PlayFabId: id }).UserInfo.TitleInfo.AvatarUrl;
 }
 
-/**
- * 获取等级从配置文件里。 不调用 server Api
- * @param profile 
- */
-function getLevelForProfile(profile: PlayFabServerModels.PlayerProfileModel | PlayFabServerModels.PlayerProfile): number {
-
-    if (<PlayFabServerModels.PlayerProfileModel>profile) {
-        let p: PlayFabServerModels.PlayerProfileModel = <PlayFabServerModels.PlayerProfileModel>profile;
-        let statistics = p.Statistics;
-        if (statistics.length <= 0)
-            return 0;
-        for (const iterator of statistics) {
-            if (iterator.Name == KEY_Level) {
-                return iterator.Value;
-            }
-        }
-    }else if(<PlayFabServerModels.PlayerProfile>profile){
-
-        let p:PlayFabServerModels.PlayerProfile =<PlayFabServerModels.PlayerProfile>profile;
-        let statistics=p.Statistics;
-        if(statistics.hasOwnProperty(KEY_Level)){
-            return statistics[KEY_Level];
-        }else{
-            return 0;
-        }
-    }
-}
 
 /**
  * 获取等级

@@ -76,9 +76,16 @@ function getFriends(args: any, context): IGetFriendsResult {
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (const f of result.Friends) {
         ret.Names.push(f.TitleDisplayName);
-        
-   
-        ret.Levels.push(getLevelForProfile(f.Profile));
+        let level:number=0;
+        if( f.Profile.Statistics.length>0){
+            for (const iterator of f.Profile.Statistics) {
+                if(iterator.Name==KEY_Level){
+                    level=iterator.Value;
+                    break;
+                }
+            }
+        }
+        ret.Levels.push(level);
         ret.Images.push(getImage(currentPlayerId));
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
@@ -171,7 +178,11 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
         ret.PlayerIds.push(p.PlayerId);
         ret.Images.push(p.AvatarUrl?p.AvatarUrl:"");
         ret.Names.push(p.DisplayName);
-        ret.Levels.push(getLevelForProfile(p));
+        let level:number=0;
+        if(p.Statistics.hasOwnProperty(KEY_Level)){
+            level=p.Statistics[KEY_Level];
+        }
+        ret.Levels.push(level);
     }
     return ret;
 }

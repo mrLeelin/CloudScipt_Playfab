@@ -28,7 +28,17 @@ function getFriends(args, context) {
     for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
         var f = _a[_i];
         ret.Names.push(f.TitleDisplayName);
-        ret.Levels.push(getLevelForProfile(f.Profile));
+        var level = 0;
+        if (f.Profile.Statistics.length > 0) {
+            for (var _b = 0, _c = f.Profile.Statistics; _b < _c.length; _b++) {
+                var iterator = _c[_b];
+                if (iterator.Name == KEY_Level) {
+                    level = iterator.Value;
+                    break;
+                }
+            }
+        }
+        ret.Levels.push(level);
         ret.Images.push(getImage(currentPlayerId));
         ret.IsGift.push(GetPlayerIsGift(currentPlayerId, f.FriendPlayFabId));
         ret.FriendIds.push(f.FriendPlayFabId);
@@ -103,7 +113,11 @@ function getLimitPlayer(args, context) {
         ret.PlayerIds.push(p.PlayerId);
         ret.Images.push(p.AvatarUrl ? p.AvatarUrl : "");
         ret.Names.push(p.DisplayName);
-        ret.Levels.push(getLevelForProfile(p));
+        var level = 0;
+        if (p.Statistics.hasOwnProperty(KEY_Level)) {
+            level = p.Statistics[KEY_Level];
+        }
+        ret.Levels.push(level);
     }
     return ret;
 }
