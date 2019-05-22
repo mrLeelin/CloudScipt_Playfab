@@ -5,7 +5,6 @@ handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
 handlers.RmFriend=rmFriend;
-handlers.GetFriendInfo=getFriendInfo;
 
 
 
@@ -21,7 +20,11 @@ interface IGetFriendsResult {
     id: number;
     Count: number;
     SelfSendGiftCount: number;
-    FriendIds: string[];
+    FriendIds?: string[];
+    Names?:string[];
+    Levels?:number[];
+    Images?:string[];
+    IsGifts?:boolean[];
 }
 interface IGetFriendInfoResult{
     id:number;
@@ -56,8 +59,9 @@ interface IGetPlayGiftCount {
 }
 
 interface IRecordHeart {
-    Id: string[],
-    TimeStamp: number[];
+   // Id: string[],
+   // TimeStamp: number[];
+    Info:{[key:string]:number};
 }
 
 
@@ -91,38 +95,56 @@ function getFriends(args: any, context:IPlayFabContext): IGetFriendsResult {
          PlayFabId: currentPlayerId,
          ProfileConstraints:constraints
     });
+    if(result.Friends.length<=0){
+        return{
+            id:Func_Code.SC_GET_FRIEND,
+            Count:0,
+            SelfSendGiftCount:getPlayerGiftCount().SendGiftCount
+        };
+    }
+
+    let time=GetTimeStamp();
+    let rH=GetPlayerGiftInfo(currentPlayerId);
     let ret: IGetFriendsResult = <IGetFriendsResult>{};
     ret.FriendIds = []
+    ret.Names=[]
+    ret.Levels=[]
+    ret.IsGifts=[]
+    ret.Images=[]
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
+    
     for (const f of result.Friends) {
-        log.info(f.Profile.AvatarUrl);
-        log.info(f.Profile.Statistics.length.toString());
+   
+        ret.Names.push(f.TitleDisplayName);
+        ret.Images.push(f.Profile.AvatarUrl);
+        let level:number=0;
+        if( f.Profile.Statistics.length>0){
+            for (const v of f.Profile.Statistics) {
+                if(v.Name==KEY_Level){
+                    level=v.Value;
+                    break;
+                }
+            }
+        }      
+        ret.Levels.push(level);
         ret.FriendIds.push(f.FriendPlayFabId);
+        if(rH==null){
+            ret.IsGifts.push(true);
+        }else{
+            if(rH.Info.hasOwnProperty(f.FriendPlayFabId)){
+                if(isSameDay(rH.Info[f.FriendPlayFabId],time)){
+                    ret.IsGifts.push(false);
+                }else{
+                    ret.IsGifts.push(true);
+                }
+            }else{
+                ret.IsGifts.push(true);
+            }            
+        }
     }
     return ret;
-}
-function getFriendInfo(args:any):IGetFriendInfoResult{
-
-    let fId:string=args["FriendId"];
-    if(fId==""){
-        log.error("you input friend is is invaild");
-        return null;
-    }
-    let info:IGetFriendInfoResult=<IGetFriendInfoResult>{};
-    
-   let titleInfo=  server.GetUserAccountInfo({
-        PlayFabId:fId
-    }).UserInfo.TitleInfo;
-
-    info.id=Func_Code.SC_GET_FRIENDINFO;
-    info.FriendId=fId;
-    info.Name=titleInfo.DisplayName;
-    info.Image=titleInfo.AvatarUrl;
-    info.Level=getLevel(fId);
-    info.IsGift=GetPlayerIsGift(currentPlayerId,fId);
-    return info;
 }
 
 function addFriend(args:any, context): IAddFriendResult {
@@ -353,27 +375,9 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     if (rData.hasOwnProperty(KEY_HeartFriends)) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     } else {
-        dH.Id = [];
-        dH.TimeStamp = [];
+        dH.Info={}
     }
-    if (dH.Id.length <= 0) {
-        dH.Id.push(fId);
-        dH.TimeStamp.push(time);
-    } else {
-        let index: number = 0;
-        for (let i = 0; i < dH.Id.length; i++) {
-            if (dH.Id[i] == fId) {
-                index = i;
-            }
-        }
-        if (index > 0) {
-            dH.Id[index] = fId,
-                dH.TimeStamp[index] = time;
-        } else {
-            dH.Id.push(fId);
-            dH.TimeStamp.push(time);
-        }
-    }
+    dH.Info[fId]=time;
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
         Data: { [KEY_HeartFriends]: JSON.stringify(dH) }
@@ -476,22 +480,30 @@ function GetGlobalTitleData(key: string): string {
 }
 
 function GetPlayerIsGift(self: string, target: string): boolean {
+
+    let rH=GetPlayerGiftInfo(self);
+    if(rH==null){
+        return true;
+    }
+    if(rH.Info.hasOwnProperty(self)){
+        if(isSameDay(rH.Info[self],GetTimeStamp())){
+            return false;
+        }
+    }
+    return true;
+}
+
+function GetPlayerGiftInfo(self:string):IRecordHeart{
     let data = server.GetUserData({
         PlayFabId: self,
         Keys: [KEY_HeartFriends]
     }).Data;
-    if (data == null || !data.hasOwnProperty(KEY_HeartFriends)) {
-        return true;
+    if(data==null||!data.hasOwnProperty(KEY_HeartFriends)){
+        return null;
     }
     let dH: IRecordHeart = JSON.parse(data[KEY_HeartFriends].Value);
-    for (let i = 0; i < dH.Id.length; i++) {
-        if (dH.Id[i] == target) {
-            if (isSameDay(dH.TimeStamp[i], GetTimeStamp())) {
-                return false;
-            }
-        }
-    }
-    return true;
+
+    return dH;
 }
 
 

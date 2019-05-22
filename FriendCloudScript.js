@@ -3,7 +3,6 @@ handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
 handlers.RmFriend = rmFriend;
-handlers.GetFriendInfo = getFriendInfo;
 var GetLimitPlayerCode;
 (function (GetLimitPlayerCode) {
     GetLimitPlayerCode[GetLimitPlayerCode["Successful"] = 101] = "Successful";
@@ -30,36 +29,58 @@ function getFriends(args, context) {
         PlayFabId: currentPlayerId,
         ProfileConstraints: constraints
     });
+    if (result.Friends.length <= 0) {
+        return {
+            id: Func_Code.SC_GET_FRIEND,
+            Count: 0,
+            SelfSendGiftCount: getPlayerGiftCount().SendGiftCount
+        };
+    }
+    var time = GetTimeStamp();
+    var rH = GetPlayerGiftInfo(currentPlayerId);
     var ret = {};
     ret.FriendIds = [];
+    ret.Names = [];
+    ret.Levels = [];
+    ret.IsGifts = [];
+    ret.Images = [];
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
         var f = _a[_i];
-        log.info(f.Profile.AvatarUrl);
-        log.info(f.Profile.Statistics.length.toString());
+        ret.Names.push(f.TitleDisplayName);
+        ret.Images.push(f.Profile.AvatarUrl);
+        var level = 0;
+        if (f.Profile.Statistics.length > 0) {
+            for (var _b = 0, _c = f.Profile.Statistics; _b < _c.length; _b++) {
+                var v = _c[_b];
+                if (v.Name == KEY_Level) {
+                    level = v.Value;
+                    break;
+                }
+            }
+        }
+        ret.Levels.push(level);
         ret.FriendIds.push(f.FriendPlayFabId);
+        if (rH == null) {
+            ret.IsGifts.push(true);
+        }
+        else {
+            if (rH.Info.hasOwnProperty(f.FriendPlayFabId)) {
+                if (isSameDay(rH.Info[f.FriendPlayFabId], time)) {
+                    ret.IsGifts.push(false);
+                }
+                else {
+                    ret.IsGifts.push(true);
+                }
+            }
+            else {
+                ret.IsGifts.push(true);
+            }
+        }
     }
     return ret;
-}
-function getFriendInfo(args) {
-    var fId = args["FriendId"];
-    if (fId == "") {
-        log.error("you input friend is is invaild");
-        return null;
-    }
-    var info = {};
-    var titleInfo = server.GetUserAccountInfo({
-        PlayFabId: fId
-    }).UserInfo.TitleInfo;
-    info.id = Func_Code.SC_GET_FRIENDINFO;
-    info.FriendId = fId;
-    info.Name = titleInfo.DisplayName;
-    info.Image = titleInfo.AvatarUrl;
-    info.Level = getLevel(fId);
-    info.IsGift = GetPlayerIsGift(currentPlayerId, fId);
-    return info;
 }
 function addFriend(args, context) {
     var gData = server.GetTitleData({
@@ -252,29 +273,9 @@ function sendGiftToFrined(args) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     }
     else {
-        dH.Id = [];
-        dH.TimeStamp = [];
+        dH.Info = {};
     }
-    if (dH.Id.length <= 0) {
-        dH.Id.push(fId);
-        dH.TimeStamp.push(time);
-    }
-    else {
-        var index = 0;
-        for (var i = 0; i < dH.Id.length; i++) {
-            if (dH.Id[i] == fId) {
-                index = i;
-            }
-        }
-        if (index > 0) {
-            dH.Id[index] = fId,
-                dH.TimeStamp[index] = time;
-        }
-        else {
-            dH.Id.push(fId);
-            dH.TimeStamp.push(time);
-        }
-    }
+    dH.Info[fId] = time;
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
         Data: (_c = {}, _c[KEY_HeartFriends] = JSON.stringify(dH), _c)
@@ -360,20 +361,25 @@ function GetGlobalTitleData(key) {
     return ret;
 }
 function GetPlayerIsGift(self, target) {
+    var rH = GetPlayerGiftInfo(self);
+    if (rH == null) {
+        return true;
+    }
+    if (rH.Info.hasOwnProperty(self)) {
+        if (isSameDay(rH.Info[self], GetTimeStamp())) {
+            return false;
+        }
+    }
+    return true;
+}
+function GetPlayerGiftInfo(self) {
     var data = server.GetUserData({
         PlayFabId: self,
         Keys: [KEY_HeartFriends]
     }).Data;
     if (data == null || !data.hasOwnProperty(KEY_HeartFriends)) {
-        return true;
+        return null;
     }
     var dH = JSON.parse(data[KEY_HeartFriends].Value);
-    for (var i = 0; i < dH.Id.length; i++) {
-        if (dH.Id[i] == target) {
-            if (isSameDay(dH.TimeStamp[i], GetTimeStamp())) {
-                return false;
-            }
-        }
-    }
-    return true;
+    return dH;
 }
