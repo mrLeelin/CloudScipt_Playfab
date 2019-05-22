@@ -4,7 +4,7 @@ handlers.GetFriends = getFriends;
 handlers.AddFriend = addFriend;
 handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
-handlers.RmFriend=rmFriend;
+handlers.RmFriend = rmFriend;
 
 
 
@@ -21,19 +21,12 @@ interface IGetFriendsResult {
     Count: number;
     SelfSendGiftCount: number;
     FriendIds?: string[];
-    Names?:string[];
-    Levels?:number[];
-    Images?:string[];
-    IsGifts?:boolean[];
+    Names?: string[];
+    Levels?: number[];
+    Images?: string[];
+    IsGifts?: boolean[];
 }
-interface IGetFriendInfoResult{
-    id:number;
-    Name:string;
-    Level:number;
-    Image:string;
-    IsGift:boolean;
-    FriendId:string;
-}
+
 interface IGetLimitPlayerResult {
     id: number;
     Count?: number;
@@ -48,9 +41,9 @@ interface ISendGiftResult {
     id: number;
     Code: number;
 }
-interface IRmFriendResult{
-    id:number;
-    Code?:number;
+interface IRmFriendResult {
+    id: number;
+    Code?: number;
 }
 
 interface IGetPlayGiftCount {
@@ -59,9 +52,9 @@ interface IGetPlayGiftCount {
 }
 
 interface IRecordHeart {
-   // Id: string[],
-   // TimeStamp: number[];
-    Info:{[key:string]:number};
+    // Id: string[],
+    // TimeStamp: number[];
+    Info: { [key: string]: number; }
 }
 
 
@@ -76,100 +69,100 @@ enum SendGiftCode {
     AlreadSend = 104,
 }
 
-enum RmFriendCode{
-    Successful=101,
-    Error=102,
+enum RmFriendCode {
+    Successful = 101,
+    Error = 102,
 }
 
 
 
-function getFriends(args: any, context:IPlayFabContext): IGetFriendsResult {
+function getFriends(args: any, context: IPlayFabContext): IGetFriendsResult {
 
-    let constraints:PlayFabServerModels.PlayerProfileViewConstraints=<PlayFabServerModels.PlayerProfileViewConstraints>{}
-    constraints.ShowAvatarUrl=true;
-    constraints.ShowStatistics=true;
-    constraints.ShowTags=true;
-    
+    let constraints: PlayFabServerModels.PlayerProfileViewConstraints = <PlayFabServerModels.PlayerProfileViewConstraints>{}
+    constraints.ShowAvatarUrl = true;
+    constraints.ShowStatistics = true;
+    constraints.ShowTags = true;
+
 
     let result = server.GetFriendsList({
-         PlayFabId: currentPlayerId,
-         ProfileConstraints:constraints
+        PlayFabId: currentPlayerId,
+        ProfileConstraints: constraints
     });
-    if(result.Friends.length<=0){
-        return{
-            id:Func_Code.SC_GET_FRIEND,
-            Count:0,
-            SelfSendGiftCount:getPlayerGiftCount().SendGiftCount
+    if (result.Friends.length <= 0) {
+        return {
+            id: Func_Code.SC_GET_FRIEND,
+            Count: 0,
+            SelfSendGiftCount: getPlayerGiftCount().SendGiftCount
         };
     }
 
-    let time=GetTimeStamp();
-    let rH=GetPlayerGiftInfo(currentPlayerId);
+    let time = GetTimeStamp();
+    let rH = GetPlayerGiftInfo(currentPlayerId);
     let ret: IGetFriendsResult = <IGetFriendsResult>{};
     ret.FriendIds = []
-    ret.Names=[]
-    ret.Levels=[]
-    ret.IsGifts=[]
-    ret.Images=[]
+    ret.Names = []
+    ret.Levels = []
+    ret.IsGifts = []
+    ret.Images = []
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
-    
+
     for (const f of result.Friends) {
-   
+
         ret.Names.push(f.TitleDisplayName);
         ret.Images.push(f.Profile.AvatarUrl);
-        let level:number=0;
-        if( f.Profile.Statistics.length>0){
+        let level: number = 0;
+        if (f.Profile.Statistics.length > 0) {
             for (const v of f.Profile.Statistics) {
-                if(v.Name==KEY_Level){
-                    level=v.Value;
+                if (v.Name == KEY_Level) {
+                    level = v.Value;
                     break;
                 }
             }
-        }      
+        }
         ret.Levels.push(level);
         ret.FriendIds.push(f.FriendPlayFabId);
-        if(rH==null){
+        if (rH == null) {
             ret.IsGifts.push(true);
-        }else{
-            if(rH.Info.hasOwnProperty(f.FriendPlayFabId)){
-                if(isSameDay(rH.Info[f.FriendPlayFabId],time)){
+        } else {
+            if (rH.Info.hasOwnProperty(f.FriendPlayFabId)) {
+                if (isSameDay(rH.Info[f.FriendPlayFabId], time)) {
                     ret.IsGifts.push(false);
-                }else{
+                } else {
                     ret.IsGifts.push(true);
                 }
-            }else{
+            } else {
                 ret.IsGifts.push(true);
-            }            
+            }
         }
     }
     return ret;
 }
 
-function addFriend(args:any, context): IAddFriendResult {
+function addFriend(args: any, context): IAddFriendResult {
 
-    
-    let gData= server.GetTitleData({
-        Keys:[KEY_GlobalFriendCountLimit]
+
+    let gData = server.GetTitleData({
+        Keys: [KEY_GlobalFriendCountLimit]
     }).Data;
-    if(!gData.hasOwnProperty(KEY_GlobalFriendCountLimit)){
+    if (!gData.hasOwnProperty(KEY_GlobalFriendCountLimit)) {
         log.error("you global data is empty.  Key : GlobalFriendCountLimit");
         return null;
     }
-    let maxCount:number=parseInt(gData[KEY_GlobalFriendCountLimit]);
-    if(server.GetFriendsList({
-        PlayFabId:currentPlayerId
-    }).Friends.length>maxCount){
+    let maxCount: number = parseInt(gData[KEY_GlobalFriendCountLimit]);
+    if (server.GetFriendsList({
+        PlayFabId: currentPlayerId
+    }).Friends.length > maxCount) {
 
-        return{
-            id:Func_Code.SC_ADD_FRIEND,
-            Create:false,
-            ErrorCode:102
+        return {
+            id: Func_Code.SC_ADD_FRIEND,
+            Create: false,
+            ErrorCode: 102
         }
     }
-    let fId:string=args["FriendId"];
-    if(fId==""){
+    let fId: string = args["FriendId"];
+    if (fId == "") {
         log.error("you input friend is is invaild");
         return null;
     }
@@ -184,8 +177,8 @@ function addFriend(args:any, context): IAddFriendResult {
     }
     //添加好友
     server.AddFriend({
-        PlayFabId:currentPlayerId,
-        FriendPlayFabId:fId
+        PlayFabId: currentPlayerId,
+        FriendPlayFabId: fId
     });
 
     if (!isFriend(fId, currentPlayerId)) {
@@ -202,36 +195,36 @@ function addFriend(args:any, context): IAddFriendResult {
 
 }
 
-function rmFriend(args:any):IRmFriendResult{
+function rmFriend(args: any): IRmFriendResult {
 
-    let fId:string=args["FriendId"];
-    if(fId==""){
+    let fId: string = args["FriendId"];
+    if (fId == "") {
         log.error("you input friend is is invaild");
         return null;
     }
-    
-    if(isFriend(currentPlayerId,fId)){
+
+    if (isFriend(currentPlayerId, fId)) {
 
         server.RemoveFriend({
-            PlayFabId:currentPlayerId,
-            FriendPlayFabId:fId
+            PlayFabId: currentPlayerId,
+            FriendPlayFabId: fId
         })
-    }else{
-        return {id:Func_Code.SC_RM_FRIEND,Code:RmFriendCode.Error};
+    } else {
+        return { id: Func_Code.SC_RM_FRIEND, Code: RmFriendCode.Error };
     }
 
-    if(isFriend(fId,currentPlayerId)){
+    if (isFriend(fId, currentPlayerId)) {
         server.RemoveFriend({
-            PlayFabId:fId,
-            FriendPlayFabId:currentPlayerId
+            PlayFabId: fId,
+            FriendPlayFabId: currentPlayerId
         });
-    }else{
-        return {id:Func_Code.SC_RM_FRIEND,Code:RmFriendCode.Error};
+    } else {
+        return { id: Func_Code.SC_RM_FRIEND, Code: RmFriendCode.Error };
     }
-  
+
     return {
-        id:Func_Code.SC_RM_FRIEND,
-        Code:RmFriendCode.Successful
+        id: Func_Code.SC_RM_FRIEND,
+        Code: RmFriendCode.Successful
     }
 }
 
@@ -256,6 +249,7 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
     }
 
 
+    let friendInfo = getFriendInfos(currentPlayerId);
     let selfLevel: number = getLevel(currentPlayerId);
     let limitLevel: number = parseInt(data[KEY_GlobalLimitLevel]);
     let profiles: PlayFabServerModels.PlayerProfile[] = [];
@@ -266,10 +260,13 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
             continue;
         }
 
-        if (isFriend(currentPlayerId, iterator.PlayerId)) {
-            continue;
+        if (friendInfo != null) {
+            for (const i of friendInfo) {
+                if (i.FriendPlayFabId == iterator.PlayerId) {
+                    continue;
+                }
+            }
         }
-
         let level: number = 0;
         if (iterator.Statistics.hasOwnProperty(KEY_Level)) {
             level = iterator.Statistics[KEY_Level];
@@ -375,9 +372,9 @@ function sendGiftToFrined(args: any): ISendGiftResult {
     if (rData.hasOwnProperty(KEY_HeartFriends)) {
         dH = JSON.parse(rData[KEY_HeartFriends].Value);
     } else {
-        dH.Info={}
+        dH.Info = {}
     }
-    dH.Info[fId]=time;
+    dH.Info[fId] = time;
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
         Data: { [KEY_HeartFriends]: JSON.stringify(dH) }
@@ -448,16 +445,24 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
 
 function isFriend(self: string, other: string): boolean {
 
-    let result = server.GetFriendsList({ PlayFabId: self });
-    if (result.Friends.length <= 0) {
+    let info = getFriendInfos(self);
+    if (info == null) {
         return false;
     }
-    for (const f of result.Friends) {
+    for (const f of info) {
         if (f.FriendPlayFabId == other) {
             return true;
         }
     }
     return false;
+}
+
+function getFriendInfos(self: string): PlayFabServerModels.FriendInfo[] {
+    let result = server.GetFriendsList({ PlayFabId: self });
+    if (result.Friends.length <= 0) {
+        return null;
+    }
+    return result.Friends;
 }
 
 
@@ -481,24 +486,24 @@ function GetGlobalTitleData(key: string): string {
 
 function GetPlayerIsGift(self: string, target: string): boolean {
 
-    let rH=GetPlayerGiftInfo(self);
-    if(rH==null){
+    let rH = GetPlayerGiftInfo(self);
+    if (rH == null) {
         return true;
     }
-    if(rH.Info.hasOwnProperty(self)){
-        if(isSameDay(rH.Info[self],GetTimeStamp())){
+    if (rH.Info.hasOwnProperty(self)) {
+        if (isSameDay(rH.Info[self], GetTimeStamp())) {
             return false;
         }
     }
     return true;
 }
 
-function GetPlayerGiftInfo(self:string):IRecordHeart{
+function GetPlayerGiftInfo(self: string): IRecordHeart {
     let data = server.GetUserData({
         PlayFabId: self,
         Keys: [KEY_HeartFriends]
     }).Data;
-    if(data==null||!data.hasOwnProperty(KEY_HeartFriends)){
+    if (data == null || !data.hasOwnProperty(KEY_HeartFriends)) {
         return null;
     }
     let dH: IRecordHeart = JSON.parse(data[KEY_HeartFriends].Value);

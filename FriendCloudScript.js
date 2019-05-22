@@ -170,6 +170,7 @@ function getLimitPlayer(args, context) {
         log.error("you not input Global Key. Key:" + KEY_GlobalLimitLevel);
         return;
     }
+    var friendInfo = getFriendInfos(currentPlayerId);
     var selfLevel = getLevel(currentPlayerId);
     var limitLevel = parseInt(data[KEY_GlobalLimitLevel]);
     var profiles = [];
@@ -178,8 +179,13 @@ function getLimitPlayer(args, context) {
         if (currentPlayerId == iterator.PlayerId) {
             continue;
         }
-        if (isFriend(currentPlayerId, iterator.PlayerId)) {
-            continue;
+        if (friendInfo != null) {
+            for (var _b = 0, friendInfo_1 = friendInfo; _b < friendInfo_1.length; _b++) {
+                var i = friendInfo_1[_b];
+                if (i.FriendPlayFabId == iterator.PlayerId) {
+                    continue;
+                }
+            }
         }
         var level = 0;
         if (iterator.Statistics.hasOwnProperty(KEY_Level)) {
@@ -206,8 +212,8 @@ function getLimitPlayer(args, context) {
     ret.Levels = [];
     ret.Names = [];
     ret.Count = profiles.length;
-    for (var _b = 0, profiles_1 = profiles; _b < profiles_1.length; _b++) {
-        var p = profiles_1[_b];
+    for (var _c = 0, profiles_1 = profiles; _c < profiles_1.length; _c++) {
+        var p = profiles_1[_c];
         ret.PlayerIds.push(p.PlayerId);
         ret.Images.push(p.AvatarUrl ? p.AvatarUrl : "");
         ret.Names.push(p.DisplayName);
@@ -332,17 +338,24 @@ function getPlayerGiftCount() {
     return { SendGiftCount: parseInt(selfSendCount), GiveGiftCount: parseInt(selfGiveCount) };
 }
 function isFriend(self, other) {
-    var result = server.GetFriendsList({ PlayFabId: self });
-    if (result.Friends.length <= 0) {
+    var info = getFriendInfos(self);
+    if (info == null) {
         return false;
     }
-    for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
-        var f = _a[_i];
+    for (var _i = 0, info_1 = info; _i < info_1.length; _i++) {
+        var f = info_1[_i];
         if (f.FriendPlayFabId == other) {
             return true;
         }
     }
     return false;
+}
+function getFriendInfos(self) {
+    var result = server.GetFriendsList({ PlayFabId: self });
+    if (result.Friends.length <= 0) {
+        return null;
+    }
+    return result.Friends;
 }
 function GetGlobalTitleData(key) {
     var keys;

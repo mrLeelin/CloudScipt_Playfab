@@ -35,7 +35,7 @@ enum Func_Code {
     SC_GET_LIMITPLAYER = 1004,
     SC_SEND_GIFT = 1005,
     SC_RM_FRIEND=1006,
-    SC_GET_FRIENDINFO=1007,
+    
 
 
     //Sync
