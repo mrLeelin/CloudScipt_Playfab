@@ -158,9 +158,14 @@ function rmFriend(args) {
     };
 }
 function getLimitPlayer(args, context) {
+    var count = args["Count"];
+    if (count <= 0) {
+        log.error("you inout count is invaild");
+        return null;
+    }
     var id = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
     var segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
-    if (segmentRequest.PlayerProfiles.length < 2) {
+    if (segmentRequest.PlayerProfiles.length < count) {
         return {
             id: Func_Code.SC_GET_LIMITPLAYER,
             Code: GetLimitPlayerCode.Empty
@@ -196,14 +201,14 @@ function getLimitPlayer(args, context) {
             profiles.push(iterator);
         }
     }
-    if (profiles.length < 3) {
+    if (profiles.length < count) {
         return {
             id: Func_Code.SC_GET_LIMITPLAYER,
             Code: GetLimitPlayerCode.Empty
         };
     }
-    if (profiles.length > 3) {
-        profiles = getRandomArrayElements(profiles, 3);
+    if (profiles.length > count) {
+        profiles = getRandomArrayElements(profiles, count);
     }
     var ret = {};
     ret.id = Func_Code.SC_GET_LIMITPLAYER;

@@ -233,10 +233,16 @@ function rmFriend(args: any): IRmFriendResult {
 
 function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
 
+    let count:number=args["Count"];
+    if(count<=0){
+        log.error("you inout count is invaild");
+        return null;
+    }
+    
     let id: string = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
 
     let segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
-    if (segmentRequest.PlayerProfiles.length < 2) {
+    if (segmentRequest.PlayerProfiles.length < count) {
         return {
             id: Func_Code.SC_GET_LIMITPLAYER,
             Code: GetLimitPlayerCode.Empty
@@ -277,14 +283,14 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
             profiles.push(iterator);
         }
     }
-    if (profiles.length < 3) {
+    if (profiles.length < count) {
         return {
             id: Func_Code.SC_GET_LIMITPLAYER,
             Code: GetLimitPlayerCode.Empty
         };
     }
-    if (profiles.length > 3) {
-        profiles = getRandomArrayElements(profiles, 3);
+    if (profiles.length > count) {
+        profiles = getRandomArrayElements(profiles, count);
     }
 
     let ret: IGetLimitPlayerResult = <IGetLimitPlayerResult>{};
