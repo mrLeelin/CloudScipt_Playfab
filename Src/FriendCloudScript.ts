@@ -277,14 +277,14 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
             profiles.push(iterator);
         }
     }
-    if (profiles.length < 2) {
+    if (profiles.length < 3) {
         return {
             id: Func_Code.SC_GET_LIMITPLAYER,
             Code: GetLimitPlayerCode.Empty
         };
     }
-    if (profiles.length > 2) {
-        profiles = getRandomArrayElements(profiles, 2);
+    if (profiles.length > 3) {
+        profiles = getRandomArrayElements(profiles, 3);
     }
 
     let ret: IGetLimitPlayerResult = <IGetLimitPlayerResult>{};
