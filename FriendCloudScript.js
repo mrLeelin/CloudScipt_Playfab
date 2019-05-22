@@ -125,6 +125,7 @@ function addFriend(args, context) {
     return {
         id: Func_Code.SC_ADD_FRIEND,
         Create: true,
+        PlayerId: fId
     };
 }
 function rmFriend(args) {

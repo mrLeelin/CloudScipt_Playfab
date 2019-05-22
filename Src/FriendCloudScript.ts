@@ -11,6 +11,7 @@ handlers.RmFriend = rmFriend;
 interface IAddFriendResult {
     id: number;
     Create: boolean;
+    PlayerId?:string;
     //101 已经有此好友
     //102 好友超出上限
     ErrorCode?: number;
@@ -191,6 +192,7 @@ function addFriend(args: any, context): IAddFriendResult {
     return {
         id: Func_Code.SC_ADD_FRIEND,
         Create: true,
+        PlayerId:fId
     };
 
 }
