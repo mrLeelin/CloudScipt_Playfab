@@ -6,7 +6,7 @@ handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
 handlers.RmFriend=rmFriend;
 handlers.GetFriendInfo=getFriendInfo;
-handlers.TestPlayStream=testPlayStream;
+
 
 
 interface IAddFriendResult {
@@ -78,28 +78,27 @@ enum RmFriendCode{
 }
 
 
-function testPlayStream(args:any,context:IPlayFabContext){
-    let psEvent=context.playStreamEvent;
-    let profile=context.playerProfile;
-    let content=JSON.stringify({
-        user:profile.PlayerId,
-        event:psEvent.EventName
-    });
-    let response= http.request('https://httpbin.org/status/200','post',content,'application/json',null);
-
-    log.info(psEvent.EventName);
-    log.info(response);
-}
 
 function getFriends(args: any, context:IPlayFabContext): IGetFriendsResult {
 
-    let result = server.GetFriendsList({ PlayFabId: currentPlayerId });
+    let constraints:PlayFabServerModels.PlayerProfileViewConstraints=<PlayFabServerModels.PlayerProfileViewConstraints>{}
+    constraints.ShowAvatarUrl=true;
+    constraints.ShowStatistics=true;
+    constraints.ShowTags=true;
+    
+
+    let result = server.GetFriendsList({
+         PlayFabId: currentPlayerId,
+         ProfileConstraints:constraints
+    });
     let ret: IGetFriendsResult = <IGetFriendsResult>{};
     ret.FriendIds = []
     ret.id = Func_Code.SC_GET_FRIEND;
     ret.Count = result.Friends.length;
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (const f of result.Friends) {
+        log.info(f.Profile.AvatarUrl);
+        log.info(f.Profile.Statistics.length.toString());
         ret.FriendIds.push(f.FriendPlayFabId);
     }
     return ret;

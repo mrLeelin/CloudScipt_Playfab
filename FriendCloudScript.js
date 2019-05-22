@@ -4,7 +4,6 @@ handlers.GetLimitPlayer = getLimitPlayer;
 handlers.SendHeart = sendGiftToFrined;
 handlers.RmFriend = rmFriend;
 handlers.GetFriendInfo = getFriendInfo;
-handlers.TestPlayStream = testPlayStream;
 var GetLimitPlayerCode;
 (function (GetLimitPlayerCode) {
     GetLimitPlayerCode[GetLimitPlayerCode["Successful"] = 101] = "Successful";
@@ -22,19 +21,15 @@ var RmFriendCode;
     RmFriendCode[RmFriendCode["Successful"] = 101] = "Successful";
     RmFriendCode[RmFriendCode["Error"] = 102] = "Error";
 })(RmFriendCode || (RmFriendCode = {}));
-function testPlayStream(args, context) {
-    var psEvent = context.playStreamEvent;
-    var profile = context.playerProfile;
-    var content = JSON.stringify({
-        user: profile.PlayerId,
-        event: psEvent.EventName
-    });
-    var response = http.request('https://httpbin.org/status/200', 'post', content, 'application/json', null);
-    log.info(psEvent.EventName);
-    log.info(response);
-}
 function getFriends(args, context) {
-    var result = server.GetFriendsList({ PlayFabId: currentPlayerId });
+    var constraints = {};
+    constraints.ShowAvatarUrl = true;
+    constraints.ShowStatistics = true;
+    constraints.ShowTags = true;
+    var result = server.GetFriendsList({
+        PlayFabId: currentPlayerId,
+        ProfileConstraints: constraints
+    });
     var ret = {};
     ret.FriendIds = [];
     ret.id = Func_Code.SC_GET_FRIEND;
@@ -42,6 +37,8 @@ function getFriends(args, context) {
     ret.SelfSendGiftCount = getPlayerGiftCount().SendGiftCount;
     for (var _i = 0, _a = result.Friends; _i < _a.length; _i++) {
         var f = _a[_i];
+        log.info(f.Profile.AvatarUrl);
+        log.info(f.Profile.Statistics.length.toString());
         ret.FriendIds.push(f.FriendPlayFabId);
     }
     return ret;
