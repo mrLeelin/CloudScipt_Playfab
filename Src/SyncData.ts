@@ -346,9 +346,6 @@ function getCurrencyData(key: string): IData {
 
 function setCurrencyData(time:number, key: string, data: IData): IData {
 
-    data.Status = Data_Status.Sync_Data;
-
-
     let cR: { [key: string]: any } = JSON.parse(data.Progress);
     if (!cR.hasOwnProperty("cts") || !cR.hasOwnProperty("quatity")) {
         log.error("you currency not 'cts' or 'quatity' property");
@@ -405,10 +402,13 @@ function setCurrencyData(time:number, key: string, data: IData): IData {
                 }).Balance);
         }
     }
+    /*
     cR["cts"] = changeType;
     cR["quatity"] = changeCount;
     cR["m_status"] = 0;
     data.Progress = JSON.stringify(cR);
+    */
+    data.Status = Data_Status.Sync_Data;
     data.TimeStamp = time;
 
 
