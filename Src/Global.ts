@@ -214,3 +214,23 @@ function getGlobalTitleData(isInternal: boolean, key: string): string {
 }
 
 
+function getTimeStampForKey(key:string):number{
+    let datas= server.GetUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data;
+    if(datas==null||!datas.hasOwnProperty(key+KEY_TIME_STAMP)){
+        return 0;
+    }
+    return parseInt(datas[key+KEY_TIME_STAMP].Value);
+}
+function setTimeStampForKey(key:string,time:number){
+    let s: { [key: string]: string } = {}
+    s[key + KEY_TIME_STAMP] = time.toString();
+    server.UpdateUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
+}
+
+

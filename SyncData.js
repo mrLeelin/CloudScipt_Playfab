@@ -185,6 +185,7 @@ function setObjects(time, id, type, key, data) {
         DataObject: data,
     };
     var response = entity.SetObjects({ Entity: { Id: id, Type: type }, Objects: [setObj] });
+    setTimeStampForKey(key, time);
     return data;
 }
 function getObjects(id, type, key) {
@@ -209,6 +210,7 @@ function getObjects(id, type, key) {
         log.error("you get Obj is not Idata. Key:" + key);
         return null;
     }
+    data.TimeStamp = getTimeStampForKey(key);
     return data;
 }
 function getTitleData(key) {
@@ -225,7 +227,9 @@ function getTitleData(key) {
         return null;
     }
     var dValue = data.Data[key];
-    return JSON.parse(dValue.Value);
+    var ret = JSON.parse(dValue.Value);
+    ret.TimeStamp = getTimeStampForKey(key);
+    return ret;
 }
 function setTitleData(time, key, data) {
     var userData = {};
@@ -236,6 +240,7 @@ function setTitleData(time, key, data) {
         PlayFabId: currentPlayerId,
         Data: userData
     });
+    setTimeStampForKey(key, time);
     return data;
 }
 function getCurrencyData(key) {
@@ -253,13 +258,9 @@ function getCurrencyData(key) {
     cR["cts"] = type;
     cR["quatity"] = count;
     cR["m_status"] = 0;
-    var t = server.GetUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Keys: [key + KEY_TIME_STAMP]
-    }).Data[key + KEY_TIME_STAMP];
     var data = {
         Status: Data_Status.Sync_Data,
-        TimeStamp: t == null ? 0 : parseInt(t.Value),
+        TimeStamp: getTimeStampForKey(key),
         Progress: JSON.stringify(cR)
     };
     return data;
@@ -314,12 +315,7 @@ function setCurrencyData(time, key, data) {
     }
     data.Status = Data_Status.Sync_Data;
     data.TimeStamp = time;
-    var s = {};
-    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
-    server.UpdateUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
+    setTimeStampForKey(key, time);
     return data;
 }
 function getItems(key) {
@@ -337,13 +333,9 @@ function getItems(key) {
     }
     cR['items'] = iItems;
     cR['m_status'] = 0;
-    var t = server.GetUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Keys: [key + KEY_TIME_STAMP]
-    }).Data[key + KEY_TIME_STAMP];
     var data = {
         Status: Data_Status.Sync_Data,
-        TimeStamp: t == null ? 0 : parseInt(t.Value),
+        TimeStamp: getTimeStampForKey(key),
         Progress: JSON.stringify(cR)
     };
     return data;
@@ -416,12 +408,7 @@ function setItems(time, key, data) {
     }
     data.Status = Data_Status.Sync_Data;
     data.TimeStamp = time;
-    var s = {};
-    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
-    server.UpdateUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
+    setTimeStampForKey(key, time);
     return data;
 }
 function getAccountInfo(id, type, key) {
@@ -437,12 +424,8 @@ function getAccountInfo(id, type, key) {
     info["m_status"] = 0;
     info["EntityId"] = id;
     info["EntityType"] = type;
-    var t = server.GetUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Keys: [key + KEY_TIME_STAMP]
-    }).Data[key + KEY_TIME_STAMP];
     var data = {
-        TimeStamp: t == null ? 0 : parseInt(t.Value),
+        TimeStamp: getTimeStampForKey(key),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };
@@ -456,12 +439,7 @@ function setAccountInfo(time, id, type, key, data) {
         ImageUrl: info["avatarUrl"]
     });
     data.TimeStamp = time;
-    var s = {};
-    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
-    server.UpdateUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
+    setTimeStampForKey(key, time);
     return data;
 }
 function getLevelInfo(key) {
@@ -473,12 +451,8 @@ function getLevelInfo(key) {
     var info = {};
     info["Level"] = level;
     info["Status"] = 0;
-    var t = server.GetUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Keys: [key + KEY_TIME_STAMP]
-    }).Data[key + KEY_TIME_STAMP];
     var data = {
-        TimeStamp: t == null ? 0 : parseInt(t.Value),
+        TimeStamp: getTimeStampForKey(key),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };
@@ -492,11 +466,6 @@ function setLevelInfo(time, key, data) {
         Statistics: [{ StatisticName: key, Value: parseInt(info["Level"]) }]
     });
     data.TimeStamp = time;
-    var s = {};
-    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
-    server.UpdateUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
+    setTimeStampForKey(key, time);
     return data;
 }

@@ -126,3 +126,21 @@ function getGlobalTitleData(isInternal, key) {
     }
     return data[key];
 }
+function getTimeStampForKey(key) {
+    var datas = server.GetUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data;
+    if (datas == null || !datas.hasOwnProperty(key + KEY_TIME_STAMP)) {
+        return 0;
+    }
+    return parseInt(datas[key + KEY_TIME_STAMP].Value);
+}
+function setTimeStampForKey(key, time) {
+    var s = {};
+    s[key + KEY_TIME_STAMP] = time.toString();
+    server.UpdateUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
+}
