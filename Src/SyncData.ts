@@ -244,6 +244,10 @@ function getDatasForCientTimeStamp(cT: number, entityId: string, entityType: str
     ];
     for (const key of keys) {
         let data: IData = get(entityId, entityType, key);
+        if(!data.hasOwnProperty('TimeStamp')){
+            datas[key] = data;
+            continue;
+        }
         if (data.TimeStamp > cT) {
             datas[key] = data;
         }

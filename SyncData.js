@@ -171,6 +171,10 @@ function getDatasForCientTimeStamp(cT, entityId, entityType) {
     for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
         var key = keys_1[_i];
         var data = get(entityId, entityType, key);
+        if (!data.hasOwnProperty('TimeStamp')) {
+            datas[key] = data;
+            continue;
+        }
         if (data.TimeStamp > cT) {
             datas[key] = data;
         }
