@@ -1,0 +1,26 @@
+
+    {
+        "CatalogVersion": "0.01",
+        "Catalog": [
+            {
+                "ItemId": 101,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Xxx"
+                ],
+                "DisplayName": "瓜",
+                "Description": "呱呱呱",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 102,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "xsss"
+                ],
+                "DisplayName": "键盘",
+                "Description": "及那盘",
+                "IsStackable": true
+            }
+        ]
+    }

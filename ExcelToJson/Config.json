@@ -1,10 +1,26 @@
 
 {
+
+    //读取的行数
     "headRow": 2,
+   // 是否四舍五入
     "round":  true,
-    "format":  true,
+    /*
+    表名:true: 普通格式的json.  false: playfab 属性格式的json
+    */
+    "format":{
+     	"Activity":false,
+     	"Item":true
+
+     },    
+     //是否删除左右中括号 
+    "ignoreAnceps": true,
+    //是否忽略空格
     "ignoreEmpty": true,
+    //表的文件夹
     "srcFolder":  "./Sample/excel",
-    "destFolder":  "./Sample/json"
+    //json的文件夹
+    "destFolder":  "./Sample/json",
+
 
 }
