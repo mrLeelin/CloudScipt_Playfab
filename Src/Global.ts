@@ -222,7 +222,11 @@ function getTimeStampForKey(key:string):number{
     if(datas==null||!datas.hasOwnProperty(key+KEY_TIME_STAMP)){
         return 0;
     }
-    return parseInt(datas[key+KEY_TIME_STAMP].Value);
+    let str=datas[key+KEY_TIME_STAMP].Value;
+    if(str==""){
+        return 0;
+    }
+    return parseInt(str);
 }
 function setTimeStampForKey(key:string,time:number){
     let s: { [key: string]: string } = {}

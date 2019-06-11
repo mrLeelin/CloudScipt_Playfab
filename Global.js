@@ -134,7 +134,11 @@ function getTimeStampForKey(key) {
     if (datas == null || !datas.hasOwnProperty(key + KEY_TIME_STAMP)) {
         return 0;
     }
-    return parseInt(datas[key + KEY_TIME_STAMP].Value);
+    var str = datas[key + KEY_TIME_STAMP].Value;
+    if (str == "") {
+        return 0;
+    }
+    return parseInt(str);
 }
 function setTimeStampForKey(key, time) {
     var s = {};
