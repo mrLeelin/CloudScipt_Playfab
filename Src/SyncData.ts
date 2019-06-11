@@ -407,7 +407,7 @@ function setCurrencyData(time:number, key: string, data: IData): IData {
     cR["quatity"] = changeCount;
     cR["m_status"] = 0;
     data.Progress = JSON.stringify(cR);
-    */
+    */ 
     data.Status = Data_Status.Sync_Data;
     data.TimeStamp = time;
 
