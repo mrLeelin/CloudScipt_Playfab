@@ -6,6 +6,7 @@ import json
 import time
 from datetime import datetime
 from xlrd import xldate_as_tuple
+import platform
 
 class NameFlag:
     master='~'
@@ -151,8 +152,12 @@ class ExcelInfo:
             sheet_name=sheetNames[index]
             if sheet_name[0]==NameFlag.error:
                 continue
-
-            strs= excelName.split('/')           
+            sep=''
+            if platform.system()=='Windows':
+                sep='\\'
+            else:
+                sep='/'           
+            strs= excelName.split(sep)           
             sheetInfo=SheetInfo(sheet_name,strs[len(strs)-1].split('.')[0])
             sheetInfo.sheetName=sheet_name
 
