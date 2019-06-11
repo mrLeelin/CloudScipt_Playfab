@@ -119,8 +119,9 @@ function get(entityId, entityType, key) {
     switch (key) {
         case KEY_Level:
             return getLevelInfo(key);
-        case KEY_QuestData:
         case KEY_Inventory:
+            return getItems(key);
+        case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
@@ -138,8 +139,9 @@ function set(time, entityId, entityType, key, data) {
     switch (key) {
         case KEY_Level:
             return setLevelInfo(time, key, data);
-        case KEY_QuestData:
         case KEY_Inventory:
+            return setItems(time, key, data);
+        case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
@@ -263,7 +265,6 @@ function getCurrencyData(key) {
     return data;
 }
 function setCurrencyData(time, key, data) {
-    data.Status = Data_Status.Sync_Data;
     var cR = JSON.parse(data.Progress);
     if (!cR.hasOwnProperty("cts") || !cR.hasOwnProperty("quatity")) {
         log.error("you currency not 'cts' or 'quatity' property");
@@ -311,10 +312,109 @@ function setCurrencyData(time, key, data) {
             }).Balance);
         }
     }
-    cR["cts"] = changeType;
-    cR["quatity"] = changeCount;
-    cR["m_status"] = 0;
-    data.Progress = JSON.stringify(cR);
+    data.Status = Data_Status.Sync_Data;
+    data.TimeStamp = time;
+    var s = {};
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
+    server.UpdateUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
+    return data;
+}
+function getItems(key) {
+    var items = server.GetUserInventory({ PlayFabId: currentPlayerId }).Inventory;
+    var cR = {};
+    var iItems = [];
+    for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
+        var item = items_1[_i];
+        var i = {
+            IsActive: true,
+            ID: parseInt(item.ItemId),
+            Num: item.RemainingUses
+        };
+        iItems.push(i);
+    }
+    cR['items'] = iItems;
+    cR['m_status'] = 0;
+    var t = server.GetUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Keys: [key + KEY_TIME_STAMP]
+    }).Data[key + KEY_TIME_STAMP];
+    var data = {
+        Status: Data_Status.Sync_Data,
+        TimeStamp: t == null ? 0 : parseInt(t.Value),
+        Progress: JSON.stringify(cR)
+    };
+    return data;
+}
+function setItems(time, key, data) {
+    var cR = JSON.parse(data.Progress);
+    if (!cR.hasOwnProperty('items')) {
+        log.error('you item progress is not contain items');
+        return null;
+    }
+    var inventoryItem = cR['items'];
+    var itemInstances = server.GetUserInventory({ PlayFabId: currentPlayerId }).Inventory;
+    if (itemInstances.length > 0) {
+        var ids_1 = [];
+        for (var _i = 0, itemInstances_1 = itemInstances; _i < itemInstances_1.length; _i++) {
+            var i = itemInstances_1[_i];
+            var id = {
+                ItemInstanceId: i.ItemInstanceId,
+                PlayFabId: currentPlayerId
+            };
+            ids_1.push(id);
+        }
+        var errors = server.RevokeInventoryItems({ Items: ids_1 }).Errors;
+        if (errors.length == null || errors.length > 0) {
+            log.error("you cur  revoke  items is error");
+            return null;
+        }
+    }
+    var version = getGlobalTitleData(true, KEY_GlobalCatalogVersion);
+    var catalogs = server.GetCatalogItems({ CatalogVersion: version }).Catalog;
+    var ids = [];
+    for (var _a = 0, inventoryItem_1 = inventoryItem; _a < inventoryItem_1.length; _a++) {
+        var item = inventoryItem_1[_a];
+        var isExist = false;
+        for (var _b = 0, catalogs_1 = catalogs; _b < catalogs_1.length; _b++) {
+            var log_1 = catalogs_1[_b];
+            if (item.ID.toString() == log_1.ItemId) {
+                isExist = true;
+                break;
+            }
+        }
+        if (isExist) {
+            for (var index = 0; index < item.Num; index++) {
+                ids.push(item.ID.toString());
+            }
+            continue;
+        }
+        log.error("you item id not contain catalogs . Item id " + item.ID);
+        return null;
+    }
+    server.GrantItemsToUser({
+        PlayFabId: currentPlayerId,
+        ItemIds: ids,
+        CatalogVersion: version
+    });
+    var selfItems = server.GetUserInventory({
+        PlayFabId: currentPlayerId
+    }).Inventory;
+    if (selfItems.length > 0) {
+        var cCount = 0;
+        for (var _c = 0, selfItems_1 = selfItems; _c < selfItems_1.length; _c++) {
+            var item = selfItems_1[_c];
+            if (item.ItemClass == "Collection") {
+                cCount++;
+            }
+        }
+        if (cCount > 0) {
+            refreshStatistics(KEY_StatisticsCollectionCount, cCount);
+        }
+    }
+    data.Status = Data_Status.Sync_Data;
     data.TimeStamp = time;
     var s = {};
     s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();

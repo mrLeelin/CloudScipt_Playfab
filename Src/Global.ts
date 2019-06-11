@@ -4,6 +4,8 @@ const KEY_SendGift: string = "__SendGift__";
 const KEY_GiveGift: string = "__GiveGift__";
 
 const KEY_StatisticsHeartCount: string = "__HeartCount__";
+const KEY_StatisticsCollectionCount:string="__CollectionCount__";
+
 const KEY_HeartFriends: string = "__HeartFriends__";
 
 
@@ -24,7 +26,8 @@ const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";
 const KEY_GlobalGiveGiftCount: string = "GlobalGiveGiftCount";
 const KEY_GlobalAllPlayersSegmentId: string = "AllPlayersSegmentId";
 const KEY_GlobalLimitLevel: string = "GlobalLimitLevel";
-const KEY_GlobalFriendCountLimit:string="GlobalFriendLimit";
+const KEY_GlobalFriendCountLimit: string = "GlobalFriendLimit";
+const KEY_GlobalCatalogVersion: string = "GlobalCatalogVersion";
 
 
 enum Func_Code {
@@ -34,8 +37,8 @@ enum Func_Code {
     SC_GET_FRIEND = 1003,
     SC_GET_LIMITPLAYER = 1004,
     SC_SEND_GIFT = 1005,
-    SC_RM_FRIEND=1006,
-    
+    SC_RM_FRIEND = 1006,
+
 
 
     //Sync
@@ -44,11 +47,11 @@ enum Func_Code {
 }
 
 /**
- * 记录一下当前的。
+ * 增加统计数量
  * @param key 
  * @param defValue 
  */
-function recordStatistics(key: string, defValue: number) {
+function recordStatistics(key: string, value:number,defValue: number) {
 
     let statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
@@ -58,11 +61,23 @@ function recordStatistics(key: string, defValue: number) {
     if (statistics == null || statistics.length <= 0) {
         v = defValue;
     } else {
-        v = statistics[0].Value + 1;
+        v = statistics[0].Value + value;
     }
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         Statistics: [{ StatisticName: key, Value: v }]
+    });
+
+}
+/**
+ * 刷新统计数量
+ * @param key 
+ * @param value 
+ */
+function refreshStatistics(key:string,value:number){
+    server.UpdatePlayerStatistics({
+        PlayFabId: currentPlayerId,
+        Statistics: [{ StatisticName: key, Value: value }]
     });
 }
 
@@ -103,35 +118,6 @@ function getLevel(id: string): number {
         return 0;
     }
     return statistics[0].Value;
-
-    /*
-    let entityKey:PlayFabDataModels.EntityKey= 
-     server.GetUserAccountInfo({PlayFabId:id}).UserInfo.TitleInfo.TitlePlayerAccount;
-     log.info("Server EntityKey:"+entityKey.Id);
-     log.info("Server EntityType:"+entityKey.Type);
-     
-     let data:IData=getObjects(entityKey.Id,entityKey.Type,KEY_Level);
-
-    let sValue:any= JSON.parse(data.Progress);
- 
-    if (!sValue.hasOwnProperty("Level")) {
-        return 0;
-    }
-    return sValue["Level"];
-
-    let data:{[key:string]:PlayFabServerModels.UserDataRecord}= server.GetUserReadOnlyData({
-        PlayFabId: currentPlayerId,
-        Keys:[KEY_Level]
-    }).Data;
-    
-    let dValue:IData= JSON.parse(data[KEY_Level].Value);
-    let value:any= JSON.stringify(dValue.Progress);
-    if(!value.hasOwnProperty("Level")){
-        return 0;
-    }
-
-    return value["Level"];
-    */
 }
 
 
@@ -201,6 +187,30 @@ function GetTimeStamp(): number {
  */
 function SendToEmail(id: string) {
 
+    //TODO
+}
+
+/**
+ * 获取  Global Title Data
+ * @param key 
+ */
+function getGlobalTitleData(isInternal: boolean, key: string): string {
+
+    let data = null;
+    if (isInternal) {
+        data = server.GetTitleInternalData({
+            Keys: [key]
+        }).Data
+    } else {
+        data = server.GetTitleData({
+            Keys: [key]
+        }).Data;
+    }
+    if (data == null || !data.hasOwnProperty(key)) {
+        log.error('you get Title Data is empty. Key:' + key);
+        return null;
+    }
+    return data[key];
 }
 
 

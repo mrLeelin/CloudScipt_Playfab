@@ -1,6 +1,7 @@
 var KEY_SendGift = "__SendGift__";
 var KEY_GiveGift = "__GiveGift__";
 var KEY_StatisticsHeartCount = "__HeartCount__";
+var KEY_StatisticsCollectionCount = "__CollectionCount__";
 var KEY_HeartFriends = "__HeartFriends__";
 var KEY_SYNC_VERSION = "__SYNC_VERSION__";
 var KEY_TIME_STAMP = "__TIME_STAMP__";
@@ -18,6 +19,7 @@ var KEY_GlobalGiveGiftCount = "GlobalGiveGiftCount";
 var KEY_GlobalAllPlayersSegmentId = "AllPlayersSegmentId";
 var KEY_GlobalLimitLevel = "GlobalLimitLevel";
 var KEY_GlobalFriendCountLimit = "GlobalFriendLimit";
+var KEY_GlobalCatalogVersion = "GlobalCatalogVersion";
 var Func_Code;
 (function (Func_Code) {
     Func_Code[Func_Code["SC_ADD_FRIEND"] = 1002] = "SC_ADD_FRIEND";
@@ -28,7 +30,7 @@ var Func_Code;
     Func_Code[Func_Code["SC_SYNC_CLIENTTOSERVICE"] = 2001] = "SC_SYNC_CLIENTTOSERVICE";
     Func_Code[Func_Code["SC_SYNC_COMPARE"] = 2002] = "SC_SYNC_COMPARE";
 })(Func_Code || (Func_Code = {}));
-function recordStatistics(key, defValue) {
+function recordStatistics(key, value, defValue) {
     var statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
         StatisticNames: [key]
@@ -38,11 +40,17 @@ function recordStatistics(key, defValue) {
         v = defValue;
     }
     else {
-        v = statistics[0].Value + 1;
+        v = statistics[0].Value + value;
     }
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         Statistics: [{ StatisticName: key, Value: v }]
+    });
+}
+function refreshStatistics(key, value) {
+    server.UpdatePlayerStatistics({
+        PlayFabId: currentPlayerId,
+        Statistics: [{ StatisticName: key, Value: value }]
     });
 }
 function rmStrUnderLine(str) {
@@ -99,4 +107,22 @@ function GetTimeStamp() {
     return d;
 }
 function SendToEmail(id) {
+}
+function getGlobalTitleData(isInternal, key) {
+    var data = null;
+    if (isInternal) {
+        data = server.GetTitleInternalData({
+            Keys: [key]
+        }).Data;
+    }
+    else {
+        data = server.GetTitleData({
+            Keys: [key]
+        }).Data;
+    }
+    if (data == null || !data.hasOwnProperty(key)) {
+        log.error('you get Title Data is empty. Key:' + key);
+        return null;
+    }
+    return data[key];
 }

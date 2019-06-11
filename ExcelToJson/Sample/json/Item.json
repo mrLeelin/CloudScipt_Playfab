@@ -21,6 +21,2203 @@
                 "DisplayName": "键盘",
                 "Description": "及那盘",
                 "IsStackable": true
+            },
+            {
+                "ItemId": 1,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "小行李箱",
+                "Description": "安娜的小行李箱，似乎在晃动。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 2,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "钢笔",
+                "Description": "丹尼尔老师的精致钢笔。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 3,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "班级名册",
+                "Description": "格林德沃新一期班级成员的名册。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 4,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "奶奶的推荐信",
+                "Description": "奶奶为你写的格林德沃的推荐信。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 5,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "小鱼干",
+                "Description": "风干的小鱼干，并没有咸味。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 6,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "格林德沃的邀请函",
+                "Description": "格林德沃发给入学新生的邀请函。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 7,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《感知万物》",
+                "Description": "教授感知魔法基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 8,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《解剖空间》",
+                "Description": "教授空间魔法基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 9,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《未来的奥秘》",
+                "Description": "教授占卜术基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《虚构形体》",
+                "Description": "教授变形术基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 11,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《黄金练成》",
+                "Description": "教授炼金术基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 12,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "魔法师的必修课",
+                "Description": "魔法师的基础必修课程，是成为魔法学徒的证明。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 13,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "手表",
+                "Description": "丹尼尔老师的精致手表，平时从不离身。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 14,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "钱包",
+                "Description": "丹尼尔老师的钱包，里面的钱还在。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 15,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "正装衣服",
+                "Description": "丹尼尔老师的正装衣服，上面并没有破损。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 16,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "梳子",
+                "Description": "丹尼尔老师的梳子。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 17,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "香烟",
+                "Description": "丹尼尔老师的香烟。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 18,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "柜子钥匙",
+                "Description": "丹尼尔老师私人柜子的钥匙。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 19,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "通知书",
+                "Description": "格林德沃的旧版录取通知书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "校服外套",
+                "Description": "格林德沃的新生校服外套。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 21,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "打印机",
+                "Description": "丹尼尔工作用的打字机，里面写的东西被抹掉了",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 22,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "背包",
+                "Description": "一个普通的背包，被放在传送阵里。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 23,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "水晶矿石",
+                "Description": "可以快速使用一次强力空间魔法的昂贵莫非材料。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 24,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "皮灵",
+                "Description": "灵魂的实体残渣。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 25,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "镜子",
+                "Description": "一面普通的小镜子。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 26,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "潦草的笔记",
+                "Description": "一张写着传送门有关的信息的小纸条。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 27,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "手帕",
+                "Description": "一块普通的手帕。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 28,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "传送门的符文",
+                "Description": "可以开启传送法阵的符文石。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 29,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "首饰盒子",
+                "Description": "存放首饰的小盒子。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 30,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "红宝石之心",
+                "Description": "一块心形的红宝石。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 31,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "红宝石的记忆",
+                "Description": "菲娜用红宝石之心引导出的记忆。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 32,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "丹尼尔的记忆碎片1",
+                "Description": "丹尼尔被红宝石之心引导出的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 33,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "丹尼尔的记忆碎片2",
+                "Description": "丹尼尔被红宝石之心引导出的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 34,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "丹尼尔的记忆碎片3",
+                "Description": "丹尼尔被红宝石之心引导出的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 35,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "丹尼尔的记忆碎片4",
+                "Description": "丹尼尔被红宝石之心引导出的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 36,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "丹尼尔的记忆",
+                "Description": "丹尼尔被红宝石之心引导出的记忆。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 37,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "证实灵魂存在的新闻",
+                "Description": "报道证实灵魂存在回忆内容的新闻报纸。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 38,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "猫眼",
+                "Description": "传说猫可以看见人类的灵魂。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 39,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "催眠怀表",
+                "Description": "用于催眠的小怀表，有着长长的锁链。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "灵魂",
+                "Description": "人类的灵魂。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 41,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "语言护符",
+                "Description": "菲娜日常佩戴的护符，可以让动物与人类交流。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 42,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《记忆读取术》",
+                "Description": "埃玛发明的读取记忆的法术，需要没有意识反抗才能使用。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 43,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "狮子符文",
+                "Description": "印有狮子座图形的护符。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 44,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "双鱼符文",
+                "Description": "印有双鱼座图形的护符。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 45,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "天蝎符文",
+                "Description": "印有天蝎座图形的护符。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 46,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "金牛符文",
+                "Description": "印有金牛座图形的护符。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 47,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "射手符文",
+                "Description": "印有射手座图形的护符。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 48,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "天秤符文",
+                "Description": "印有天秤座图形的护符。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 49,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "猫头鹰奖章",
+                "Description": "格林德沃的刻有猫头鹰像的奖章，代表学识。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "猫眼奖章",
+                "Description": "格林德沃的刻有猫眼像的奖章，代表智慧。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 51,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "衔尾蛇奖章",
+                "Description": "格林德沃的刻有衔尾蛇像的奖章，代表传承。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 52,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "塔罗牌",
+                "Description": "玛丽安所使用的塔罗牌。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 53,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "巫师魔杖",
+                "Description": "巫师使用的魔杖。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 54,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "学校校徽",
+                "Description": "格林德沃的学校校徽。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 55,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《语言的力量》",
+                "Description": "教授魔咒基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 56,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《魔法的历史》",
+                "Description": "教授魔法历史基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 57,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《神奇的动物们》",
+                "Description": "教授魔法生物学基础的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 58,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《世界的异变》",
+                "Description": "教授异像的魔法书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 59,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《隐形兽的踪迹》",
+                "Description": "讲解隐形兽生态与寻找隐形兽手段的书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 60,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "Ct"
+                ],
+                "DisplayName": "《异像防御学》",
+                "Description": "教授对抗异像手段的书籍。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40001,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "草药",
+                "Description": "乌鸦村沼泽特产的草药，在当地产量很高。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40002,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "乌鸦",
+                "Description": "乌鸦村特有的乌鸦，胆子非常大。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40003,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "女巫的护符",
+                "Description": "雕刻着奇怪表情的木牌项链。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40004,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "女巫的药剂",
+                "Description": "女巫制作的药剂，性质十分的热烈。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40005,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "羊皮纸记录",
+                "Description": "羊皮纸上记录的乌鸦村的天气情况。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40006,
+                "ItemClass": "Collection",
+                "DisplayName": "成熟的葡萄",
+                "Description": "一串完全成熟的葡萄，个头非常大。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40007,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "绿松石手镯",
+                "Description": "串着许多绿松石的手镯，是埃米莉雅奶奶的遗物。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40008,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "被打扮的乌鸦",
+                "Description": "埃米莉雅饲养的乌鸦，身上绑着蝴蝶结。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40009,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "女巫的记录",
+                "Description": "记录着乌鸦村历代女巫名单的本子。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40010,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "香丸",
+                "Description": "用各种草药混合而成的香丸，散发着淡淡的香气。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40011,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "编制的鸟笼",
+                "Description": "用树枝编制的简易鸟笼。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40012,
+                "ItemClass": "Collection",
+                "DisplayName": "鸡蛋",
+                "Description": "普通的乡村鸡蛋，在乌鸦村可以作为女巫的报酬。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40013,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "干燥的草药",
+                "Description": "被晒干保存的草药。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40014,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "奥利弗的狗",
+                "Description": "奥利弗养的土狗。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40015,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "女巫的长袍",
+                "Description": "女巫穿着的粗糙长袍，能看出明显的女性特质。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40016,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "散装的药物",
+                "Description": "散装的药物，被分成了许多份。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40017,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "茶杯",
+                "Description": "巫师使用的粗糙茶杯，里面有一些茶叶渣。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40018,
+                "ItemClass": "Collection",
+                "DisplayName": "鸽子",
+                "Description": "巫师变出的鸽子，不知道它们被养在哪里。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40019,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "去山顶的地图",
+                "Description": "从村里通向巫师的住所的山路路线图。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40020,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "铲子",
+                "Description": "铸铁的铲子，有些重。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40021,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "指南针",
+                "Description": "随身携带的指南针。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40022,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "淤泥",
+                "Description": "从塌方的道路上挖出的淤泥。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40023,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "木棍",
+                "Description": "结实的木棍，用来撬动巨石。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40024,
+                "ItemClass": "Collection",
+                "DisplayName": "大石块",
+                "Description": "因塌方而落在路上的大石块。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40025,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "乌鸦攻击",
+                "Description": "乌鸦的攻击，令每个被攻击的人都印象深刻。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40026,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "伐木斧",
+                "Description": "用于伐木的乡村斧子。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40027,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "木桩",
+                "Description": "被砍伐下的木桩，用于制作栅栏。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40028,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "削尖的木桩",
+                "Description": "底部被削尖的木桩，用于制作栅栏。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40029,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "草绳",
+                "Description": "用稻草编制的草绳，很结实但容易腐烂。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40030,
+                "ItemClass": "Collection",
+                "DisplayName": "木桩栅栏",
+                "Description": "在木桩上绑上草绳制成的栅栏。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40031,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "燕麦",
+                "Description": "一种廉价的谷物。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40032,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "燕麦粥",
+                "Description": "用燕麦制作的粥，是乡下人的主食。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40033,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "燃烧的蜡烛",
+                "Description": "正在燃烧的廉价蜡烛。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40034,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "空的被子",
+                "Description": "空的被子，埃米莉雅不在里面。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40035,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "窗边的脚印",
+                "Description": "窗边的脚印，脚印是朝外的。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40036,
+                "ItemClass": "Collection",
+                "DisplayName": "埃米莉雅",
+                "Description": "乌鸦村村长的孙女。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40037,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "巫师魔法书",
+                "Description": "巫师的魔法师，里面可能记载着很多魔法。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40038,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "石堆",
+                "Description": "用石头垒砌的简易石堆，用来做路标。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40039,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "草丛",
+                "Description": "可以戴在头上的一堆草丛，用来隐藏自己。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40040,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蓑衣",
+                "Description": "用草编制的简易衣服，可以抵挡乌鸦的攻击。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40041,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "黑麦麦粒",
+                "Description": "黑麦的麦粒，乌鸦很喜欢吃。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40042,
+                "ItemClass": "Collection",
+                "DisplayName": "戴维",
+                "Description": "乌鸦村现任的巫师，也是历代女巫中唯一的男性。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40043,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "藤蔓戒指",
+                "Description": "用藤蔓编制的简易戒指，上面有一朵花，不过已经完全干枯了。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40044,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "生命之花",
+                "Description": "与女巫生命相连的花朵，被放在玻璃瓶中，已经完全枯萎了。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40045,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "《女巫之锤》",
+                "Description": "曾经盛行一时的猎巫运动的行动纲领。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40046,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "奇怪文字的卷轴",
+                "Description": "写有奇怪象形文字的卷轴，上面的文字与奶奶留下的文件是同一种文字。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40047,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "羽毛项链",
+                "Description": "边缘带有各色羽毛的项链，是女巫喜欢的装饰品。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40048,
+                "ItemClass": "Collection",
+                "DisplayName": "带照片的项链",
+                "Description": "中间带有女巫蕾娜塔照片的吊坠。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40049,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "村长的告示",
+                "Description": "村长发布的关于女巫蕾娜塔失踪的告示。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40050,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "女巫的帽子",
+                "Description": "女巫的大帽子，充满异端的气息。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40051,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "被毁坏的栈道",
+                "Description": "被毁坏的木质栈道，这是原本通向沼泽的唯一通道。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40052,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "药剂师的背包",
+                "Description": "药剂师的大背包，里面有很多草药。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40053,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "彩陶塑像",
+                "Description": "精致的彩陶塑像。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40054,
+                "ItemClass": "Collection",
+                "DisplayName": "蕾娜塔的信",
+                "Description": "女巫蕾娜塔离开时留下了信件。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40055,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "符文石块",
+                "Description": "在石头上雕刻的简易符文。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40056,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "铜币",
+                "Description": "最小面值的铜制硬币。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40057,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "白面包",
+                "Description": "精面制作的白面包。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40058,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "马戏团的广告",
+                "Description": "马戏团发布的广告传单。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40059,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "乌鸦魔术的新闻",
+                "Description": "报纸上记录的马戏团乌鸦表演的新闻。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40060,
+                "ItemClass": "Collection",
+                "DisplayName": "马戏团的招聘书",
+                "Description": "马戏团老板给蕾娜塔的招聘书，上面签了一个很不错的价格。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40061,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "乌鸦巢",
+                "Description": "巫师小屋周围的乌鸦巢。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40062,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "稻草堆",
+                "Description": "一堆稻草，上面铺着一张布，是一个简易的床铺。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40063,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蕾娜塔的木雕",
+                "Description": "用木头制作的蕾娜塔的木雕，手法很粗糙，并不怎么像。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40064,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "兔脚护符",
+                "Description": "用兔脚制作的护符，是女巫的传统装备。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40065,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "半成品符文石",
+                "Description": "雕刻一半的符文石，似乎有一些魔力。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40066,
+                "ItemClass": "Collection",
+                "DisplayName": "捕梦网",
+                "Description": "使用了乌鸦羽毛的捕梦网。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40067,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "鳄鱼出没",
+                "Description": "村长发布的关于沼泽中有鳄鱼出没的传单。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40068,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "鳄鱼",
+                "Description": "潜伏在沼泽中的鳄鱼，之漏出了脸。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40069,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "山羊",
+                "Description": "在沼泽中放牧的山羊。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40070,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "渔网",
+                "Description": "兼顾的渔网。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40071,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "鱼叉",
+                "Description": "锋利的鱼叉。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40072,
+                "ItemClass": "Collection",
+                "DisplayName": "套索",
+                "Description": "用来将鳄鱼拉出来的套索。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40073,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "沼泽地图",
+                "Description": "沼泽地的地图。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40074,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "巨大的毒蘑菇",
+                "Description": "一个巨大的毒蘑菇丛，散发着毒气。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40075,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "口罩",
+                "Description": "简易的口罩，可以驱散毒气。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40076,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "鳄鱼巢",
+                "Description": "鳄鱼的巢，里面有几个损毁的鳄鱼蛋。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40077,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "腐坏的蛋",
+                "Description": "已经破损的蛋，已经腐坏了，显然没有孵化。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40078,
+                "ItemClass": "Collection",
+                "DisplayName": "火把",
+                "Description": "用树脂布条和油脂制作的简易的火把。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40079,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蜻蜓",
+                "Description": "一只普通的蜻蜓。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40080,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蓝蜻蜓",
+                "Description": "一只蓝色蜻蜓。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40081,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "红蜻蜓",
+                "Description": "一只红色的蜻蜓。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40082,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "金龟子",
+                "Description": "一只金龟子。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40083,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "萤火虫",
+                "Description": "一只萤火虫。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40084,
+                "ItemClass": "Collection",
+                "DisplayName": "女巫的灵魂",
+                "Description": "女巫蕾娜塔的灵魂。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40085,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "刻有文字的石板碎片1",
+                "Description": "一块刻有符文文字的石板碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40086,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "刻有文字的石板碎片2",
+                "Description": "一块刻有符文文字的石板碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40087,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "刻有文字的石板碎片3",
+                "Description": "一块刻有符文文字的石板碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40088,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "刻有文字的石板碎片4",
+                "Description": "一块刻有符文文字的石板碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40089,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "石质基座",
+                "Description": "石质的基座，上面可以放置石板。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40090,
+                "ItemClass": "Collection",
+                "DisplayName": "刻有咒语的石碑",
+                "Description": "刻有一段咒语的石碑。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40091,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "发光的石碑",
+                "Description": "正在发光的石碑，上面产生了魔法共鸣。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40092,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蕾娜塔的记忆碎片1",
+                "Description": "蕾娜塔的模糊的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40093,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蕾娜塔的记忆碎片2",
+                "Description": "蕾娜塔的模糊的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40094,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蕾娜塔的记忆碎片3",
+                "Description": "蕾娜塔的模糊的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40095,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "蕾娜塔的记忆碎片4",
+                "Description": "蕾娜塔的模糊的记忆碎片。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40096,
+                "ItemClass": "Collection",
+                "DisplayName": "蕾娜塔的记忆",
+                "Description": "蕾娜塔的模糊的记忆。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40097,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "《杂谈灵异事件簿》",
+                "Description": "记载着世界各地的怪异事件的书。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40098,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "《狂想者的异闻录》",
+                "Description": "一位疯狂魔法师的见闻录。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40099,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "《异象大全》",
+                "Description": "较为专业的记载各地奇异现象的书本。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40100,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "《在生命的边缘》",
+                "Description": "记录各地的人在生命垂危时遇到清醒灵魂的记录。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40101,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "《迷失之人》",
+                "Description": "记录一位魔法师遇到清醒灵魂的事件纪实。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 40102,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "anomalies"
+                ],
+                "DisplayName": "《实用法阵建造》",
+                "Description": "用于建造各种法阵的使用书籍。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50001,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "生命之心",
+                "Description": "传说中拥有生命的宝石，可以为保护主人而献出自己的生命。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50002,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "影子之书",
+                "Description": "追随魔法师终身的魔导书，记录着主人对魔法研究的所有成果，在主人魔力的感染下有了自己意识。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50003,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "魔力装置",
+                "Description": "可以把魔力转换为动能的神奇装置，原理还不清楚。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50004,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "圣骑士之盾",
+                "Description": "圣骑士中的英雄人物所用的骑士盾，雕刻有圣人布道的场景，拥有强大的守护力。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50005,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "圣骑士之剑",
+                "Description": "圣骑士中的英雄人物所用的骑士剑，只能为守护弱小而挥舞。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50006,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "僭越者的王冠",
+                "Description": "僭越者私自制造的虚伪王冠，拥有改变人心智的力量。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50007,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "混沌装置",
+                "Description": "意义不明的奇怪装置，可以安装在任何机械上，拥有无尽的可能性。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50008,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "世界树之种",
+                "Description": "极东之地世界树的树种，成熟的世界树据说可以连接天界。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50009,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "虚伪的灵魂容器",
+                "Description": "可以为灵魂提供庇护的神奇宝盒，甚至可以让灵魂放弃对肉身的需要。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 50010,
+                "ItemClass": "Collection",
+                "Tags": [
+                    "artifacts"
+                ],
+                "DisplayName": "纯洁之王",
+                "Description": "至高的纯洁白王，拥有护佑主人在棋局中胜利的能力。",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20001,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "猫眼拼图门票",
+                "Description": "进入猫眼拼图玩法所需的门票，每进行一次该玩法，需要消耗一定数量的门票",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20002,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "格林德沃门票",
+                "Description": "进入格林德沃地区所需的门票，每进入一次该地区的战斗场景，需要消耗一定数量的门票",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20003,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "红枫镇门票",
+                "Description": "进入伦敦城地区所需的门票，每进入一次该地区的战斗场景，需要消耗一定数量的门票",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20004,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "白糖堡门票",
+                "Description": "进入白糖堡地区所需的门票，每进入一次该地区的战斗场景，需要消耗一定数量的门票",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20005,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "乌鸦村门票",
+                "Description": "进入乌鸦村地区所需的门票，每进入一次该地区的战斗场景，需要消耗一定数量的门票",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20006,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "贤者之居门票",
+                "Description": "进入贤者之居地区所需的门票，每进入一次该地区的战斗场景，需要消耗一定数量的门票",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20007,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "红苹果",
+                "Description": "一个美味多汁的苹果能回复30点体力",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20008,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "新鲜橙汁",
+                "Description": "新鲜的杯装橙汁能回复50点体力",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20009,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "羊角面包",
+                "Description": "一块羊角面包能回复100点体力",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20010,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "星期日烤肉",
+                "Description": "一杯超能饮料能回复150点体力",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20011,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "魔力之源",
+                "Description": "一杯被魔法加持过的鸡尾酒能回复250点体力",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20012,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "En"
+                ],
+                "DisplayName": "天鹅饼干",
+                "Description": "立即恢复35点体力，并且将体力恢复速度提高3倍，持续20分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20013,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "En"
+                ],
+                "DisplayName": "焦糖布丁",
+                "Description": "立即恢复150点体力，并且将体力恢复速度提高3倍，持续30分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20014,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "En"
+                ],
+                "DisplayName": "红丝绒蛋糕",
+                "Description": "立即恢复280点体力，并且将体力恢复速度提高3倍，持续30分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20015,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Ex"
+                ],
+                "DisplayName": "猫头鹰硬币",
+                "Description": "在寻物、小游戏战斗中增加15%经验，持续30分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20016,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "猫头鹰符文",
+                "Description": "将完成一个地区或小游戏时获得的经验值增加100%，使用后消失",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20017,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Ex"
+                ],
+                "DisplayName": "猫头鹰银币",
+                "Description": "在寻物、小游戏战斗中增加20%经验，持续90分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20018,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Ex"
+                ],
+                "DisplayName": "猫头鹰金币",
+                "Description": "在寻物、小游戏战斗中增加100%经验，持续90分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20019,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Dr"
+                ],
+                "DisplayName": "猫眼硬币",
+                "Description": "在寻物、小游戏后找到奖励物品的几率+10%，持续30分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20020,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "猫眼符文",
+                "Description": "在完成单一寻物或小游戏时，找到奖励物品的几率+50%，使用后消失",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20021,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Dr"
+                ],
+                "DisplayName": "猫眼银币",
+                "Description": "在寻物、小游戏后找到奖励物品的几率+30%，持续90分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20022,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Dr"
+                ],
+                "DisplayName": "猫眼金币",
+                "Description": "在寻物、小游戏后找到奖励物品的几率+90%，持续120分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20023,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Co"
+                ],
+                "DisplayName": "衔尾蛇硬币",
+                "Description": "在寻物、小游戏中增加20%金币，持续30分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20024,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Co"
+                ],
+                "DisplayName": "衔尾蛇银币",
+                "Description": "在寻物、小游戏中增加25%金币，持续90分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20025,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "Co"
+                ],
+                "DisplayName": "衔尾蛇金币",
+                "Description": "在寻物、小游戏中增加100%金币，持续120分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20026,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "En"
+                ],
+                "DisplayName": "大吉岭红茶",
+                "Description": "3倍增加体力恢复速度，持续30分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20027,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "En"
+                ],
+                "DisplayName": "阿萨姆奶茶",
+                "Description": "5倍增加体力恢复速度，持续90分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20028,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy",
+                    "En"
+                ],
+                "DisplayName": "伯爵茶",
+                "Description": "10倍增加体力恢复速度，持续120分钟",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20029,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "毛线球",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20030,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "魔法药剂",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20031,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "向日葵",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20032,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "烧瓶",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20033,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "符石",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20034,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "神器面具",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20035,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "魔法卷轴",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20036,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Monsters"
+                ],
+                "DisplayName": "魔法石碎片",
+                "Description": "用于挑战魔法拼图的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 20037,
+                "ItemClass": "Prop",
+                "Tags": [
+                    "Energy"
+                ],
+                "DisplayName": "召唤神龙",
+                "Description": "用于召唤异向",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10001,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "点金手",
+                "Description": "这是一双可以点金的手",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10002,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "绿宝石凤凰",
+                "Description": "传说中胸镶嵌着绿宝石的凤凰，可以为人类带来好运",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10003,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "七彩花",
+                "Description": "拥有七彩花的女人，会变得十分幸福",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10004,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "预言之蛇",
+                "Description": "这只古老的蛇，它可以预言一切",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10005,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "炼金药水",
+                "Description": "炼金师常备的药水",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10006,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "魔法圣杯",
+                "Description": "古老的神器之一，圣杯内拥有可以看到过去的神水",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10007,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "红色浆果",
+                "Description": "传说吃下红色浆果可以让人的魔法能力大大提升",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 10008,
+                "ItemClass": "Synthesizer",
+                "Tags": [
+                    "Other"
+                ],
+                "DisplayName": "四叶草",
+                "Description": "神奇的四叶草可以给人们带来好运",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 30001,
+                "ItemClass": "Tool",
+                "Tags": [
+                    "Tool"
+                ],
+                "DisplayName": "魔力提灯",
+                "Description": "提高在夜晚模式下的视野外围，持续30秒",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 30002,
+                "ItemClass": "Tool",
+                "Tags": [
+                    "Tool"
+                ],
+                "DisplayName": "打火机",
+                "Description": "在黑夜模式下，使用后能为所在地点照明30秒",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 30003,
+                "ItemClass": "Tool",
+                "Tags": [
+                    "Tool"
+                ],
+                "DisplayName": "魔法沙漏",
+                "Description": "给你额外的45秒时间探索各个地点和小游戏",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 30004,
+                "ItemClass": "Tool",
+                "Tags": [
+                    "Tool"
+                ],
+                "DisplayName": "放大镜",
+                "Description": "它会指引你找到所需的道具",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 30005,
+                "ItemClass": "Tool",
+                "Tags": [
+                    "Tool"
+                ],
+                "DisplayName": "解谜魔方",
+                "Description": "魔方可以为你变更出缺失或者变形的文字",
+                "IsStackable": true
+            },
+            {
+                "ItemId": 30006,
+                "ItemClass": "Tool",
+                "Tags": [
+                    "Tool"
+                ],
+                "DisplayName": "魔力炸弹",
+                "Description": "快速找到三种物品",
+                "IsStackable": true
             }
         ]
     }

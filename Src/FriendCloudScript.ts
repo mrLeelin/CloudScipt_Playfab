@@ -151,7 +151,7 @@ function addFriend(args: any, context): IAddFriendResult {
         log.error("you global data is empty.  Key : GlobalFriendCountLimit");
         return null;
     }
-    let maxCount: number = parseInt(gData[KEY_GlobalFriendCountLimit]);
+    let maxCount: number = parseInt(getGlobalTitleData(false,KEY_GlobalFriendCountLimit));
     if (server.GetFriendsList({
         PlayFabId: currentPlayerId
     }).Friends.length > maxCount) {
@@ -239,7 +239,7 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
         return null;
     }
     
-    let id: string = GetGlobalTitleData(KEY_GlobalAllPlayersSegmentId);
+    let id: string = getGlobalTitleData(true,KEY_GlobalAllPlayersSegmentId);
 
     let segmentRequest = server.GetPlayersInSegment({ SegmentId: id });
     if (segmentRequest.PlayerProfiles.length < count) {
@@ -249,17 +249,9 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
         };
     }
 
-    let data = server.GetTitleData({ Keys: [KEY_GlobalLimitLevel] }).Data;
-    if (data == null || !data.hasOwnProperty(KEY_GlobalLimitLevel)) {
-
-        log.error("you not input Global Key. Key:" + KEY_GlobalLimitLevel);
-        return;
-    }
-
-
     let friendInfo = getFriendInfos(currentPlayerId);
     let selfLevel: number = getLevel(currentPlayerId);
-    let limitLevel: number = parseInt(data[KEY_GlobalLimitLevel]);
+    let limitLevel: number = parseInt(getGlobalTitleData(false,KEY_GlobalLimitLevel));
     let profiles: PlayFabServerModels.PlayerProfile[] = [];
 
     for (const iterator of segmentRequest.PlayerProfiles) {
@@ -388,7 +380,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Data: { [KEY_HeartFriends]: JSON.stringify(dH) }
     })
     //统计一下   
-    recordStatistics(KEY_StatisticsHeartCount, 1);
+    recordStatistics(KEY_StatisticsHeartCount, 1,1);
     return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.Successful };
 
 }
@@ -401,16 +393,8 @@ function getPlayerGiftCount(): IGetPlayGiftCount {
     let selfGiveCount: string = "";
     let time: number = GetTimeStamp();
 
-    let gData: { [key: string]: string } = server.GetTitleData({
-        Keys: [KEY_GlobalSendGiftCount, KEY_GlobalGiveGiftCount]
-    }).Data;
-
-    if (gData == null || (!gData.hasOwnProperty(KEY_GlobalSendGiftCount) || !gData.hasOwnProperty(KEY_GlobalGiveGiftCount))) {
-        log.error("you not set global key. Send Gift and  give Gift");
-        return null;
-    }
-    selfSendCount = gData[KEY_GlobalSendGiftCount];
-    selfGiveCount = gData[KEY_GlobalGiveGiftCount];
+    selfSendCount = getGlobalTitleData(false,KEY_GlobalSendGiftCount);
+    selfGiveCount = getGlobalTitleData(false,KEY_GlobalGiveGiftCount);
 
     let sData: { [key: string]: PlayFabServerModels.UserDataRecord } = server.GetUserReadOnlyData({
         PlayFabId: currentPlayerId,
@@ -473,24 +457,6 @@ function getFriendInfos(self: string): PlayFabServerModels.FriendInfo[] {
     return result.Friends;
 }
 
-
-
-function GetGlobalTitleData(key: string): string {
-    let keys: string[];
-    keys = [key];
-    let result = server.GetTitleInternalData({ Keys: keys });
-    let ret: string;
-    for (const k in result.Data) {
-        if (result.Data.hasOwnProperty(k)) {
-            ret = result.Data[k];
-            break;
-        }
-    }
-    if (ret == "") {
-        log.error("you get global title id is invaid .Id:" + key);
-    }
-    return ret;
-}
 
 function GetPlayerIsGift(self: string, target: string): boolean {
 

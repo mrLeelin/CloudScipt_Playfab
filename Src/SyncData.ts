@@ -5,34 +5,8 @@ handlers.CompareDataVersions = compareDataVersions;
 
 
 
-enum Data_Status {
-
-    New_Data = 101,
-    Update_Data = 103,
-    Sync_Data = 104,
-    Delete_Data = 102,
-}
 
 
-enum Server_Data_Status {
-    None = 101,
-    Equal = 102,
-    Unequal = 103,
-}
-
-enum CurrencyType {
-    CO,
-    DI,
-    EX,
-    EN,
-    Unkown
-}
-
-interface IData {
-    TimeStamp: number;
-    Progress: string;
-    Status: number;
-}
 interface ISyncClientToServiceRequest {
     Count: number;
     Keys: string[];
@@ -61,7 +35,40 @@ interface ICompareDataVersionsResult {
     Diamonds?: number;
 }
 
+enum Data_Status {
 
+    New_Data = 101,
+    Update_Data = 103,
+    Sync_Data = 104,
+    Delete_Data = 102,
+}
+
+
+enum Server_Data_Status {
+    None = 101,
+    Equal = 102,
+    Unequal = 103,
+}
+
+enum CurrencyType {
+    CO,
+    DI,
+    EX,
+    EN,
+    Unkown
+}
+
+interface IData {
+    TimeStamp: number;
+    Progress: string;
+    Status: number;
+}
+
+interface IInventoryItem {
+    IsActive: boolean;
+    ID: number;
+    Num: number;
+}
 
 function compareDataVersions(args: any): ICompareDataVersionsResult {
 
@@ -149,7 +156,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         let status: number = data.Status;
 
         if (status == Data_Status.New_Data) {
-            let sData: IData = set( tS,entityId, entityType, key, data);
+            let sData: IData = set(tS, entityId, entityType, key, data);
             ret[key] = sData;
         } else if (status == Data_Status.Update_Data) {
             let sData: IData = get(entityId, entityType, key);
@@ -158,7 +165,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
                     log.info("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
             }
-            sData = set(tS,entityId, entityType, key, data);
+            sData = set(tS, entityId, entityType, key, data);
             ret[key] = sData;
         } else {
             log.error("you sync Data Status :" + status);
@@ -181,9 +188,10 @@ function get(entityId: string, entityType: string, key: string): IData {
 
     switch (key) {
         case KEY_Level:
-            return getLevelInfo(key);
-        case KEY_QuestData:
+            return getLevelInfo(key);      
         case KEY_Inventory:
+            return getItems(key);
+        case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
@@ -197,25 +205,26 @@ function get(entityId: string, entityType: string, key: string): IData {
             return getTitleData(key);
     }
 }
-function set(time:number, entityId: string, entityType: string, key: string, data: IData): IData {
+function set(time: number, entityId: string, entityType: string, key: string, data: IData): IData {
 
 
     switch (key) {
         case KEY_Level:
-            return setLevelInfo(time,key,data);
-        case KEY_QuestData:
+            return setLevelInfo(time, key, data);       
         case KEY_Inventory:
+            return setItems(time,key,data);
+        case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
-            return setTitleData(time,key, data);
+            return setTitleData(time, key, data);
         case KEY_Currency:
-            return setCurrencyData(time,key, data);
+            return setCurrencyData(time, key, data);
         case KEY_Account:
-            return setAccountInfo(time,entityId, entityType, key, data);
+            return setAccountInfo(time, entityId, entityType, key, data);
         default:
-            return setTitleData(time,key, data);
+            return setTitleData(time, key, data);
     }
 }
 
@@ -243,7 +252,7 @@ function getDatasForCientTimeStamp(cT: number, entityId: string, entityType: str
 }
 
 
-function setObjects(time:number, id: string, type: string, key: string, data: IData): IData {
+function setObjects(time: number, id: string, type: string, key: string, data: IData): IData {
 
     //Client To Server
     data.Status = Data_Status.Sync_Data;
@@ -300,7 +309,7 @@ function getTitleData(key: string): IData {
     return JSON.parse(dValue.Value) as IData;
 }
 
-function setTitleData(time:number,key: string, data: IData): IData {
+function setTitleData(time: number, key: string, data: IData): IData {
 
     let userData: { [key: string]: string } = {};
     data.Status = Data_Status.Sync_Data;
@@ -344,7 +353,7 @@ function getCurrencyData(key: string): IData {
 
 }
 
-function setCurrencyData(time:number, key: string, data: IData): IData {
+function setCurrencyData(time: number, key: string, data: IData): IData {
 
     let cR: { [key: string]: any } = JSON.parse(data.Progress);
     if (!cR.hasOwnProperty("cts") || !cR.hasOwnProperty("quatity")) {
@@ -402,17 +411,118 @@ function setCurrencyData(time:number, key: string, data: IData): IData {
                 }).Balance);
         }
     }
-    /*
-    cR["cts"] = changeType;
-    cR["quatity"] = changeCount;
-    cR["m_status"] = 0;
-    data.Progress = JSON.stringify(cR);
-    */ 
     data.Status = Data_Status.Sync_Data;
     data.TimeStamp = time;
 
 
     let s: { [key: string]: string } = {}
+    s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
+    server.UpdateUserPublisherInternalData({
+        PlayFabId: currentPlayerId,
+        Data: s
+    });
+
+    return data;
+}
+function getItems(key: string): IData {
+
+   let items= server.GetUserInventory({PlayFabId:currentPlayerId}).Inventory;
+   let cR:{[key:string]:any}={}
+   let iItems:IInventoryItem[]=[]
+   for (const item of items) {
+        let i:IInventoryItem={
+            IsActive:true,
+            ID:parseInt(item.ItemId),
+            Num:item.RemainingUses
+        };
+        iItems.push(i);
+   }
+   cR['items']=iItems;
+   cR['m_status']=0;
+
+  let t= server.GetUserPublisherInternalData({
+       PlayFabId: currentPlayerId,
+       Keys:[key+KEY_TIME_STAMP]
+   }).Data[key+KEY_TIME_STAMP];
+   let data:IData={
+       Status:Data_Status.Sync_Data,
+       TimeStamp:t==null?0:parseInt(t.Value),
+       Progress:JSON.stringify(cR)
+   }
+   return data;
+}
+function setItems(time: number, key: string, data: IData): IData {
+
+    let cR: { [key: string]: any } = JSON.parse(data.Progress);
+    if (!cR.hasOwnProperty('items')) {
+        log.error('you item progress is not contain items');
+        return null;
+    }
+    let inventoryItem: IInventoryItem[] = cR['items'];
+
+    let itemInstances = server.GetUserInventory({ PlayFabId: currentPlayerId }).Inventory;
+
+    if (itemInstances.length > 0) {
+        let ids: PlayFabServerModels.RevokeInventoryItem[] = []
+        for (const i of itemInstances) {
+            let id: PlayFabServerModels.RevokeInventoryItem = {
+                ItemInstanceId: i.ItemInstanceId,
+                PlayFabId: currentPlayerId
+            };
+            ids.push(id);
+        }
+        let errors = server.RevokeInventoryItems({ Items: ids }).Errors;
+        if (errors.length == null || errors.length > 0) {
+            log.error("you cur  revoke  items is error");
+            return null;
+        }
+    }
+    let version=getGlobalTitleData(true,KEY_GlobalCatalogVersion);
+    let catalogs= server.GetCatalogItems({CatalogVersion:version}).Catalog;
+    let ids:string[]=[]
+    for (const item of inventoryItem) {
+        let isExist=false;
+
+        for (const log of catalogs) {
+            if(item.ID.toString()==log.ItemId){
+                isExist=true;
+                break;
+            }
+        }
+        if(isExist)
+        {
+            for (let index = 0; index < item.Num; index++) {                
+                ids.push(item.ID.toString());
+            }
+        
+            continue;
+        }
+        log.error("you item id not contain catalogs . Item id "+item.ID);
+        return null;
+    }
+
+    server.GrantItemsToUser({
+        PlayFabId:currentPlayerId,
+        ItemIds:ids,
+        CatalogVersion:version
+    })
+   let selfItems= server.GetUserInventory({
+        PlayFabId:currentPlayerId
+    }).Inventory;
+    if(selfItems.length>0){
+        let cCount=0;
+        for (const item of selfItems) {
+            if(item.ItemClass=="Collection"){
+                cCount++;
+            }
+        }
+        if(cCount>0){
+            refreshStatistics(KEY_StatisticsCollectionCount,cCount);
+        }
+    }
+    data.Status = Data_Status.Sync_Data;
+    data.TimeStamp = time;
+  let s: { [key: string]: string } = {}
     s[key + KEY_TIME_STAMP] = data.TimeStamp.toString();
     server.UpdateUserPublisherInternalData({
         PlayFabId: currentPlayerId,
@@ -451,7 +561,7 @@ function getAccountInfo(id: string, type: string, key: string): IData {
     return data;
 }
 
-function setAccountInfo( time:number,id: string, type: string, key: string, data: IData): IData {
+function setAccountInfo(time: number, id: string, type: string, key: string, data: IData): IData {
 
 
     data.Status = Data_Status.Sync_Data;
@@ -473,19 +583,19 @@ function setAccountInfo( time:number,id: string, type: string, key: string, data
 
 }
 
-function getLevelInfo( key: string): IData {
+function getLevelInfo(key: string): IData {
 
-    let statistics= server.GetPlayerStatistics({PlayFabId:currentPlayerId,StatisticNames:[key]}).Statistics;
-    let level:number=0;
-    if(statistics!=null&&statistics.length>0){
+    let statistics = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: [key] }).Statistics;
+    let level: number = 0;
+    if (statistics != null && statistics.length > 0) {
 
-      level=  statistics[0].Value;
+        level = statistics[0].Value;
     }
 
     let info: { [key: string]: any } = {}
 
-    info["Level"]=level;
-    info["Status"]=0;
+    info["Level"] = level;
+    info["Status"] = 0;
 
     let t: PlayFabServerModels.UserDataRecord = server.GetUserPublisherInternalData({
         PlayFabId: currentPlayerId,
@@ -499,7 +609,7 @@ function getLevelInfo( key: string): IData {
     };
     return data;
 }
-function setLevelInfo( time:number,key: string, data: IData): IData {
+function setLevelInfo(time: number, key: string, data: IData): IData {
     data.Status = Data_Status.Sync_Data;
     let info: { [key: string]: string } = JSON.parse(data.Progress);
     server.UpdatePlayerStatistics({
