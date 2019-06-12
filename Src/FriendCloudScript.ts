@@ -8,8 +8,7 @@ handlers.RmFriend = rmFriend;
 
 
 
-interface IAddFriendResult {
-    id: number;
+interface IAddFriendResult extends IResult{
     Create: boolean;
     PlayerId?:string;
     //101 已经有此好友
@@ -17,8 +16,7 @@ interface IAddFriendResult {
     ErrorCode?: number;
 }
 
-interface IGetFriendsResult {
-    id: number;
+interface IGetFriendsResult extends IResult {
     Count: number;
     SelfSendGiftCount: number;
     FriendIds?: string[];
@@ -28,8 +26,7 @@ interface IGetFriendsResult {
     IsGifts?: boolean[];
 }
 
-interface IGetLimitPlayerResult {
-    id: number;
+interface IGetLimitPlayerResult extends IResult {
     Count?: number;
     Names?: string[];
     Levels?: number[];
@@ -38,12 +35,10 @@ interface IGetLimitPlayerResult {
     Code: number;
 }
 
-interface ISendGiftResult {
-    id: number;
+interface ISendGiftResult extends IResult {
     Code: number;
 }
-interface IRmFriendResult {
-    id: number;
+interface IRmFriendResult extends IResult {
     Code?: number;
 }
 
@@ -359,9 +354,11 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Data: { [KEY_GiveGift]: (--fGiveCount).toString() },
     });
     //Send
+    let type:ItemType=args['Type'];
+    let itemId:number=args['ItemId'];
+    let count:number=args['Count'];
     //往邮箱里写入一条数据
-    SendToEmail(fId);
-
+    SendOneItemToEmail(fId,type,itemId,count);
     //记录一下
 
     let rData = server.GetUserData({

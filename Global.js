@@ -1,8 +1,9 @@
 var KEY_SendGift = "__SendGift__";
 var KEY_GiveGift = "__GiveGift__";
+var KEY_HeartFriends = "__HeartFriends__";
+var KEY_Mail = "__Mail__";
 var KEY_StatisticsHeartCount = "__HeartCount__";
 var KEY_StatisticsCollectionCount = "__CollectionCount__";
-var KEY_HeartFriends = "__HeartFriends__";
 var KEY_SYNC_VERSION = "__SYNC_VERSION__";
 var KEY_TIME_STAMP = "__TIME_STAMP__";
 var KEY_GeneralGameData = "__GeneralGeneralGameManagerVM__";
@@ -29,6 +30,8 @@ var Func_Code;
     Func_Code[Func_Code["SC_RM_FRIEND"] = 1006] = "SC_RM_FRIEND";
     Func_Code[Func_Code["SC_SYNC_CLIENTTOSERVICE"] = 2001] = "SC_SYNC_CLIENTTOSERVICE";
     Func_Code[Func_Code["SC_SYNC_COMPARE"] = 2002] = "SC_SYNC_COMPARE";
+    Func_Code[Func_Code["SC_GET_MAILS"] = 3001] = "SC_GET_MAILS";
+    Func_Code[Func_Code["SC_RM_MAILS"] = 3002] = "SC_RM_MAILS";
 })(Func_Code || (Func_Code = {}));
 function recordStatistics(key, value, defValue) {
     var statistics = server.GetPlayerStatistics({
@@ -105,8 +108,6 @@ function GetTimeStamp() {
     var time = server.GetTime({});
     var d = Date.parse(time.Time);
     return d;
-}
-function SendToEmail(id) {
 }
 function getGlobalTitleData(isInternal, key) {
     var data = null;

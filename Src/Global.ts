@@ -2,11 +2,15 @@
 
 const KEY_SendGift: string = "__SendGift__";
 const KEY_GiveGift: string = "__GiveGift__";
+const KEY_HeartFriends: string = "__HeartFriends__";
+
+
+const KEY_Mail:string="__Mail__";
 
 const KEY_StatisticsHeartCount: string = "__HeartCount__";
 const KEY_StatisticsCollectionCount:string="__CollectionCount__";
 
-const KEY_HeartFriends: string = "__HeartFriends__";
+
 
 
 const KEY_SYNC_VERSION: string = "__SYNC_VERSION__"
@@ -44,6 +48,14 @@ enum Func_Code {
     //Sync
     SC_SYNC_CLIENTTOSERVICE = 2001,
     SC_SYNC_COMPARE = 2002,
+
+    //Mail
+    SC_GET_MAILS=3001,
+    SC_RM_MAILS=3002,
+}
+
+interface IResult{
+    id:Func_Code;
 }
 
 /**
@@ -53,6 +65,7 @@ enum Func_Code {
  */
 function recordStatistics(key: string, value:number,defValue: number) {
 
+  
     let statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
         StatisticNames: [key]
@@ -181,14 +194,8 @@ function GetTimeStamp(): number {
     return d;
 }
 
-/**
- * 发送邮箱
- * @param id 接受的人的ids
- */
-function SendToEmail(id: string) {
 
-    //TODO
-}
+
 
 /**
  * 获取  Global Title Data

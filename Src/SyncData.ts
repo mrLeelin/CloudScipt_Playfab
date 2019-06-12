@@ -17,14 +17,12 @@ interface ISyncClientToServiceRequest {
     MaxClientTimeStamp: number;
 
 }
-interface ISyncClientToServiceResult {
-    id: number;
+interface ISyncClientToServiceResult extends IResult{
     Datas: { [key: string]: IData };
     TimeStamp: number;
     ClientToServer: boolean;
 }
-interface ICompareDataVersionsResult {
-    id: number;
+interface ICompareDataVersionsResult extends IResult{
     TimeStamp?: number;
     DisplayName?: string;
     Level?: number;

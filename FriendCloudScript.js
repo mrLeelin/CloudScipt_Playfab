@@ -270,7 +270,10 @@ function sendGiftToFrined(args) {
         PlayFabId: fId,
         Data: (_b = {}, _b[KEY_GiveGift] = (--fGiveCount).toString(), _b),
     });
-    SendToEmail(fId);
+    var type = args['Type'];
+    var itemId = args['ItemId'];
+    var count = args['Count'];
+    SendOneItemToEmail(fId, type, itemId, count);
     var rData = server.GetUserData({
         PlayFabId: currentPlayerId,
         Keys: [KEY_HeartFriends]
