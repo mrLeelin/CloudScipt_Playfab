@@ -59,7 +59,7 @@ enum CurrencyType {
 }
 
 interface IData {
-    TimeStamp: number;
+    TimeStamp?: number;
     Progress: string;
     Status: number;
 }
@@ -159,13 +159,15 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
             let sData: IData = set(tS, entityId, entityType, key, data);
             ret[key] = sData;
         } else if (status == Data_Status.Update_Data) {
+            /*
             let sData: IData = get(entityId, entityType, key);
             if (sData != null) {
                 if (data.TimeStamp != sData.TimeStamp) {
                     log.info("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
                 }
             }
-            sData = set(tS, entityId, entityType, key, data);
+            */
+            let sData = set(tS, entityId, entityType, key, data);
             ret[key] = sData;
         } else {
             log.error("you sync Data Status :" + status);
@@ -243,13 +245,14 @@ function getDatasForCientTimeStamp(cT: number, entityId: string, entityType: str
         KEY_SpecialGameData,
     ];
     for (const key of keys) {
-        let data: IData = get(entityId, entityType, key);
-        if(!data.hasOwnProperty('TimeStamp')){
-            datas[key] = data;
-            continue;
-        }
-        if (data.TimeStamp > cT) {
-            datas[key] = data;
+        try {
+            let time=getTimeStampForKey(key);
+            if(time>cT){
+                let data: IData = get(entityId, entityType, key);
+                datas[key] = data;
+            }
+        } catch (error) {
+            log.error(error+" Key:"+key);
         }
     }
     return datas;
@@ -313,7 +316,6 @@ function getTitleData(key: string): IData {
     }
     let dValue: PlayFabServerModels.UserDataRecord = data.Data[key];
     let ret= JSON.parse(dValue.Value) as IData;
-    ret.TimeStamp=getTimeStampForKey(key);
     return ret;
 }
 
@@ -351,7 +353,6 @@ function getCurrencyData(key: string): IData {
 
     let data: IData = {
         Status: Data_Status.Sync_Data,
-        TimeStamp: getTimeStampForKey(key),
         Progress: JSON.stringify(cR)
     };
     return data;
@@ -438,7 +439,6 @@ function getItems(key: string): IData {
    cR['m_status']=0;
    let data:IData={
        Status:Data_Status.Sync_Data,
-       TimeStamp:getTimeStampForKey(key),
        Progress:JSON.stringify(cR)
    }
    return data;
@@ -534,7 +534,6 @@ function getAccountInfo(id: string, type: string, key: string): IData {
     info["EntityId"] = id;
     info["EntityType"] = type;
     let data: IData = {
-        TimeStamp: getTimeStampForKey(key),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };
@@ -572,7 +571,6 @@ function getLevelInfo(key: string): IData {
     info["Level"] = level;
     info["Status"] = 0;
     let data: IData = {
-        TimeStamp: getTimeStampForKey(key),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };

@@ -93,13 +93,7 @@ function syncData(args) {
             ret[key] = sData;
         }
         else if (status_1 == Data_Status.Update_Data) {
-            var sData = get(entityId, entityType, key);
-            if (sData != null) {
-                if (data.TimeStamp != sData.TimeStamp) {
-                    log.info("TimeStamp is not equal. key :" + key + ".Client :" + data.TimeStamp + ".Server:" + data.TimeStamp);
-                }
-            }
-            sData = set(tS, entityId, entityType, key, data);
+            var sData = set(tS, entityId, entityType, key, data);
             ret[key] = sData;
         }
         else {
@@ -170,13 +164,15 @@ function getDatasForCientTimeStamp(cT, entityId, entityType) {
     ];
     for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
         var key = keys_1[_i];
-        var data = get(entityId, entityType, key);
-        if (!data.hasOwnProperty('TimeStamp')) {
-            datas[key] = data;
-            continue;
+        try {
+            var time = getTimeStampForKey(key);
+            if (time > cT) {
+                var data = get(entityId, entityType, key);
+                datas[key] = data;
+            }
         }
-        if (data.TimeStamp > cT) {
-            datas[key] = data;
+        catch (error) {
+            log.error(error + " Key:" + key);
         }
     }
     return datas;
@@ -232,7 +228,6 @@ function getTitleData(key) {
     }
     var dValue = data.Data[key];
     var ret = JSON.parse(dValue.Value);
-    ret.TimeStamp = getTimeStampForKey(key);
     return ret;
 }
 function setTitleData(time, key, data) {
@@ -264,7 +259,6 @@ function getCurrencyData(key) {
     cR["m_status"] = 0;
     var data = {
         Status: Data_Status.Sync_Data,
-        TimeStamp: getTimeStampForKey(key),
         Progress: JSON.stringify(cR)
     };
     return data;
@@ -339,7 +333,6 @@ function getItems(key) {
     cR['m_status'] = 0;
     var data = {
         Status: Data_Status.Sync_Data,
-        TimeStamp: getTimeStampForKey(key),
         Progress: JSON.stringify(cR)
     };
     return data;
@@ -429,7 +422,6 @@ function getAccountInfo(id, type, key) {
     info["EntityId"] = id;
     info["EntityType"] = type;
     var data = {
-        TimeStamp: getTimeStampForKey(key),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };
@@ -456,7 +448,6 @@ function getLevelInfo(key) {
     info["Level"] = level;
     info["Status"] = 0;
     var data = {
-        TimeStamp: getTimeStampForKey(key),
         Status: Data_Status.Sync_Data,
         Progress: JSON.stringify(info),
     };
