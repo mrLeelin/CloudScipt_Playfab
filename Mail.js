@@ -20,6 +20,7 @@ function clientGetMails(args) {
     var ret = {};
     ret.Mails = mails;
     ret.Count = mails.length;
+    ret.id = Func_Code.SC_GET_MAILS;
     return ret;
 }
 function clientRmEmails(args) {

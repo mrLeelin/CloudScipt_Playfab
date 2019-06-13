@@ -53,6 +53,7 @@ function clientGetMails(args:any):IGetMailsResult{
     let ret:IGetMailsResult=<IGetMailsResult>{};
     ret.Mails=mails;
     ret.Count=mails.length
+    ret.id=Func_Code.SC_GET_MAILS;
     return ret;
 }
 
