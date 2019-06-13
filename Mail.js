@@ -42,14 +42,9 @@ function SendMailFormServer(args, content) {
         ImageUrl: ''
     };
     var id;
-    if (currentPlayerId == null) {
-        id = content.playerProfile.PlayerId;
-        log.info(content.playerProfile.DisplayName);
-        log.info(content.playStreamEvent.EventName + "    EventName");
-    }
-    else {
-        id = currentPlayerId;
-    }
+    id = content.playerProfile.PlayerId;
+    log.info(content.playerProfile.DisplayName);
+    log.info(content.playStreamEvent.EventName + "    EventName");
     SendToEmail(id, type, itemIds, counts, sender);
 }
 function SendToEmail(id, itemType, itemId, count, sender) {
