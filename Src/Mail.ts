@@ -78,7 +78,16 @@ function SendMailFormServer(args:any,content:IPlayFabContext){
         Level:0,
         ImageUrl:''
     };
-    SendToEmail(currentPlayerId,type,itemIds,counts,sender);
+    let id:string;
+    if(currentPlayerId==null){
+        id=content.playerProfile.PlayerId;
+        log.info(content.playerProfile.DisplayName);
+        log.info(content.playStreamEvent.EventName+"    EventName");
+    }else{
+        id=currentPlayerId;
+    }
+    
+    SendToEmail(id,type,itemIds,counts,sender);
 }
 
 /**

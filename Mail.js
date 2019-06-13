@@ -41,7 +41,16 @@ function SendMailFormServer(args, content) {
         Level: 0,
         ImageUrl: ''
     };
-    SendToEmail(currentPlayerId, type, itemIds, counts, sender);
+    var id;
+    if (currentPlayerId == null) {
+        id = content.playerProfile.PlayerId;
+        log.info(content.playerProfile.DisplayName);
+        log.info(content.playStreamEvent.EventName + "    EventName");
+    }
+    else {
+        id = currentPlayerId;
+    }
+    SendToEmail(id, type, itemIds, counts, sender);
 }
 function SendToEmail(id, itemType, itemId, count, sender) {
     if (sender == null) {
