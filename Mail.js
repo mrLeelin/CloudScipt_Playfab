@@ -36,7 +36,7 @@ function SendMailFormServer(args, content) {
     var itemIds = args['ItemIds'];
     var counts = args['ItemCounds'];
     var sender = {
-        Name: content.playerProfile.DisplayName,
+        Name: "Service",
         Level: 0,
         ImageUrl: ''
     };

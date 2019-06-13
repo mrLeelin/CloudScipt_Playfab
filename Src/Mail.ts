@@ -73,7 +73,7 @@ function SendMailFormServer(args:any,content:IPlayFabContext){
     let itemIds:number[]=args['ItemIds'];
     let counts:number[]=args['ItemCounds'];
     let sender:ISender={
-        Name:content.playerProfile.DisplayName,
+        Name:"Service",
         Level:0,
         ImageUrl:''
     };
