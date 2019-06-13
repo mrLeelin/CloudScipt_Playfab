@@ -1,5 +1,6 @@
 handlers.GetMails = clientGetMails;
 handlers.RmMails = clientRmEmails;
+handlers.SendMailFormServer = SendMailFormServer;
 var ItemType;
 (function (ItemType) {
     ItemType[ItemType["Currency"] = 0] = "Currency";
@@ -29,6 +30,17 @@ function clientRmEmails(args) {
     return {
         id: Func_Code.SC_RM_MAILS
     };
+}
+function SendMailFormServer(args, content) {
+    var type = args['Types'];
+    var itemIds = args['ItemIds'];
+    var counts = args['ItemCounds'];
+    var sender = {
+        Name: content.playerProfile.DisplayName,
+        Level: 0,
+        ImageUrl: ''
+    };
+    SendToEmail(currentPlayerId, type, itemIds, counts, sender);
 }
 function SendToEmail(id, itemType, itemId, count, sender) {
     if (sender == null) {

@@ -1,5 +1,6 @@
 handlers.GetMails=clientGetMails;
 handlers.RmMails=clientRmEmails;
+handlers.SendMailFormServer=SendMailFormServer;
 
  interface IGetMailsResult extends IResult{
      Count:number;
@@ -64,6 +65,19 @@ function clientRmEmails(args :IClientRmEmailsRequest):IRmMailsResult{
      return{
          id:Func_Code.SC_RM_MAILS
      }
+}
+
+function SendMailFormServer(args:any,content:IPlayFabContext){
+
+    let type:ItemType[]=args['Types'];
+    let itemIds:number[]=args['ItemIds'];
+    let counts:number[]=args['ItemCounds'];
+    let sender:ISender={
+        Name:content.playerProfile.DisplayName,
+        Level:0,
+        ImageUrl:''
+    };
+    SendToEmail(currentPlayerId,type,itemIds,counts,sender);
 }
 
 /**
