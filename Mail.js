@@ -1,11 +1,5 @@
 handlers.GetMails = clientGetMails;
 handlers.RmMails = clientRmEmails;
-handlers.SendMailFormServer = SendMailFormServer;
-var ItemType;
-(function (ItemType) {
-    ItemType[ItemType["Currency"] = 0] = "Currency";
-    ItemType[ItemType["Item"] = 1] = "Item";
-})(ItemType || (ItemType = {}));
 function clientGetMails(args) {
     var mails = getMails(currentPlayerId);
     if (mails == null || mails.length <= 0) {
@@ -32,16 +26,25 @@ function clientRmEmails(args) {
         id: Func_Code.SC_RM_MAILS
     };
 }
-function SendMailFormServer(args, content) {
-    var type = args['Types'];
-    var itemIds = args['ItemIds'];
-    var counts = args['ItemCounds'];
-    var sender = {
-        Name: "Service",
-        Level: 0,
-        ImageUrl: ''
-    };
-    SendToEmail(currentPlayerId, type, itemIds, counts, sender);
+function refreshMails(timeTamp) {
+    var maxDay = parseInt(getGlobalTitleData(true, KEY_GlobalMailsExistenceDay));
+    if (maxDay <= 0) {
+        log.error('you not set Global Title. Key:' + KEY_GlobalMailsExistenceDay);
+        return;
+    }
+    var mails = getMails(currentPlayerId);
+    var rm = [];
+    for (var _i = 0, mails_1 = mails; _i < mails_1.length; _i++) {
+        var m = mails_1[_i];
+        if (getDifferDayNumber(timeTamp, m.TimeStamp) > 30) {
+            rm.push(m.MailId);
+        }
+    }
+    if (rm.length > 0) {
+        if (!rmMails(currentPlayerId, rm)) {
+            log.error('you rm Mails is invaild');
+        }
+    }
 }
 function SendToEmail(id, itemType, itemId, count, sender) {
     if (sender == null) {
@@ -74,6 +77,9 @@ function getMails(playId) {
         Keys: [KEY_Mail]
     }).Data;
     if (data == null || !data.hasOwnProperty(KEY_Mail)) {
+        return null;
+    }
+    if (data[KEY_Mail].Value == '') {
         return null;
     }
     var mails = JSON.parse(data[KEY_Mail].Value);
@@ -123,8 +129,8 @@ function rmMails(playId, ids) {
     for (var _i = 0, ids_1 = ids; _i < ids_1.length; _i++) {
         var id = ids_1[_i];
         var mail = null;
-        for (var _b = 0, mails_1 = mails; _b < mails_1.length; _b++) {
-            var m = mails_1[_b];
+        for (var _b = 0, mails_2 = mails; _b < mails_2.length; _b++) {
+            var m = mails_2[_b];
             if (m.MailId == id) {
                 mail = m;
                 break;
@@ -140,9 +146,10 @@ function rmMails(playId, ids) {
         var index = mails.indexOf(m);
         mails.splice(index, 1);
     }
+    var json_text = mails.length <= 0 ? '' : JSON.stringify(mails);
     server.UpdateUserData({
         PlayFabId: playId,
-        Data: (_a = {}, _a[KEY_Mail] = JSON.stringify(mails), _a)
+        Data: (_a = {}, _a[KEY_Mail] = json_text, _a)
     });
     return true;
 }

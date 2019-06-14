@@ -48,13 +48,7 @@ enum Server_Data_Status {
     Unequal = 103,
 }
 
-enum CurrencyType {
-    CO,
-    DI,
-    EX,
-    EN,
-    Unkown
-}
+
 
 interface IData {
     TimeStamp?: number;

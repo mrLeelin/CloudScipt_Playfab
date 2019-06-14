@@ -3,7 +3,7 @@ handlers.RefreshEveryDay = RefreshEveryDay;
 function SendMailFormServer(args, content) {
     var type = args['Types'];
     var itemIds = args['ItemIds'];
-    var counts = args['ItemCounds'];
+    var counts = args['ItemCounts'];
     var sender = {
         Name: "Service",
         Level: 0,
@@ -14,7 +14,4 @@ function SendMailFormServer(args, content) {
 function RefreshEveryDay(args, content) {
     var timeTamp = GetTimeStamp();
     refreshMails(timeTamp);
-}
-function refreshMails(timeTamp) {
-    log.info(currentPlayerId);
 }

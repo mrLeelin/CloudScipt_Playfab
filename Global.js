@@ -1,6 +1,7 @@
 var KEY_SendGift = "__SendGift__";
 var KEY_GiveGift = "__GiveGift__";
 var KEY_HeartFriends = "__HeartFriends__";
+var KEY_ACTIVITYINFO = '__ActivityInfo__';
 var KEY_Mail = "__Mail__";
 var KEY_StatisticsHeartCount = "__HeartCount__";
 var KEY_StatisticsCollectionCount = "__CollectionCount__";
@@ -21,6 +22,8 @@ var KEY_GlobalAllPlayersSegmentId = "AllPlayersSegmentId";
 var KEY_GlobalLimitLevel = "GlobalLimitLevel";
 var KEY_GlobalFriendCountLimit = "GlobalFriendLimit";
 var KEY_GlobalCatalogVersion = "GlobalCatalogVersion";
+var KEY_GlobalMailsExistenceDay = "MailsExistenceDay";
+var KEY_GlobalActivity = "Activity";
 var Func_Code;
 (function (Func_Code) {
     Func_Code[Func_Code["SC_ADD_FRIEND"] = 1002] = "SC_ADD_FRIEND";
@@ -32,7 +35,21 @@ var Func_Code;
     Func_Code[Func_Code["SC_SYNC_COMPARE"] = 2002] = "SC_SYNC_COMPARE";
     Func_Code[Func_Code["SC_GET_MAILS"] = 3001] = "SC_GET_MAILS";
     Func_Code[Func_Code["SC_RM_MAILS"] = 3002] = "SC_RM_MAILS";
+    Func_Code[Func_Code["SC_GET_ACTIVITYS"] = 4001] = "SC_GET_ACTIVITYS";
+    Func_Code[Func_Code["SC_GET_CURACTIVITY"] = 4002] = "SC_GET_CURACTIVITY";
 })(Func_Code || (Func_Code = {}));
+var ItemType;
+(function (ItemType) {
+    ItemType[ItemType["Currency"] = 0] = "Currency";
+    ItemType[ItemType["Item"] = 1] = "Item";
+})(ItemType || (ItemType = {}));
+var CurrencyType;
+(function (CurrencyType) {
+    CurrencyType[CurrencyType["CO"] = 0] = "CO";
+    CurrencyType[CurrencyType["DI"] = 1] = "DI";
+    CurrencyType[CurrencyType["EX"] = 2] = "EX";
+    CurrencyType[CurrencyType["EN"] = 3] = "EN";
+})(CurrencyType || (CurrencyType = {}));
 function recordStatistics(key, value, defValue) {
     var statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
@@ -103,6 +120,11 @@ function isSameDay(one, two) {
     var A = new Date(one);
     var B = new Date(two);
     return A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0);
+}
+function getDifferDayNumber(one, two) {
+    var A = new Date(one);
+    var B = new Date(two);
+    return Math.abs(A.getDay() - B.getDay());
 }
 function GetTimeStamp() {
     var time = server.GetTime({});

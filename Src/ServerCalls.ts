@@ -8,7 +8,7 @@ function SendMailFormServer(args:any,content:IPlayFabContext){
 
     let type:ItemType[]=args['Types'];
     let itemIds:number[]=args['ItemIds'];
-    let counts:number[]=args['ItemCounds'];
+    let counts:number[]=args['ItemCounts'];
     let sender:ISender={
         Name:"Service",
         Level:0,
@@ -25,13 +25,7 @@ function SendMailFormServer(args:any,content:IPlayFabContext){
 function RefreshEveryDay(args:any,content:IPlayFabContext){
 
     let timeTamp:number=GetTimeStamp();
-
     refreshMails(timeTamp);
-
 }
 
 
-function refreshMails(timeTamp:number){
-
-    log.info(currentPlayerId);
-}

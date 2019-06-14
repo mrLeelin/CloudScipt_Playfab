@@ -3,7 +3,7 @@
 const KEY_SendGift: string = "__SendGift__";
 const KEY_GiveGift: string = "__GiveGift__";
 const KEY_HeartFriends: string = "__HeartFriends__";
-
+const KEY_ACTIVITYINFO:string='__ActivityInfo__';
 
 const KEY_Mail:string="__Mail__";
 
@@ -32,7 +32,8 @@ const KEY_GlobalAllPlayersSegmentId: string = "AllPlayersSegmentId";
 const KEY_GlobalLimitLevel: string = "GlobalLimitLevel";
 const KEY_GlobalFriendCountLimit: string = "GlobalFriendLimit";
 const KEY_GlobalCatalogVersion: string = "GlobalCatalogVersion";
-
+const KEY_GlobalMailsExistenceDay:string="MailsExistenceDay";
+const KEY_GlobalActivity:string="Activity";
 
 enum Func_Code {
 
@@ -52,10 +53,25 @@ enum Func_Code {
     //Mail
     SC_GET_MAILS=3001,
     SC_RM_MAILS=3002,
+
+    //Activity
+    SC_GET_ACTIVITYS=4001,
+    SC_GET_CURACTIVITY=4002,
 }
 
 interface IResult{
     id:Func_Code;
+}
+
+enum ItemType {
+    Currency = 0,
+    Item = 1
+}
+enum CurrencyType{
+    CO, //金币
+    DI, //钻石
+    EX, //经验
+    EN  //体力
 }
 
 /**
@@ -182,6 +198,13 @@ function isSameDay(one: number | string, two: number | string) {
     let A: Date = new Date(one);
     let B: Date = new Date(two);
     return A.setHours(0, 0, 0, 0) == B.setHours(0, 0, 0, 0);
+}
+
+function getDifferDayNumber(one:number|string,two:number|string):number{
+    let A:Date=new Date(one);
+    let B:Date=new Date(two);
+
+    return Math.abs(A.getDay()-B.getDay());
 }
 
 /**

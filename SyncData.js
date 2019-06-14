@@ -13,14 +13,6 @@ var Server_Data_Status;
     Server_Data_Status[Server_Data_Status["Equal"] = 102] = "Equal";
     Server_Data_Status[Server_Data_Status["Unequal"] = 103] = "Unequal";
 })(Server_Data_Status || (Server_Data_Status = {}));
-var CurrencyType;
-(function (CurrencyType) {
-    CurrencyType[CurrencyType["CO"] = 0] = "CO";
-    CurrencyType[CurrencyType["DI"] = 1] = "DI";
-    CurrencyType[CurrencyType["EX"] = 2] = "EX";
-    CurrencyType[CurrencyType["EN"] = 3] = "EN";
-    CurrencyType[CurrencyType["Unkown"] = 4] = "Unkown";
-})(CurrencyType || (CurrencyType = {}));
 function compareDataVersions(args) {
     var localVersion = args["Local"];
     var sValue = server.GetUserPublisherInternalData({
