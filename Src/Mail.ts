@@ -147,7 +147,6 @@ function getMails(playId: string): IMail[] {
     if(data[KEY_Mail].Value==undefined){
         return null;
     }
-    log.info('Json_Text.:'+data[KEY_Mail].Value);
     let mails: IMail[] = JSON.parse(data[KEY_Mail].Value);
     if (mails == null || mails.length <= 0) {
         return null;

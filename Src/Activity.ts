@@ -53,6 +53,7 @@ function ClientGetConductActivity(angs: any): IGetConductActivityResult {
             Count: 0
         }
     }
+ 
     let activitys:IActivity[]=[]
     for (const i of activityDataTable) {
         let a:IActivity={
@@ -63,6 +64,7 @@ function ClientGetConductActivity(angs: any): IGetConductActivityResult {
             ContentItems:i.ContentItems
         }
         activitys.push(a);
+        log.info(a.ActivityId.toString()+"    Activity Id");
     }
     return {
         id:Func_Code.SC_GET_ACTIVITYS,
@@ -116,9 +118,22 @@ function FinishedActivity(args:any){
         log.error('you cur Count is invaild. MaxCount:'+curActivity.Count+'. you Count:'+count);
         return;
     }
-    
-
-
+    let data_text= server.GetUserInternalData({
+        PlayFabId:currentPlayerId,
+        Keys:[KEY_ACTIVITYINFO]
+    }).Data;
+    let data=JSON.parse(data_text[KEY_ACTIVITYINFO].Value) as IPlayerActivityInfo[];
+    for (const i of data) {
+        if(i.Id==id){
+            i.Count=count-1;
+            i.TimeStamp=GetTimeStamp();
+            server.UpdateUserInternalData({
+                PlayFabId:currentPlayerId,
+                Data:{[KEY_ACTIVITYINFO]:JSON.stringify(data)},       
+            })
+            break;
+        }
+    }
 }
 
 /**
@@ -133,6 +148,10 @@ function getConductActivitys():IActivityDataTable[]{
     let lTime: Date = new Date(GetTimeStamp());
     let cA: IActivityDataTable[] = [];
     for (const a of activityDataTable) {
+        if((a.StartTime==undefined||a.StartTime==null)&&(a.EndTime==undefined||a.EndTime==null)){
+            cA.push(a)
+            continue;
+        }
         let sTime: Date = new Date(a.StartTime);
         let eTime: Date = new Date(a.EndTime);
         if (lTime >= sTime && lTime <= eTime) {

@@ -82,7 +82,6 @@ function getMails(playId) {
     if (data[KEY_Mail].Value == undefined) {
         return null;
     }
-    log.info('Json_Text.:' + data[KEY_Mail].Value);
     var mails = JSON.parse(data[KEY_Mail].Value);
     if (mails == null || mails.length <= 0) {
         return null;

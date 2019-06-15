@@ -23,6 +23,7 @@ function ClientGetConductActivity(angs) {
             ContentItems: i.ContentItems
         };
         activitys.push(a);
+        log.info(a.ActivityId.toString() + "    Activity Id");
     }
     return {
         id: Func_Code.SC_GET_ACTIVITYS,
@@ -53,6 +54,7 @@ function ClientGetCurActivity(args) {
     };
 }
 function FinishedActivity(args) {
+    var _a;
     var id = args['Id'];
     var curActivity = getConductActivityForId(id);
     if (curActivity == null) {
@@ -63,6 +65,23 @@ function FinishedActivity(args) {
     if (count <= 0) {
         log.error('you cur Count is invaild. MaxCount:' + curActivity.Count + '. you Count:' + count);
         return;
+    }
+    var data_text = server.GetUserInternalData({
+        PlayFabId: currentPlayerId,
+        Keys: [KEY_ACTIVITYINFO]
+    }).Data;
+    var data = JSON.parse(data_text[KEY_ACTIVITYINFO].Value);
+    for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+        var i = data_1[_i];
+        if (i.Id == id) {
+            i.Count = count - 1;
+            i.TimeStamp = GetTimeStamp();
+            server.UpdateUserInternalData({
+                PlayFabId: currentPlayerId,
+                Data: (_a = {}, _a[KEY_ACTIVITYINFO] = JSON.stringify(data), _a),
+            });
+            break;
+        }
     }
 }
 function getConductActivitys() {
@@ -75,6 +94,10 @@ function getConductActivitys() {
     var cA = [];
     for (var _i = 0, activityDataTable_2 = activityDataTable; _i < activityDataTable_2.length; _i++) {
         var a = activityDataTable_2[_i];
+        if ((a.StartTime == undefined || a.StartTime == null) && (a.EndTime == undefined || a.EndTime == null)) {
+            cA.push(a);
+            continue;
+        }
         var sTime = new Date(a.StartTime);
         var eTime = new Date(a.EndTime);
         if (lTime >= sTime && lTime <= eTime) {
