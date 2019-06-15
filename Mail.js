@@ -1,5 +1,10 @@
 handlers.GetMails = clientGetMails;
 handlers.RmMails = clientRmEmails;
+var RmMailsResultCode;
+(function (RmMailsResultCode) {
+    RmMailsResultCode[RmMailsResultCode["Alreadly"] = 0] = "Alreadly";
+    RmMailsResultCode[RmMailsResultCode["Successful"] = 1] = "Successful";
+})(RmMailsResultCode || (RmMailsResultCode = {}));
 function clientGetMails(args) {
     var mails = getMails(currentPlayerId);
     if (mails == null || mails.length <= 0) {
@@ -18,12 +23,42 @@ function clientGetMails(args) {
     return ret;
 }
 function clientRmEmails(args) {
+    var mails = getMailsForIds(currentPlayerId, args.MailIds);
+    if (mails == null || mails.length <= 0) {
+        return {
+            id: Func_Code.SC_RM_MAILS,
+            Code: RmMailsResultCode.Alreadly,
+            Count: 0
+        };
+    }
     if (!rmMails(currentPlayerId, args.MailIds)) {
         log.error('you remove mail is invaild');
         return null;
     }
+    var currency = {};
+    var items = {};
+    for (var _i = 0, mails_1 = mails; _i < mails_1.length; _i++) {
+        var m = mails_1[_i];
+        if (m.Count > 0) {
+            for (var i = 0; i < m.ItemType.length; i++) {
+                if (m.ItemType[i] == 0) {
+                    var key = CurrencyType[m.ItemId[i]];
+                    currency[key] += m.ItemCount[i];
+                }
+                else {
+                    items[m.ItemId[i]] += m.ItemCount[i];
+                }
+            }
+        }
+    }
+    var allMails = getMails(currentPlayerId);
     return {
-        id: Func_Code.SC_RM_MAILS
+        id: Func_Code.SC_RM_MAILS,
+        Count: allMails.length,
+        Mails: allMails,
+        ContentCurrency: currency,
+        ContentItems: items,
+        Code: RmMailsResultCode.Successful
     };
 }
 function refreshMails(timeTamp) {
@@ -34,8 +69,8 @@ function refreshMails(timeTamp) {
     }
     var mails = getMails(currentPlayerId);
     var rm = [];
-    for (var _i = 0, mails_1 = mails; _i < mails_1.length; _i++) {
-        var m = mails_1[_i];
+    for (var _i = 0, mails_2 = mails; _i < mails_2.length; _i++) {
+        var m = mails_2[_i];
         if (getDifferDayNumber(timeTamp, m.TimeStamp) > 30) {
             rm.push(m.MailId);
         }
@@ -88,6 +123,23 @@ function getMails(playId) {
     }
     return mails;
 }
+function getMailsForIds(playId, ids) {
+    var allMalils = getMails(playId);
+    if (allMalils == null) {
+        return null;
+    }
+    if (ids == null || ids.length <= 0) {
+        return allMalils;
+    }
+    var mails = [];
+    for (var _i = 0, allMalils_1 = allMalils; _i < allMalils_1.length; _i++) {
+        var m = allMalils_1[_i];
+        if (ids.indexOf(m.MailId) != -1) {
+            mails.push(m);
+        }
+    }
+    return mails;
+}
 function addMail(playId, mail) {
     var _a;
     if (mail.Sender == null) {
@@ -129,8 +181,8 @@ function rmMails(playId, ids) {
     for (var _i = 0, ids_1 = ids; _i < ids_1.length; _i++) {
         var id = ids_1[_i];
         var mail = null;
-        for (var _b = 0, mails_2 = mails; _b < mails_2.length; _b++) {
-            var m = mails_2[_b];
+        for (var _b = 0, mails_3 = mails; _b < mails_3.length; _b++) {
+            var m = mails_3[_b];
             if (m.MailId == id) {
                 mail = m;
                 break;

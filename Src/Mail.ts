@@ -9,6 +9,11 @@ interface IGetMailsResult extends IResult {
 
 interface IRmMailsResult extends IResult {
 
+    Code:RmMailsResultCode;
+    Count:number;
+    Mails?:IMail[];
+    ContentCurrency?:{[key:string]:number},
+    ContentItems?:{[key:number]:number};
 }
 
 interface IMail {
@@ -30,6 +35,11 @@ interface ISender {
 
 interface IClientRmEmailsRequest {
     MailIds: number[];
+}
+
+enum RmMailsResultCode{
+    Alreadly,
+    Successful,
 }
 
 function clientGetMails(args: any): IGetMailsResult {
@@ -55,12 +65,42 @@ function clientGetMails(args: any): IGetMailsResult {
 
 function clientRmEmails(args: IClientRmEmailsRequest): IRmMailsResult {
 
+    let mails= getMailsForIds(currentPlayerId,args.MailIds);
+    if(mails==null||mails.length<=0){
+        return{
+            id:Func_Code.SC_RM_MAILS,
+            Code:RmMailsResultCode.Alreadly,
+            Count:0
+        };
+    }
     if (!rmMails(currentPlayerId, args.MailIds)) {
         log.error('you remove mail is invaild');
         return null;
     }
+    let currency:{[key:string]:number}={}
+    let items:{[key:number]:number}={}
+    for (const m of mails) {
+        if(m.Count>0){
+            for (let i = 0; i < m.ItemType.length; i++) {
+                if(m.ItemType[i]==0){
+                    //Currency
+                    let key:string=CurrencyType[m.ItemId[i]];
+                    currency[key]+=m.ItemCount[i];                
+                }else{
+                    //Item
+                    items[m.ItemId[i]]+=m.ItemCount[i];
+                }             
+            }
+        }
+    }
+    let allMails=getMails(currentPlayerId);
     return {
-        id: Func_Code.SC_RM_MAILS
+        id: Func_Code.SC_RM_MAILS,
+        Count:allMails.length,
+        Mails:allMails,
+        ContentCurrency:currency,
+        ContentItems:items,
+        Code:RmMailsResultCode.Successful
     }
 }
 
@@ -144,12 +184,28 @@ function getMails(playId: string): IMail[] {
     if (data == null || !data.hasOwnProperty(KEY_Mail)) {
         return null;
     }
-    if(data[KEY_Mail].Value==undefined){
+    if (data[KEY_Mail].Value == undefined) {
         return null;
     }
     let mails: IMail[] = JSON.parse(data[KEY_Mail].Value);
     if (mails == null || mails.length <= 0) {
         return null;
+    }
+    return mails;
+}
+function getMailsForIds(playId: string, ids?: number[]): IMail[] {
+    let allMalils = getMails(playId);
+    if(allMalils==null){
+        return null;
+    }
+    if(ids==null||ids.length<=0){
+        return allMalils;
+    }
+    let mails:IMail[]=[]
+    for (const m of allMalils) {
+        if(ids.indexOf(m.MailId)!=-1){
+            mails.push(m);
+        }
     }
     return mails;
 }
@@ -209,7 +265,7 @@ function rmMails(playId: string, ids: number[]): boolean {
         let index: number = mails.indexOf(m);
         mails.splice(index, 1);
     }
-    let json_text:string=mails.length<=0?'':JSON.stringify(mails);
+    let json_text: string = mails.length <= 0 ? '' : JSON.stringify(mails);
     server.UpdateUserData({
         PlayFabId: playId,
         Data: { [KEY_Mail]: json_text }
