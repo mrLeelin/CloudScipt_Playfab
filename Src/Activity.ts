@@ -147,9 +147,6 @@ function getConductActivitys():IActivityDataTable[]{
     if (str == undefined) {
         return null;
     }
-    log.info(str);
-    let test=JSON.parse(str);
-    log.info(test);
     let activityDataTable: IActivityDataTable[] = JSON.parse(str);
     let lTime: Date = new Date(GetTimeStamp());
     let cA: IActivityDataTable[] = [];
