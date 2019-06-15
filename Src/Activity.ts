@@ -145,9 +145,12 @@ function FinishedActivity(args:any){
  */
 function getConductActivitys():IActivityDataTable[]{
     let str: string = getGlobalTitleData(true, KEY_GlobalActivity);
-    if (str == "") {
+    if (str == undefined) {
         return null;
     }
+    log.info(str);
+    let test=JSON.parse(str);
+    log.info(test);
     let activityDataTable: IActivityDataTable[] = JSON.parse(str);
     let lTime: Date = new Date(GetTimeStamp());
     let cA: IActivityDataTable[] = [];

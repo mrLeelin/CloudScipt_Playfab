@@ -91,9 +91,12 @@ function FinishedActivity(args) {
 }
 function getConductActivitys() {
     var str = getGlobalTitleData(true, KEY_GlobalActivity);
-    if (str == "") {
+    if (str == undefined) {
         return null;
     }
+    log.info(str);
+    var test = JSON.parse(str);
+    log.info(test);
     var activityDataTable = JSON.parse(str);
     var lTime = new Date(GetTimeStamp());
     var cA = [];
