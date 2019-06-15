@@ -139,7 +139,7 @@ function getLastCount(aId) {
         PlayFabId: currentPlayerId,
         Keys: [KEY_ACTIVITYINFO]
     }).Data;
-    if (data_text == null || data_text.hasOwnProperty(KEY_ACTIVITYINFO)) {
+    if (data_text == null || !data_text.hasOwnProperty(KEY_ACTIVITYINFO)) {
         var info_1 = {
             Count: activity.Count,
             TimeStamp: GetTimeStamp(),

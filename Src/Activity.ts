@@ -200,7 +200,7 @@ function getLastCount(aId:number):number{
         PlayFabId:currentPlayerId,
         Keys:[KEY_ACTIVITYINFO]
     }).Data;
-    if(data_text==null||data_text.hasOwnProperty(KEY_ACTIVITYINFO)){
+    if(data_text==null||!data_text.hasOwnProperty(KEY_ACTIVITYINFO)){
         let info:IPlayerActivityInfo={
             Count:activity.Count,
             TimeStamp:GetTimeStamp(),
@@ -213,6 +213,7 @@ function getLastCount(aId:number):number{
         })
         return activity.Count;
     }
+    
     let infos:IPlayerActivityInfo[]=JSON.parse(data_text[KEY_ACTIVITYINFO].Value);
     for (const i of infos) {
         if(i.Id==aId){
