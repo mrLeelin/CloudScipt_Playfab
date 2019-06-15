@@ -144,7 +144,7 @@ function getMails(playId: string): IMail[] {
     if (data == null || !data.hasOwnProperty(KEY_Mail)) {
         return null;
     }
-    if(data[KEY_Mail].Value==''){
+    if(data[KEY_Mail].Value==undefined){
         return null;
     }
     log.info('Json_Text.:'+data[KEY_Mail].Value);
