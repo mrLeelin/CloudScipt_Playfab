@@ -1,3 +1,6 @@
+handlers.GetActivitys = ClientGetConductActivity;
+handlers.GetActivity = ClientGetCurActivity;
+handlers.FinishedActivity = FinishedActivity;
 var GetCurActivityCode;
 (function (GetCurActivityCode) {
     GetCurActivityCode[GetCurActivityCode["NoActivity"] = 0] = "NoActivity";

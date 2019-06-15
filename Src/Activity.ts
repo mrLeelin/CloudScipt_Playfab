@@ -1,4 +1,6 @@
-
+handlers.GetActivitys=ClientGetConductActivity;
+handlers.GetActivity=ClientGetCurActivity;
+handlers.FinishedActivity=FinishedActivity;
 
 interface IGetConductActivityResult extends IResult {
     Activitys?: IActivity[];
