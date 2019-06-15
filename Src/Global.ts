@@ -68,10 +68,10 @@ enum ItemType {
     Item = 1
 }
 enum CurrencyType{
-    CO, //金币
-    DI, //钻石
-    EX, //经验
-    EN  //体力
+    Co, //金币
+    Di, //钻石
+    Ex, //经验
+    En  //体力
 }
 
 /**
@@ -155,7 +155,7 @@ function getLevel(id: string): number {
 function getCoins(): number {
 
     let coin: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    let key: string = CurrencyType[CurrencyType.CO];
+    let key: string = CurrencyType[CurrencyType.Co];
     if (coin.hasOwnProperty(key)) {
         return coin[key];
     }
@@ -164,7 +164,7 @@ function getCoins(): number {
 
 function getDiamonds(): number {
     let di: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    let key: string = CurrencyType[CurrencyType.DI];
+    let key: string = CurrencyType[CurrencyType.Di];
     if (di.hasOwnProperty(key)) {
         return di[key];
     }

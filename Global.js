@@ -45,10 +45,10 @@ var ItemType;
 })(ItemType || (ItemType = {}));
 var CurrencyType;
 (function (CurrencyType) {
-    CurrencyType[CurrencyType["CO"] = 0] = "CO";
-    CurrencyType[CurrencyType["DI"] = 1] = "DI";
-    CurrencyType[CurrencyType["EX"] = 2] = "EX";
-    CurrencyType[CurrencyType["EN"] = 3] = "EN";
+    CurrencyType[CurrencyType["Co"] = 0] = "Co";
+    CurrencyType[CurrencyType["Di"] = 1] = "Di";
+    CurrencyType[CurrencyType["Ex"] = 2] = "Ex";
+    CurrencyType[CurrencyType["En"] = 3] = "En";
 })(CurrencyType || (CurrencyType = {}));
 function recordStatistics(key, value, defValue) {
     var statistics = server.GetPlayerStatistics({
@@ -92,7 +92,7 @@ function getLevel(id) {
 }
 function getCoins() {
     var coin = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    var key = CurrencyType[CurrencyType.CO];
+    var key = CurrencyType[CurrencyType.Co];
     if (coin.hasOwnProperty(key)) {
         return coin[key];
     }
@@ -100,7 +100,7 @@ function getCoins() {
 }
 function getDiamonds() {
     var di = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    var key = CurrencyType[CurrencyType.DI];
+    var key = CurrencyType[CurrencyType.Di];
     if (di.hasOwnProperty(key)) {
         return di[key];
     }

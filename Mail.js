@@ -43,10 +43,12 @@ function clientRmEmails(args) {
             for (var i = 0; i < m.ItemType.length; i++) {
                 if (m.ItemType[i] == 0) {
                     var key = CurrencyType[m.ItemId[i]];
-                    currency[key] += m.ItemCount[i];
+                    var count = currency[key] + m.ItemCount[i];
+                    currency[key] = count;
                 }
                 else {
-                    items[m.ItemId[i]] += m.ItemCount[i];
+                    var count = items[m.ItemId[i]] + m.ItemCount[i];
+                    items[m.ItemId[i]] = count;
                 }
             }
         }

@@ -85,10 +85,12 @@ function clientRmEmails(args: IClientRmEmailsRequest): IRmMailsResult {
                 if(m.ItemType[i]==0){
                     //Currency
                     let key:string=CurrencyType[m.ItemId[i]];
-                    currency[key]+=m.ItemCount[i];                
+                    let count=currency[key]+m.ItemCount[i];
+                    currency[key]=count;             
                 }else{
                     //Item
-                    items[m.ItemId[i]]+=m.ItemCount[i];
+                    let count=items[m.ItemId[i]]+m.ItemCount[i];
+                    items[m.ItemId[i]]=count;
                 }             
             }
         }
