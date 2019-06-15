@@ -271,7 +271,7 @@ function setCurrencyData(time, key, data) {
     for (var i = 0; i < type.length; i++) {
         var t = type[i];
         changeType.push(t);
-        var cName = CurrencyType[t].toString();
+        var cName = CurrencyType[t].toString().toUpperCase();
         if (result.VirtualCurrency.hasOwnProperty(cName)) {
             var number = result.VirtualCurrency[cName];
             var selfN = count[i];

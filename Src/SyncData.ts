@@ -371,7 +371,7 @@ function setCurrencyData(time: number, key: string, data: IData): IData {
     for (let i = 0; i < type.length; i++) {
         let t: CurrencyType = type[i];
         changeType.push(t);
-        let cName: string = CurrencyType[t].toString();
+        let cName: string = CurrencyType[t].toString().toUpperCase();
 
         if (result.VirtualCurrency.hasOwnProperty(cName)) {
 
