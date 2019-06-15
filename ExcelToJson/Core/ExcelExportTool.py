@@ -30,7 +30,6 @@ def ParseWrite(write):
             add='\\"'
         str_new.append(str(s)+add)
     str_write="".join(str_new)
-    str_write= str(str_write).strip().strip('[]')
     str_write='{\" %s \":\"%s\" }'%(key,str_write)
     return str_write
 
@@ -55,8 +54,6 @@ if __name__ == '__main__':
                     if d.keys().__contains__(key):
                         if d[key]==True:
                             str_write=str(json.dumps(finalJsons[key],indent=4,ensure_ascii=False))
-                            if config["ignoreAnceps"]==True:
-                                str_write=str(str_write).strip().strip('[]')
                         else:
                             str_write=str(json.dumps(finalJsons[key],ensure_ascii=False))
                             str_write=ParseWrite(str_write) 
