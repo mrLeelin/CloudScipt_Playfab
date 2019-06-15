@@ -38,7 +38,7 @@ interface IClientRmEmailsRequest {
 }
 
 enum RmMailsResultCode{
-    Alreadly,
+    NoMail,
     Successful,
 }
 
@@ -69,7 +69,7 @@ function clientRmEmails(args: IClientRmEmailsRequest): IRmMailsResult {
     if(mails==null||mails.length<=0){
         return{
             id:Func_Code.SC_RM_MAILS,
-            Code:RmMailsResultCode.Alreadly,
+            Code:RmMailsResultCode.NoMail,
             Count:0
         };
     }
@@ -85,11 +85,19 @@ function clientRmEmails(args: IClientRmEmailsRequest): IRmMailsResult {
                 if(m.ItemType[i]==0){
                     //Currency
                     let key:string=CurrencyType[m.ItemId[i]];
-                    let count=currency[key]+m.ItemCount[i];
+                    let oldCount:number=0;
+                    if(currency.hasOwnProperty(key)){
+                        oldCount=currency[key];
+                    }
+                    let count:number=oldCount+m.ItemCount[i];
                     currency[key]=count;             
                 }else{
                     //Item
-                    let count=items[m.ItemId[i]]+m.ItemCount[i];
+                    let oldCount:number=0;
+                    if(items.hasOwnProperty(m.ItemId[i])){
+                        oldCount=items[m.ItemId[i]];
+                    }
+                    let count:number=oldCount+m.ItemCount[i];
                     items[m.ItemId[i]]=count;
                 }             
             }

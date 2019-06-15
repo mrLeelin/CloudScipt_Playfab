@@ -2,7 +2,7 @@ handlers.GetMails = clientGetMails;
 handlers.RmMails = clientRmEmails;
 var RmMailsResultCode;
 (function (RmMailsResultCode) {
-    RmMailsResultCode[RmMailsResultCode["Alreadly"] = 0] = "Alreadly";
+    RmMailsResultCode[RmMailsResultCode["NoMail"] = 0] = "NoMail";
     RmMailsResultCode[RmMailsResultCode["Successful"] = 1] = "Successful";
 })(RmMailsResultCode || (RmMailsResultCode = {}));
 function clientGetMails(args) {
@@ -27,7 +27,7 @@ function clientRmEmails(args) {
     if (mails == null || mails.length <= 0) {
         return {
             id: Func_Code.SC_RM_MAILS,
-            Code: RmMailsResultCode.Alreadly,
+            Code: RmMailsResultCode.NoMail,
             Count: 0
         };
     }
@@ -43,11 +43,19 @@ function clientRmEmails(args) {
             for (var i = 0; i < m.ItemType.length; i++) {
                 if (m.ItemType[i] == 0) {
                     var key = CurrencyType[m.ItemId[i]];
-                    var count = currency[key] + m.ItemCount[i];
+                    var oldCount = 0;
+                    if (currency.hasOwnProperty(key)) {
+                        oldCount = currency[key];
+                    }
+                    var count = oldCount + m.ItemCount[i];
                     currency[key] = count;
                 }
                 else {
-                    var count = items[m.ItemId[i]] + m.ItemCount[i];
+                    var oldCount = 0;
+                    if (items.hasOwnProperty(m.ItemId[i])) {
+                        oldCount = items[m.ItemId[i]];
+                    }
+                    var count = oldCount + m.ItemCount[i];
                     items[m.ItemId[i]] = count;
                 }
             }
