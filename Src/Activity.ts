@@ -66,7 +66,6 @@ function ClientGetConductActivity(angs: any): IGetConductActivityResult {
             ContentItems:i.ContentItems
         }
         activitys.push(a);
-        log.info(a.ActivityId.toString()+"    Activity Id");
     }
     return {
         id:Func_Code.SC_GET_ACTIVITYS,
