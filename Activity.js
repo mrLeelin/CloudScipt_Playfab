@@ -41,7 +41,7 @@ function ClientGetCurActivity(args) {
         };
     }
     var count = getLastCount(id);
-    if (count <= 0) {
+    if (count == 0) {
         return {
             id: Func_Code.SC_GET_CURACTIVITY,
             Code: GetCurActivityCode.NoCount,
@@ -51,6 +51,7 @@ function ClientGetCurActivity(args) {
         id: Func_Code.SC_GET_CURACTIVITY,
         Code: GetCurActivityCode.Successful,
         Pirce: curActivity.Pirce,
+        Count: count
     };
 }
 function FinishedActivity(args) {
@@ -62,26 +63,27 @@ function FinishedActivity(args) {
         return;
     }
     var count = getLastCount(id);
-    if (count <= 0) {
-        log.error('you cur Count is invaild. MaxCount:' + curActivity.Count + '. you Count:' + count);
-        return;
-    }
-    var data_text = server.GetUserInternalData({
-        PlayFabId: currentPlayerId,
-        Keys: [KEY_ACTIVITYINFO]
-    }).Data;
-    var data = JSON.parse(data_text[KEY_ACTIVITYINFO].Value);
-    for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
-        var i = data_1[_i];
-        if (i.Id == id) {
-            i.Count = count - 1;
-            i.TimeStamp = GetTimeStamp();
-            server.UpdateUserInternalData({
-                PlayFabId: currentPlayerId,
-                Data: (_a = {}, _a[KEY_ACTIVITYINFO] = JSON.stringify(data), _a),
-            });
-            break;
+    if (count > 0) {
+        var data_text = server.GetUserInternalData({
+            PlayFabId: currentPlayerId,
+            Keys: [KEY_ACTIVITYINFO]
+        }).Data;
+        var data = JSON.parse(data_text[KEY_ACTIVITYINFO].Value);
+        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+            var i = data_1[_i];
+            if (i.Id == id) {
+                i.Count = count - 1;
+                i.TimeStamp = GetTimeStamp();
+                server.UpdateUserInternalData({
+                    PlayFabId: currentPlayerId,
+                    Data: (_a = {}, _a[KEY_ACTIVITYINFO] = JSON.stringify(data), _a),
+                });
+                break;
+            }
         }
+    }
+    else if (count == 0) {
+        log.error('you cur Count is invaild. MaxCount:' + curActivity.Count + '. you Count:' + count);
     }
 }
 function getConductActivitys() {
@@ -129,7 +131,7 @@ function getLastCount(aId) {
     var activity = getConductActivityForId(aId);
     if (activity == null) {
         log.error('you Activity is invaild. Id:' + aId);
-        return 0;
+        return -1;
     }
     var data_text = server.GetUserInternalData({
         PlayFabId: currentPlayerId,

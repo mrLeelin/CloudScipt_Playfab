@@ -88,7 +88,7 @@ function ClientGetCurActivity(args:any):IGetCurActivityResult{
         }
     }
     let count=getLastCount(id);
-    if(count<=0){
+    if(count==0){
         return{
             id:Func_Code.SC_GET_CURACTIVITY,
             Code:GetCurActivityCode.NoCount,
@@ -98,7 +98,7 @@ function ClientGetCurActivity(args:any):IGetCurActivityResult{
         id:Func_Code.SC_GET_CURACTIVITY,
         Code:GetCurActivityCode.Successful,
         Pirce:curActivity.Pirce,
-        //TODO Count
+        Count:count
     }
 }
 /**
@@ -114,26 +114,28 @@ function FinishedActivity(args:any){
         return;
     }
     let count=getLastCount(id);
-    if(count<=0){
-        log.error('you cur Count is invaild. MaxCount:'+curActivity.Count+'. you Count:'+count);
-        return;
-    }
-    let data_text= server.GetUserInternalData({
-        PlayFabId:currentPlayerId,
-        Keys:[KEY_ACTIVITYINFO]
-    }).Data;
-    let data=JSON.parse(data_text[KEY_ACTIVITYINFO].Value) as IPlayerActivityInfo[];
-    for (const i of data) {
-        if(i.Id==id){
-            i.Count=count-1;
-            i.TimeStamp=GetTimeStamp();
-            server.UpdateUserInternalData({
-                PlayFabId:currentPlayerId,
-                Data:{[KEY_ACTIVITYINFO]:JSON.stringify(data)},       
-            })
-            break;
+
+    if(count>0){
+        let data_text= server.GetUserInternalData({
+            PlayFabId:currentPlayerId,
+            Keys:[KEY_ACTIVITYINFO]
+        }).Data;
+        let data=JSON.parse(data_text[KEY_ACTIVITYINFO].Value) as IPlayerActivityInfo[];
+        for (const i of data) {
+            if(i.Id==id){
+                i.Count=count-1;
+                i.TimeStamp=GetTimeStamp();
+                server.UpdateUserInternalData({
+                    PlayFabId:currentPlayerId,
+                    Data:{[KEY_ACTIVITYINFO]:JSON.stringify(data)},       
+                })
+                break;
+            }
         }
+    }else if(count==0){
+        log.error('you cur Count is invaild. MaxCount:'+curActivity.Count+'. you Count:'+count);
     }
+
 }
 
 /**
@@ -191,7 +193,7 @@ function getLastCount(aId:number):number{
     let activity= getConductActivityForId(aId);
     if(activity==null){
         log.error('you Activity is invaild. Id:'+aId);
-        return 0;
+        return -1;
     }
     let data_text= server.GetUserInternalData({
         PlayFabId:currentPlayerId,
