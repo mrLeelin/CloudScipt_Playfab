@@ -34,7 +34,11 @@ const KEY_GlobalFriendCountLimit: string = "GlobalFriendLimit";
 const KEY_GlobalCatalogVersion: string = "GlobalCatalogVersion";
 const KEY_GlobalMailsExistenceDay:string="MailsExistenceDay";
 const KEY_GlobalActivity:string="Activity";
-const KEY_GlobalTimeOffect:string="TimeOffectForHours";
+
+/**
+ * 北京时间和playfab 上 差8小时
+ */
+const Offect_Time_Hours:number=8;
 
 enum Func_Code {
 
@@ -215,9 +219,8 @@ function GetTimeStamp(): number {
 
     let time: PlayFabServerModels.GetTimeResult = server.GetTime({});
     //Change To BEIJING Time
-    let offect=getGlobalTitleData(true,KEY_GlobalTimeOffect);
     let date:Date =new Date(time.Time);
-     date.setHours(date.getHours()+parseInt(offect));
+     date.setHours(date.getHours()+Offect_Time_Hours);
     return date.getTime();
 }
 
