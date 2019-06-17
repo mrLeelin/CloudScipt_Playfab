@@ -104,11 +104,7 @@ function getConductActivitys() {
         }
         var sTime = new Date(Date.parse(a.StartTime));
         var eTime = new Date(Date.parse(a.EndTime));
-        if (lTime.getTime() >= sTime.getTime() && lTime.getTime() <= eTime.getTime()) {
-            log.info('Id:' + a.Id);
-            log.info('LocalTIme:' + lTime + '.   Time Stamp:' + lTime.getTime());
-            log.info('StartTime:' + sTime + '.   Time Stamp:' + sTime.getTime() + "  Time Str :" + a.StartTime);
-            log.info('EndTime:' + eTime + '.   Time Stamp:' + eTime.getTime() + "  Time Str :" + a.EndTime);
+        if (lTime >= sTime && lTime <= eTime) {
             cA.push(a);
         }
     }

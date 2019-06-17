@@ -24,7 +24,7 @@ var KEY_GlobalFriendCountLimit = "GlobalFriendLimit";
 var KEY_GlobalCatalogVersion = "GlobalCatalogVersion";
 var KEY_GlobalMailsExistenceDay = "MailsExistenceDay";
 var KEY_GlobalActivity = "Activity";
-var KEY_GlobalTimeOffect = "TimeOffectForHouse";
+var KEY_GlobalTimeOffect = "TimeOffectForHours";
 var Func_Code;
 (function (Func_Code) {
     Func_Code[Func_Code["SC_ADD_FRIEND"] = 1002] = "SC_ADD_FRIEND";
@@ -129,15 +129,10 @@ function getDifferDayNumber(one, two) {
 }
 function GetTimeStamp() {
     var time = server.GetTime({});
-    var d = Date.parse(time.Time);
     var offect = getGlobalTitleData(true, KEY_GlobalTimeOffect);
     var date = new Date(time.Time);
     date.setHours(date.getHours() + parseInt(offect));
-    log.info('Test ');
-    log.info('UTC  ' + date.toUTCString());
-    log.info('No UTC  ' + date.toDateString());
-    log.info('Local ' + date.toLocaleDateString());
-    return d;
+    return date.getTime();
 }
 function getGlobalTitleData(isInternal, key) {
     var data = null;
