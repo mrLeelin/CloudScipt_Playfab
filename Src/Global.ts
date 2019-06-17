@@ -34,6 +34,7 @@ const KEY_GlobalFriendCountLimit: string = "GlobalFriendLimit";
 const KEY_GlobalCatalogVersion: string = "GlobalCatalogVersion";
 const KEY_GlobalMailsExistenceDay:string="MailsExistenceDay";
 const KEY_GlobalActivity:string="Activity";
+const KEY_GlobalTimeOffect:string="TimeOffectForHouse";
 
 enum Func_Code {
 
@@ -215,8 +216,9 @@ function GetTimeStamp(): number {
     let time: PlayFabServerModels.GetTimeResult = server.GetTime({});
     let d: number =  Date.parse(time.Time);
     //Change To BEIJING Time
+    let offect=getGlobalTitleData(true,KEY_GlobalTimeOffect);
     let date:Date =new Date(time.Time);
-     date.setHours(date.getHours()+17);
+     date.setHours(date.getHours()+parseInt(offect));
      log.info('Test ');
      log.info('UTC  '+date.toUTCString());
      log.info('No UTC  '+date.toDateString());
