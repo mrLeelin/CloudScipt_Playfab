@@ -129,6 +129,11 @@ function getDifferDayNumber(one, two) {
 function GetTimeStamp() {
     var time = server.GetTime({});
     var d = Date.parse(time.Time);
+    var date = new Date(time.Time);
+    log.info('Test ');
+    log.info('UTC  ' + date.toUTCString());
+    log.info('No UTC  ' + date.toDateString());
+    log.info('Local ' + date.toLocaleDateString());
     return d;
 }
 function getGlobalTitleData(isInternal, key) {

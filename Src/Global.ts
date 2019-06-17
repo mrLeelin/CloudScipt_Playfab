@@ -213,7 +213,13 @@ function getDifferDayNumber(one:number|string,two:number|string):number{
 function GetTimeStamp(): number {
 
     let time: PlayFabServerModels.GetTimeResult = server.GetTime({});
-    let d: number = Date.parse(time.Time);
+    let d: number =  Date.parse(time.Time);
+    //Change To BEIJING Time
+    let date:Date =new Date(time.Time);
+     log.info('Test ');
+     log.info('UTC  '+date.toUTCString());
+     log.info('No UTC  '+date.toDateString());
+     log.info('Local '+date.toLocaleDateString());
     return d;
 }
 
