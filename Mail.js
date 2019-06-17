@@ -64,7 +64,7 @@ function clientRmEmails(args) {
     var allMails = getMails(currentPlayerId);
     return {
         id: Func_Code.SC_RM_MAILS,
-        Count: allMails.length,
+        Count: allMails == null ? 0 : allMails.length,
         Mails: allMails,
         ContentCurrency: currency,
         ContentItems: items,

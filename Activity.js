@@ -102,9 +102,9 @@ function getConductActivitys() {
             cA.push(a);
             continue;
         }
-        var sTime = new Date(a.StartTime);
-        var eTime = new Date(a.EndTime);
-        if (lTime >= sTime && lTime <= eTime) {
+        var sTime = new Date(Date.parse(a.StartTime));
+        var eTime = new Date(Date.parse(a.EndTime));
+        if (lTime.getTime() >= sTime.getTime() && lTime.getTime() <= eTime.getTime()) {
             cA.push(a);
         }
     }

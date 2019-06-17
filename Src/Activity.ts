@@ -155,9 +155,9 @@ function getConductActivitys():IActivityDataTable[]{
             cA.push(a)
             continue;
         }
-        let sTime: Date = new Date(a.StartTime);
-        let eTime: Date = new Date(a.EndTime);
-        if (lTime >= sTime && lTime <= eTime) {
+        let sTime: Date = new Date(Date.parse(a.StartTime));
+        let eTime: Date = new Date(Date.parse(a.EndTime));
+        if (lTime.getTime() >= sTime.getTime() && lTime.getTime() <= eTime.getTime()) {
             cA.push(a);
         }
     }
