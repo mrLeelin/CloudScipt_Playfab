@@ -130,6 +130,7 @@ function GetTimeStamp() {
     var time = server.GetTime({});
     var d = Date.parse(time.Time);
     var date = new Date(time.Time);
+    date.setHours(date.getHours() + 8);
     log.info('Test ');
     log.info('UTC  ' + date.toUTCString());
     log.info('No UTC  ' + date.toDateString());

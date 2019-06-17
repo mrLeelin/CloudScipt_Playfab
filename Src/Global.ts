@@ -216,6 +216,7 @@ function GetTimeStamp(): number {
     let d: number =  Date.parse(time.Time);
     //Change To BEIJING Time
     let date:Date =new Date(time.Time);
+     date.setHours(date.getHours()+8);
      log.info('Test ');
      log.info('UTC  '+date.toUTCString());
      log.info('No UTC  '+date.toDateString());
