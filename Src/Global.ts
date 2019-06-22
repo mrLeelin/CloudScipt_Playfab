@@ -62,6 +62,7 @@ enum Func_Code {
     //Activity
     SC_GET_ACTIVITYS=4001,
     SC_GET_CURACTIVITY=4002,
+    SC_FINISHED_ACTIVITY=4003,
 }
 
 interface IResult{

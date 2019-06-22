@@ -8,7 +8,7 @@ var GetCurActivityCode;
     GetCurActivityCode[GetCurActivityCode["NoCount"] = 2] = "NoCount";
 })(GetCurActivityCode || (GetCurActivityCode = {}));
 function ClientGetConductActivity(angs) {
-    var activityDataTable = getConductActivitys();
+    var activityDataTable = getActivitys();
     if (activityDataTable == null) {
         return {
             id: Func_Code.SC_GET_ACTIVITYS,
@@ -21,7 +21,7 @@ function ClientGetConductActivity(angs) {
         var a = {
             ActivityId: i.Id,
             Price: i.Pirce,
-            Count: i.Count,
+            Count: getLastCount(i),
             ContentCurrency: i.ContentCurrency,
             ContentItems: i.ContentItems
         };
@@ -42,8 +42,8 @@ function ClientGetCurActivity(args) {
             Code: GetCurActivityCode.NoActivity
         };
     }
-    var count = getLastCount(id);
-    if (count == 0) {
+    var count = getLastCount(curActivity);
+    if (count < 0) {
         return {
             id: Func_Code.SC_GET_CURACTIVITY,
             Code: GetCurActivityCode.NoCount,
@@ -53,26 +53,31 @@ function ClientGetCurActivity(args) {
         id: Func_Code.SC_GET_CURACTIVITY,
         Code: GetCurActivityCode.Successful,
         Pirce: curActivity.Pirce,
-        Count: count
+        Count: count,
+        ActivityId: id,
     };
 }
 function FinishedActivity(args) {
     var _a;
     var id = args['Id'];
-    var curActivity = getConductActivityForId(id);
-    if (curActivity == null) {
-        log.error('you cur Activity is invaild. Id:' + id);
-        return;
+    var aDataTables = getActivitys(false);
+    var count = 0;
+    for (var _i = 0, aDataTables_1 = aDataTables; _i < aDataTables_1.length; _i++) {
+        var a = aDataTables_1[_i];
+        if (a.Id == id) {
+            count = getLastCount(a);
+            break;
+        }
     }
-    var count = getLastCount(id);
+    var activitys = ClientGetConductActivity(null).Activitys;
     if (count > 0) {
         var data_text = server.GetUserInternalData({
             PlayFabId: currentPlayerId,
             Keys: [KEY_ACTIVITYINFO]
         }).Data;
         var data = JSON.parse(data_text[KEY_ACTIVITYINFO].Value);
-        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
-            var i = data_1[_i];
+        for (var _b = 0, data_1 = data; _b < data_1.length; _b++) {
+            var i = data_1[_b];
             if (i.Id == id) {
                 i.Count = count - 1;
                 i.TimeStamp = GetTimeStamp();
@@ -80,20 +85,37 @@ function FinishedActivity(args) {
                     PlayFabId: currentPlayerId,
                     Data: (_a = {}, _a[KEY_ACTIVITYINFO] = JSON.stringify(data), _a),
                 });
-                break;
+                var ac = getConductActivityForId(i.Id);
+                return {
+                    Code: GetCurActivityCode.Successful,
+                    Count: activitys == null ? 0 : activitys.length,
+                    Activitys: activitys,
+                    id: Func_Code.SC_FINISHED_ACTIVITY,
+                    ContentCurrency: ac.ContentCurrency,
+                    ContentItems: ac.ContentItems
+                };
             }
         }
     }
     else if (count == 0) {
-        log.error('you cur Count is invaild. MaxCount:' + curActivity.Count + '. you Count:' + count);
+        return {
+            Code: GetCurActivityCode.NoCount,
+            Count: activitys == null ? 0 : activitys.length,
+            Activitys: activitys,
+            id: Func_Code.SC_FINISHED_ACTIVITY
+        };
     }
 }
-function getConductActivitys() {
+function getActivitys(isTime) {
+    if (isTime === void 0) { isTime = true; }
     var str = getGlobalTitleData(true, KEY_GlobalActivity);
     if (str == undefined) {
         return null;
     }
     var activityDataTable = JSON.parse(str);
+    if (!isTime) {
+        return activityDataTable;
+    }
     var lTime = new Date(GetTimeStamp());
     var cA = [];
     for (var _i = 0, activityDataTable_2 = activityDataTable; _i < activityDataTable_2.length; _i++) {
@@ -114,7 +136,7 @@ function getConductActivitys() {
     return cA;
 }
 function getConductActivityForId(id) {
-    var aDatas = getConductActivitys();
+    var aDatas = getActivitys();
     if (aDatas == null) {
         return null;
     }
@@ -128,42 +150,37 @@ function getConductActivityForId(id) {
     }
     return curActivity;
 }
-function getLastCount(aId) {
+function getLastCount(data) {
     var _a, _b, _c;
-    var activity = getConductActivityForId(aId);
-    if (activity == null) {
-        log.error('you Activity is invaild. Id:' + aId);
-        return -1;
-    }
     var data_text = server.GetUserInternalData({
         PlayFabId: currentPlayerId,
         Keys: [KEY_ACTIVITYINFO]
     }).Data;
     if (data_text == null || !data_text.hasOwnProperty(KEY_ACTIVITYINFO)) {
         var info_1 = {
-            Count: activity.Count,
+            Count: data.Count,
             TimeStamp: GetTimeStamp(),
-            Id: activity.Id
+            Id: data.Id
         };
         var infos_2 = [info_1];
         server.UpdateUserInternalData({
             PlayFabId: currentPlayerId,
             Data: (_a = {}, _a[KEY_ACTIVITYINFO] = JSON.stringify(infos_2), _a),
         });
-        return activity.Count;
+        return data.Count;
     }
     var infos = JSON.parse(data_text[KEY_ACTIVITYINFO].Value);
     for (var _i = 0, infos_1 = infos; _i < infos_1.length; _i++) {
         var i = infos_1[_i];
-        if (i.Id == aId) {
-            if (new Date(i.TimeStamp) < new Date(activity.StartTime)) {
-                i.Count = activity.Count;
+        if (i.Id == data.Id) {
+            if (new Date(i.TimeStamp) < new Date(data.StartTime)) {
+                i.Count = data.Count;
                 i.TimeStamp = GetTimeStamp();
                 server.UpdateUserInternalData({
                     PlayFabId: currentPlayerId,
                     Data: (_b = {}, _b[KEY_ACTIVITYINFO] = JSON.stringify(infos), _b),
                 });
-                return activity.Count;
+                return data.Count;
             }
             else {
                 return i.Count;
@@ -171,14 +188,14 @@ function getLastCount(aId) {
         }
     }
     var info = {
-        Count: activity.Count,
+        Count: data.Count,
         TimeStamp: GetTimeStamp(),
-        Id: activity.Id
+        Id: data.Id
     };
     infos.push(info);
     server.UpdateUserInternalData({
         PlayFabId: currentPlayerId,
         Data: (_c = {}, _c[KEY_ACTIVITYINFO] = JSON.stringify(infos), _c),
     });
-    return activity.Count;
+    return data.Count;
 }

@@ -38,6 +38,7 @@ var Func_Code;
     Func_Code[Func_Code["SC_RM_MAILS"] = 3002] = "SC_RM_MAILS";
     Func_Code[Func_Code["SC_GET_ACTIVITYS"] = 4001] = "SC_GET_ACTIVITYS";
     Func_Code[Func_Code["SC_GET_CURACTIVITY"] = 4002] = "SC_GET_CURACTIVITY";
+    Func_Code[Func_Code["SC_FINISHED_ACTIVITY"] = 4003] = "SC_FINISHED_ACTIVITY";
 })(Func_Code || (Func_Code = {}));
 var ItemType;
 (function (ItemType) {

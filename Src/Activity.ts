@@ -11,6 +11,14 @@ interface IGetCurActivityResult extends IResult{
     Code:GetCurActivityCode;
     Pirce?:number;
     Count?:number;
+    ActivityId?:number;
+}
+interface IFinishedActivityResult extends IResult{
+    Code:GetCurActivityCode;
+    Activitys?:IActivity[]
+    Count:number;
+    ContentCurrency?:{[key:string]:number};
+    ContentItems?:{[key:number]:number};
 }
 
 enum GetCurActivityCode{
@@ -25,7 +33,7 @@ interface IActivity {
     Price:number;
     Count:number;
     ContentCurrency?:{[key:string]:number};
-    ContentItems?:{[key:string]:number};
+    ContentItems?:{[key:number]:number};
 }
 interface IActivityDataTable {
     Id: number;
@@ -48,7 +56,7 @@ interface IPlayerActivityInfo{
  */
 function ClientGetConductActivity(angs: any): IGetConductActivityResult {
 
-    let activityDataTable:IActivityDataTable[]=getConductActivitys();
+    let activityDataTable:IActivityDataTable[]=getActivitys();
     if(activityDataTable==null){
         return {
             id: Func_Code.SC_GET_ACTIVITYS,
@@ -61,7 +69,7 @@ function ClientGetConductActivity(angs: any): IGetConductActivityResult {
         let a:IActivity={
             ActivityId:i.Id,
             Price:i.Pirce,
-            Count:i.Count,
+            Count:getLastCount(i),
             ContentCurrency:i.ContentCurrency,
             ContentItems:i.ContentItems
         }
@@ -88,8 +96,8 @@ function ClientGetCurActivity(args:any):IGetCurActivityResult{
             Code:GetCurActivityCode.NoActivity
         }
     }
-    let count=getLastCount(id);
-    if(count==0){
+    let count=getLastCount(curActivity);
+    if(count<0){
         return{
             id:Func_Code.SC_GET_CURACTIVITY,
             Code:GetCurActivityCode.NoCount,
@@ -99,23 +107,26 @@ function ClientGetCurActivity(args:any):IGetCurActivityResult{
         id:Func_Code.SC_GET_CURACTIVITY,
         Code:GetCurActivityCode.Successful,
         Pirce:curActivity.Pirce,
-        Count:count
+        Count:count,
+        ActivityId:id,
     }
 }
 /**
  * 客户端完成活动
  * @param Id
  */
-function FinishedActivity(args:any){
+function FinishedActivity(args:any):IFinishedActivityResult{
 
     let id:number=args['Id'];
-    let curActivity=getConductActivityForId(id);
-    if(curActivity==null){
-        log.error('you cur Activity is invaild. Id:'+id);
-        return;
+    let aDataTables=getActivitys(false);
+    let count=0;
+    for (const a of aDataTables) {
+        if(a.Id==id){
+            count=getLastCount(a);
+            break;
+        }
     }
-    let count=getLastCount(id);
-
+    let activitys=ClientGetConductActivity(null).Activitys; 
     if(count>0){
         let data_text= server.GetUserInternalData({
             PlayFabId:currentPlayerId,
@@ -130,25 +141,40 @@ function FinishedActivity(args:any){
                     PlayFabId:currentPlayerId,
                     Data:{[KEY_ACTIVITYINFO]:JSON.stringify(data)},       
                 })
-                break;
+                let ac= getConductActivityForId(i.Id)                          
+                return {
+                    Code:GetCurActivityCode.Successful,
+                    Count:activitys==null?0:activitys.length,
+                    Activitys:activitys,
+                    id:Func_Code.SC_FINISHED_ACTIVITY,
+                    ContentCurrency:ac.ContentCurrency,
+                    ContentItems:ac.ContentItems
+                }
             }
         }
     }else if(count==0){
-        log.error('you cur Count is invaild. MaxCount:'+curActivity.Count+'. you Count:'+count);
+        return{
+            Code:GetCurActivityCode.NoCount,
+            Count:activitys==null?0:activitys.length,
+            Activitys:activitys,
+            id:Func_Code.SC_FINISHED_ACTIVITY
+        }
     }
-
 }
 
 /**
  * 获取当前进行中的活动
  */
-function getConductActivitys():IActivityDataTable[]{
+function getActivitys(isTime:boolean=true):IActivityDataTable[]{
     let str: string = getGlobalTitleData(true, KEY_GlobalActivity);
     if (str == undefined) {
         return null;
     }
 
     let activityDataTable: IActivityDataTable[] = JSON.parse(str);
+    if(!isTime){
+        return activityDataTable;
+    }
     let lTime: Date = new Date(GetTimeStamp());
     let cA: IActivityDataTable[] = [];
     for (const a of activityDataTable) {
@@ -173,7 +199,7 @@ function getConductActivitys():IActivityDataTable[]{
  */
 function getConductActivityForId(id:number):IActivityDataTable{
  
-    let aDatas= getConductActivitys();
+    let aDatas= getActivitys();
     if(aDatas==null){
         return null;
     }
@@ -190,58 +216,61 @@ function getConductActivityForId(id:number):IActivityDataTable{
  * 获取剩余完成次数 会自动更新
  * @param aId 
  */
-function getLastCount(aId:number):number{
+function getLastCount(data:IActivityDataTable):number{
 
+    /*
     let activity= getConductActivityForId(aId);
     if(activity==null){
         log.error('you Activity is invaild. Id:'+aId);
         return -1;
     }
+    */
+
     let data_text= server.GetUserInternalData({
         PlayFabId:currentPlayerId,
         Keys:[KEY_ACTIVITYINFO]
     }).Data;
     if(data_text==null||!data_text.hasOwnProperty(KEY_ACTIVITYINFO)){
         let info:IPlayerActivityInfo={
-            Count:activity.Count,
+            Count:data.Count,
             TimeStamp:GetTimeStamp(),
-            Id:activity.Id
+            Id:data.Id
         };
         let infos:IPlayerActivityInfo[]=[info]
         server.UpdateUserInternalData({
             PlayFabId:currentPlayerId,
             Data:{[KEY_ACTIVITYINFO]:JSON.stringify(infos)},       
         })
-        return activity.Count;
+        return data.Count;
     }
     
     let infos:IPlayerActivityInfo[]=JSON.parse(data_text[KEY_ACTIVITYINFO].Value);
     for (const i of infos) {
-        if(i.Id==aId){
-            if(new Date(i.TimeStamp)<new Date(activity.StartTime))
+        if(i.Id==data.Id){
+            if(new Date(i.TimeStamp)<new Date(data.StartTime))
             {
-                i.Count=activity.Count;
+                i.Count=data.Count;
                 i.TimeStamp=GetTimeStamp();
                 server.UpdateUserInternalData({
                     PlayFabId:currentPlayerId,
                     Data:{[KEY_ACTIVITYINFO]:JSON.stringify(infos)},       
                 })
-                return activity.Count;
+                return data.Count;
             }else{
                 return i.Count;
             }
         }
     }
     let info:IPlayerActivityInfo={
-        Count:activity.Count,
+        Count:data.Count,
         TimeStamp:GetTimeStamp(),
-        Id:activity.Id
+        Id:data.Id
     }
     infos.push(info);
     server.UpdateUserInternalData({
         PlayFabId:currentPlayerId,
         Data:{[KEY_ACTIVITYINFO]:JSON.stringify(infos)},       
     })
-    return activity.Count;
+    return data.Count;
 }
 
