@@ -65,35 +65,27 @@ function syncData(args) {
     var Values = args.Values;
     var entityId = args.EntityId;
     var entityType = args.EntityType;
-    if (!args.ClientToServer) {
-        var datas = getDatasForCientTimeStamp(args.MaxClientTimeStamp, entityId, entityType);
-        log.info("Server To Client Successful. ");
-        return {
-            id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
-            Datas: datas,
-            TimeStamp: tS,
-            ClientToServer: args.ClientToServer
-        };
-    }
     var ret = {};
     for (var i = 0; i < count; i++) {
         var key = keys[i];
         var data = Values[i];
-        var status_1 = data.Status;
-        if (status_1 == Data_Status.New_Data) {
-            var sData = set(tS, entityId, entityType, key, data);
-            ret[key] = sData;
-        }
-        else if (status_1 == Data_Status.Update_Data) {
-            var sData = set(tS, entityId, entityType, key, data);
-            ret[key] = sData;
+        if (args.ClientToServer) {
+            if (data.Status == Data_Status.New_Data) {
+                ret[key] = set(tS, entityId, entityType, key, data);
+            }
+            else if (data.Status == Data_Status.Update_Data) {
+                ret[key] = set(tS, entityId, entityType, key, data);
+            }
         }
         else {
-            log.error("you sync Data Status :" + status_1);
-            return;
+            var time = getTimeStampForKey(key);
+            if (time > data.TimeStamp) {
+                var data_1 = get(entityId, entityType, key);
+                ret[key] = data_1;
+            }
         }
     }
-    log.info("Sync Successful");
+    log.info(args.ClientToServer ? "Client To Server Successful" : "Server To Client Successful");
     return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
         Datas: ret,
@@ -232,6 +224,11 @@ function setTitleData(time, key, data) {
         Data: userData
     });
     setTimeStampForKey(key, time);
+    if (key == KEY_GeneralGameData) {
+        var progress = JSON.parse(data.Progress);
+        var ids = progress['Keys'];
+        refreshStatistics(KEY_Statistics_Instance, ids.length);
+    }
     return data;
 }
 function getCurrencyData(key) {
@@ -301,6 +298,9 @@ function setCurrencyData(time, key, data) {
                 Amount: count[i],
                 VirtualCurrency: cName
             }).Balance);
+        }
+        if (t == CurrencyType.Co) {
+            refreshStatistics(KEY_Statistics_Coin, count[i]);
         }
     }
     data.Status = Data_Status.Sync_Data;
@@ -392,7 +392,7 @@ function setItems(time, key, data) {
             }
         }
         if (cCount > 0) {
-            refreshStatistics(KEY_StatisticsCollectionCount, cCount);
+            refreshStatistics(KEY_Statistics_Collection, cCount);
         }
     }
     data.Status = Data_Status.Sync_Data;
@@ -448,10 +448,7 @@ function getLevelInfo(key) {
 function setLevelInfo(time, key, data) {
     data.Status = Data_Status.Sync_Data;
     var info = JSON.parse(data.Progress);
-    server.UpdatePlayerStatistics({
-        PlayFabId: currentPlayerId,
-        Statistics: [{ StatisticName: key, Value: parseInt(info["Level"]) }]
-    });
+    refreshStatistics(KEY_Statistics_Level, parseInt(info["Level"]));
     data.TimeStamp = time;
     setTimeStampForKey(key, time);
     return data;

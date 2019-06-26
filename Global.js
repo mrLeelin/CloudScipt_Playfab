@@ -3,8 +3,6 @@ var KEY_GiveGift = "__GiveGift__";
 var KEY_HeartFriends = "__HeartFriends__";
 var KEY_ACTIVITYINFO = '__ActivityInfo__';
 var KEY_Mail = "__Mail__";
-var KEY_StatisticsHeartCount = "__HeartCount__";
-var KEY_StatisticsCollectionCount = "__CollectionCount__";
 var KEY_SYNC_VERSION = "__SYNC_VERSION__";
 var KEY_TIME_STAMP = "__TIME_STAMP__";
 var KEY_GeneralGameData = "__GeneralGeneralGameManagerVM__";
@@ -24,6 +22,11 @@ var KEY_GlobalFriendCountLimit = "GlobalFriendLimit";
 var KEY_GlobalCatalogVersion = "GlobalCatalogVersion";
 var KEY_GlobalMailsExistenceDay = "MailsExistenceDay";
 var KEY_GlobalActivity = "Activity";
+var KEY_Statistics_Level = "Level";
+var KEY_Statistics_Heart = "HeartCount";
+var KEY_Statistics_Coin = "Coin";
+var KEY_Statistics_Instance = "InstanceCount";
+var KEY_Statistics_Collection = "CollectionCount";
 var Offect_Time_Hours = 8;
 var Func_Code;
 (function (Func_Code) {
@@ -39,6 +42,7 @@ var Func_Code;
     Func_Code[Func_Code["SC_GET_ACTIVITYS"] = 4001] = "SC_GET_ACTIVITYS";
     Func_Code[Func_Code["SC_GET_CURACTIVITY"] = 4002] = "SC_GET_CURACTIVITY";
     Func_Code[Func_Code["SC_FINISHED_ACTIVITY"] = 4003] = "SC_FINISHED_ACTIVITY";
+    Func_Code[Func_Code["SC_GET_RANKS"] = 5001] = "SC_GET_RANKS";
 })(Func_Code || (Func_Code = {}));
 var ItemType;
 (function (ItemType) {
@@ -85,7 +89,7 @@ function getImage(id) {
 function getLevel(id) {
     var statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
-        StatisticNames: [KEY_Level]
+        StatisticNames: [KEY_Statistics_Level]
     }).Statistics;
     if (statistics == null || statistics.length <= 0) {
         return 0;

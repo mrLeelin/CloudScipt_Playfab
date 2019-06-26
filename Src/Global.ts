@@ -1,5 +1,6 @@
 
 
+////////////////////////PlayerTitleData///////////////////////////////////////////
 const KEY_SendGift: string = "__SendGift__";
 const KEY_GiveGift: string = "__GiveGift__";
 const KEY_HeartFriends: string = "__HeartFriends__";
@@ -7,12 +8,12 @@ const KEY_ACTIVITYINFO:string='__ActivityInfo__';
 
 const KEY_Mail:string="__Mail__";
 
-const KEY_StatisticsHeartCount: string = "__HeartCount__";
-const KEY_StatisticsCollectionCount:string="__CollectionCount__";
 
 
 
 
+
+/////////////////////////SyncKey/////////////////////////////////////////////////
 const KEY_SYNC_VERSION: string = "__SYNC_VERSION__"
 const KEY_TIME_STAMP: string = "__TIME_STAMP__";
 const KEY_GeneralGameData: string = "__GeneralGeneralGameManagerVM__";
@@ -25,7 +26,7 @@ const KEY_Inventory: string = "__InventoryDefaultImpSaveData__";
 const KEY_Currency: string = "__VirtualCurrencyKey__";
 const KEY_Account: string = "__SimpleAccount__";
 
-
+//////////////////////////GlobalKey///////////////////////////////////////////////
 const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";
 const KEY_GlobalGiveGiftCount: string = "GlobalGiveGiftCount";
 const KEY_GlobalAllPlayersSegmentId: string = "AllPlayersSegmentId";
@@ -34,6 +35,14 @@ const KEY_GlobalFriendCountLimit: string = "GlobalFriendLimit";
 const KEY_GlobalCatalogVersion: string = "GlobalCatalogVersion";
 const KEY_GlobalMailsExistenceDay:string="MailsExistenceDay";
 const KEY_GlobalActivity:string="Activity";
+
+
+//////////////////////////StatisticsKey//////////////////////////////////////////
+const KEY_Statistics_Level:string="Level";
+const KEY_Statistics_Heart: string = "HeartCount";
+const KEY_Statistics_Coin:string="Coin";
+const KEY_Statistics_Instance:string="InstanceCount";
+const KEY_Statistics_Collection:string="CollectionCount";
 
 /**
  * 北京时间和playfab 上 差8小时
@@ -63,6 +72,10 @@ enum Func_Code {
     SC_GET_ACTIVITYS=4001,
     SC_GET_CURACTIVITY=4002,
     SC_FINISHED_ACTIVITY=4003,
+
+
+    //Rank
+    SC_GET_RANKS=5001,
 }
 
 interface IResult{
@@ -146,7 +159,7 @@ function getLevel(id: string): number {
 
     let statistics = server.GetPlayerStatistics({
         PlayFabId: currentPlayerId,
-        StatisticNames: [KEY_Level]
+        StatisticNames: [KEY_Statistics_Level]
     }).Statistics;
 
     if (statistics == null || statistics.length <= 0) {
