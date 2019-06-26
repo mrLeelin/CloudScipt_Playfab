@@ -27,7 +27,7 @@ var KEY_Statistics_Heart = "HeartCount";
 var KEY_Statistics_Coin = "Coin";
 var KEY_Statistics_Instance = "InstanceCount";
 var KEY_Statistics_Collection = "CollectionCount";
-var Offect_Time_Hours = 8;
+var Offect_Time_Hours = 0;
 var Func_Code;
 (function (Func_Code) {
     Func_Code[Func_Code["SC_ADD_FRIEND"] = 1002] = "SC_ADD_FRIEND";

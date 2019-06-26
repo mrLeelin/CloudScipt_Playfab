@@ -45,9 +45,9 @@ const KEY_Statistics_Instance:string="InstanceCount";
 const KEY_Statistics_Collection:string="CollectionCount";
 
 /**
- * 北京时间和playfab 上 差8小时
+ * 北京时间和playfab 上 差0小时
  */
-const Offect_Time_Hours:number=8;
+const Offect_Time_Hours:number=0;
 
 enum Func_Code {
 
