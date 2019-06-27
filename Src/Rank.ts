@@ -1,4 +1,4 @@
-handlers.GetRanks=getRank;
+handlers.GetRank=getRank;
 
 
 interface IRankResult extends IResult{
@@ -23,7 +23,7 @@ interface IRankData {
     Level: number;
     Coin: number;
     Instance: number;
-    Colliction: number;
+    Collection: number;
     IsSelf: boolean;
 
 }
@@ -32,7 +32,7 @@ interface IStorage {
     Coin: number,
     Level: number,
     Instance: number,
-    Colliction: number
+    Collection: number
 }
 
 
@@ -84,7 +84,7 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
             if (key == KEY_Statistics_Coin) {
                 rank['Coin'] = lb.StatValue;
             } else if (key == KEY_Statistics_Collection) {
-                rank['Colliction'] = lb.StatValue;
+                rank['Collection'] = lb.StatValue;
             } else if (key == KEY_Statistics_Instance) {
                 rank['Instance'] = lb.StatValue;
             } else if (key == KEY_Statistics_Level) {
@@ -100,7 +100,7 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
             if (key == KEY_Statistics_Coin) {
                 storage['Coin'] = lb.StatValue;
             } else if (key == KEY_Statistics_Collection) {
-                storage['Colliction'] = lb.StatValue;
+                storage['Collection'] = lb.StatValue;
             } else if (key == KEY_Statistics_Instance) {
                 storage['Instance'] = lb.StatValue;
             } else if (key == KEY_Statistics_Level) {
@@ -124,8 +124,8 @@ function changeRankDatas(datas: IRankData[], copy: { [key: string]: IStorage }):
                 if (r.Level <= 0) {
                     r.Level = storage.Level;
                 }
-                if (r.Colliction <= 0) {
-                    r.Colliction = storage.Colliction;
+                if (r.Collection <= 0) {
+                    r.Collection = storage.Collection;
                 }
                 if (r.Instance <= 0) {
                     r.Instance = storage.Instance;

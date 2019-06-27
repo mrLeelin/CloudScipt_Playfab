@@ -1,4 +1,4 @@
-handlers.GetRanks = getRank;
+handlers.GetRank = getRank;
 function getRank(args) {
     var maxNum = 100;
     var constrains = {};
@@ -41,7 +41,7 @@ function getRankDatas(key, max, constranins, copy) {
                 rank['Coin'] = lb.StatValue;
             }
             else if (key == KEY_Statistics_Collection) {
-                rank['Colliction'] = lb.StatValue;
+                rank['Collection'] = lb.StatValue;
             }
             else if (key == KEY_Statistics_Instance) {
                 rank['Instance'] = lb.StatValue;
@@ -61,7 +61,7 @@ function getRankDatas(key, max, constranins, copy) {
                 storage['Coin'] = lb.StatValue;
             }
             else if (key == KEY_Statistics_Collection) {
-                storage['Colliction'] = lb.StatValue;
+                storage['Collection'] = lb.StatValue;
             }
             else if (key == KEY_Statistics_Instance) {
                 storage['Instance'] = lb.StatValue;
@@ -87,8 +87,8 @@ function changeRankDatas(datas, copy) {
                 if (r.Level <= 0) {
                     r.Level = storage.Level;
                 }
-                if (r.Colliction <= 0) {
-                    r.Colliction = storage.Colliction;
+                if (r.Collection <= 0) {
+                    r.Collection = storage.Collection;
                 }
                 if (r.Instance <= 0) {
                     r.Instance = storage.Instance;
