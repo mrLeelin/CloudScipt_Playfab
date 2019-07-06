@@ -240,7 +240,6 @@ function getCurrencyData(key) {
         if (result.VirtualCurrency.hasOwnProperty(key_1)) {
             var element = result.VirtualCurrency[key_1];
             var new_key = key_1.slice(0, 1) + key_1.substr(1, 1).toLowerCase();
-            log.info("Text Key:" + new_key + "  Key:" + key_1 + "Lower Key:" + key_1.substr(1, 1).toLowerCase());
             type.push(CurrencyType[new_key]);
             count.push(element);
         }
@@ -433,7 +432,7 @@ function setAccountInfo(time, id, type, key, data) {
     return data;
 }
 function getLevelInfo(key) {
-    var statistics = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: [key] }).Statistics;
+    var statistics = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: [KEY_Statistics_Level] }).Statistics;
     var level = 0;
     if (statistics != null && statistics.length > 0) {
         level = statistics[0].Value;

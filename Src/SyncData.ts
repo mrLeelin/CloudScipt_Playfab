@@ -375,7 +375,6 @@ function getCurrencyData(key: string): IData {
         if (result.VirtualCurrency.hasOwnProperty(key)) {
             const element = result.VirtualCurrency[key];
             let new_key=key.slice(0,1)+key.substr(1,1).toLowerCase();
-            log.info("Text Key:"+new_key+"  Key:"+key+"Lower Key:"+key.substr(1,1).toLowerCase());
             type.push(CurrencyType[new_key]);
             count.push(element);
         }
@@ -597,7 +596,7 @@ function setAccountInfo(time: number, id: string, type: string, key: string, dat
 
 function getLevelInfo(key: string): IData {
 
-    let statistics = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: [key] }).Statistics;
+    let statistics = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: [KEY_Statistics_Level] }).Statistics;
     let level: number = 0;
     if (statistics != null && statistics.length > 0) {
 
