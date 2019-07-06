@@ -21,6 +21,7 @@ interface ISyncClientToServiceResult extends IResult {
     Datas: { [key: string]: IData };
     TimeStamp: number;
     ClientToServer: boolean;
+    Count:number;
 }
 interface ICompareDataVersionsResult extends IResult {
     TimeStamp?: number;
@@ -110,6 +111,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: null,
             TimeStamp: 0,
+            Count:0,
             ClientToServer: args.ClientToServer
         };
     }
@@ -128,7 +130,6 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     let entityType: string = args.EntityType;
 
     let ret: { [key: string]: IData; } = {};
-
     for (let i = 0; i < count; i++) {
         let key: string = keys[i];
         let data: IData = Values[i];
@@ -204,6 +205,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
         Datas: ret,
+        Count:count,
         TimeStamp: tS,
         ClientToServer: args.ClientToServer
     };

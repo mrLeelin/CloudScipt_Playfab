@@ -51,6 +51,7 @@ function syncData(args) {
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: null,
             TimeStamp: 0,
+            Count: 0,
             ClientToServer: args.ClientToServer
         };
     }
@@ -89,6 +90,7 @@ function syncData(args) {
     return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
         Datas: ret,
+        Count: count,
         TimeStamp: tS,
         ClientToServer: args.ClientToServer
     };
