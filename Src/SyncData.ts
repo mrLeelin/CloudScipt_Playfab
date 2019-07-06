@@ -375,7 +375,7 @@ function getCurrencyData(key: string): IData {
         if (result.VirtualCurrency.hasOwnProperty(key)) {
             const element = result.VirtualCurrency[key];
             let new_key=key.slice(0,1)+key.slice(1,1).toLowerCase();
-            log.info("Text Key:"+new_key);
+            log.info("Text Key:"+new_key+"  Key:"+key+"Lower Key:"+key.slice(1,1).toLowerCase());
             type.push(CurrencyType[new_key]);
             count.push(element);
         }

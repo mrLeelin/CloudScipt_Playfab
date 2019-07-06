@@ -240,7 +240,7 @@ function getCurrencyData(key) {
         if (result.VirtualCurrency.hasOwnProperty(key_1)) {
             var element = result.VirtualCurrency[key_1];
             var new_key = key_1.slice(0, 1) + key_1.slice(1, 1).toLowerCase();
-            log.info("Text Key:" + new_key);
+            log.info("Text Key:" + new_key + "  Key:" + key_1 + "Lower Key:" + key_1.slice(1, 1).toLowerCase());
             type.push(CurrencyType[new_key]);
             count.push(element);
         }
