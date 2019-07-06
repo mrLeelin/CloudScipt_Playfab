@@ -25,6 +25,7 @@ const KEY_Level: string = "__ProgressKey__";
 const KEY_Inventory: string = "__InventoryDefaultImpSaveData__";
 const KEY_Currency: string = "__VirtualCurrencyKey__";
 const KEY_Account: string = "__SimpleAccount__";
+const KEY_Miscell:string="Miscellaneous";
 
 //////////////////////////GlobalKey///////////////////////////////////////////////
 const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";

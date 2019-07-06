@@ -104,6 +104,7 @@ function get(entityId, entityType, key) {
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
+        case KEY_Miscell:
             return getTitleData(key);
         case KEY_Currency:
             return getCurrencyData(key);
@@ -124,6 +125,7 @@ function set(time, entityId, entityType, key, data) {
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
+        case KEY_Miscell:
             return setTitleData(time, key, data);
         case KEY_Currency:
             return setCurrencyData(time, key, data);

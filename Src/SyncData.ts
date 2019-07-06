@@ -223,6 +223,7 @@ function get(entityId: string, entityType: string, key: string): IData {
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
+        case KEY_Miscell:
             return getTitleData(key);
         case KEY_Currency:
             return getCurrencyData(key);
@@ -245,6 +246,7 @@ function set(time: number, entityId: string, entityType: string, key: string, da
         case KEY_AchievementData:
         case KEY_SpecialGameData:
         case KEY_ItemEffect:
+        case KEY_Miscell:
             return setTitleData(time, key, data);
         case KEY_Currency:
             return setCurrencyData(time, key, data);
