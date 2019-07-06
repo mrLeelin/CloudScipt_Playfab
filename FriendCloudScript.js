@@ -55,7 +55,7 @@ function getFriends(args, context) {
         if (f.Profile.Statistics.length > 0) {
             for (var _b = 0, _c = f.Profile.Statistics; _b < _c.length; _b++) {
                 var v = _c[_b];
-                if (v.Name == KEY_Level) {
+                if (v.Name == KEY_Statistics_Level) {
                     level = v.Value;
                     break;
                 }
@@ -189,8 +189,8 @@ function getLimitPlayer(args, context) {
             }
         }
         var level = 0;
-        if (iterator.Statistics.hasOwnProperty(KEY_Level)) {
-            level = iterator.Statistics[KEY_Level];
+        if (iterator.Statistics.hasOwnProperty(KEY_Statistics_Level)) {
+            level = iterator.Statistics[KEY_Statistics_Level];
         }
         if (Math.abs(level - selfLevel) <= limitLevel) {
             profiles.push(iterator);
@@ -219,8 +219,8 @@ function getLimitPlayer(args, context) {
         ret.Images.push(p.AvatarUrl ? p.AvatarUrl : "");
         ret.Names.push(p.DisplayName);
         var level = 0;
-        if (p.Statistics.hasOwnProperty(KEY_Level)) {
-            level = p.Statistics[KEY_Level];
+        if (p.Statistics.hasOwnProperty(KEY_Statistics_Level)) {
+            level = p.Statistics[KEY_Statistics_Level];
         }
         ret.Levels.push(level);
     }
@@ -290,7 +290,7 @@ function sendGiftToFrined(args) {
         PlayFabId: currentPlayerId,
         Data: (_c = {}, _c[KEY_HeartFriends] = JSON.stringify(dH), _c)
     });
-    recordStatistics(KEY_StatisticsHeartCount, 1, 1);
+    recordStatistics(KEY_Statistics_Heart, 1, 1);
     return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.Successful };
 }
 function getPlayerGiftCount() {

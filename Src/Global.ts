@@ -123,6 +123,8 @@ function recordStatistics(key: string, value:number,defValue: number) {
  * @param value 
  */
 function refreshStatistics(key:string,value:number){
+    if(value<=0)
+    return;
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         Statistics: [{ StatisticName: key, Value: value }]
@@ -175,6 +177,7 @@ function getCoins(): number {
 
     let coin: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
     let key: string = CurrencyType[CurrencyType.Co];
+    key=key.toUpperCase();
     if (coin.hasOwnProperty(key)) {
         return coin[key];
     }
@@ -183,7 +186,7 @@ function getCoins(): number {
 
 function getDiamonds(): number {
     let di: any = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    let key: string = CurrencyType[CurrencyType.Di];
+    let key: string = CurrencyType[CurrencyType.Di].toUpperCase();
     if (di.hasOwnProperty(key)) {
         return di[key];
     }

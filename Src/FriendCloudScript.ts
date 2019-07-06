@@ -111,7 +111,7 @@ function getFriends(args: any, context: IPlayFabContext): IGetFriendsResult {
         let level: number = 0;
         if (f.Profile.Statistics.length > 0) {
             for (const v of f.Profile.Statistics) {
-                if (v.Name == KEY_Level) {
+                if (v.Name == KEY_Statistics_Level) {
                     level = v.Value;
                     break;
                 }
@@ -263,8 +263,8 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
             }
         }
         let level: number = 0;
-        if (iterator.Statistics.hasOwnProperty(KEY_Level)) {
-            level = iterator.Statistics[KEY_Level];
+        if (iterator.Statistics.hasOwnProperty(KEY_Statistics_Level)) {
+            level = iterator.Statistics[KEY_Statistics_Level];
         }
         if (Math.abs(level - selfLevel) <= limitLevel) {
             profiles.push(iterator);
@@ -293,8 +293,8 @@ function getLimitPlayer(args: any, context): IGetLimitPlayerResult {
         ret.Images.push(p.AvatarUrl ? p.AvatarUrl : "");
         ret.Names.push(p.DisplayName);
         let level: number = 0;
-        if (p.Statistics.hasOwnProperty(KEY_Level)) {
-            level = p.Statistics[KEY_Level];
+        if (p.Statistics.hasOwnProperty(KEY_Statistics_Level)) {
+            level = p.Statistics[KEY_Statistics_Level];
         }
         ret.Levels.push(level);
     }
@@ -377,7 +377,7 @@ function sendGiftToFrined(args: any): ISendGiftResult {
         Data: { [KEY_HeartFriends]: JSON.stringify(dH) }
     })
     //统计一下   
-    recordStatistics(KEY_StatisticsHeartCount, 1,1);
+    recordStatistics(KEY_Statistics_Heart, 1,1);
     return { id: Func_Code.SC_SEND_GIFT, Code: SendGiftCode.Successful };
 
 }

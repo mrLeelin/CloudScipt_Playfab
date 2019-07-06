@@ -156,8 +156,9 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
                 ret[key] = data;
             }
         }
+        log.info("Key: "+key+". "+args.ClientToServer?"Client To Server Successful":"Server To Client Successful");
     }
-    log.info(args.ClientToServer?"Client To Server Successful":"Server To Client Successful");
+    
 
     /*
 

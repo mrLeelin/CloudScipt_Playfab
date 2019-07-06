@@ -74,6 +74,8 @@ function recordStatistics(key, value, defValue) {
     });
 }
 function refreshStatistics(key, value) {
+    if (value <= 0)
+        return;
     server.UpdatePlayerStatistics({
         PlayFabId: currentPlayerId,
         Statistics: [{ StatisticName: key, Value: value }]
@@ -99,6 +101,7 @@ function getLevel(id) {
 function getCoins() {
     var coin = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
     var key = CurrencyType[CurrencyType.Co];
+    key = key.toUpperCase();
     if (coin.hasOwnProperty(key)) {
         return coin[key];
     }
@@ -106,7 +109,7 @@ function getCoins() {
 }
 function getDiamonds() {
     var di = server.GetUserInventory({ PlayFabId: currentPlayerId }).VirtualCurrency;
-    var key = CurrencyType[CurrencyType.Di];
+    var key = CurrencyType[CurrencyType.Di].toUpperCase();
     if (di.hasOwnProperty(key)) {
         return di[key];
     }
