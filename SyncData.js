@@ -84,7 +84,7 @@ function syncData(args) {
                 ret[key] = data_1;
             }
         }
-        log.info("Key: " + key + ". " + args.ClientToServer ? "Client To Server Successful" : "Server To Client Successful");
+        log.info("Key: " + key + ". " + (args.ClientToServer ? "Client To Server Successful" : "Server To Client Successful"));
     }
     return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
