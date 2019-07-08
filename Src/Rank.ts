@@ -1,7 +1,7 @@
-handlers.GetRank=getRank;
+handlers.GetRank = getRank;
 
 
-interface IRankResult extends IResult{
+interface IRankResult extends IResult {
 
     LevelRanks: IRankData[];
 
@@ -39,7 +39,7 @@ interface IStorage {
 
 
 
-function getRank(args: any) :IRankResult{
+function getRank(args: any): IRankResult {
 
     let maxNum = 100;//TODO
 
@@ -56,21 +56,17 @@ function getRank(args: any) :IRankResult{
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
 
-    for (const c of result.CoinRanks) {
-        log.debug("Before:"+JSON.stringify(c));
-    }
-    result.CoinRanks = changeRankDatas(KEY_Statistics_Coin,result.CoinRanks, copy);
-    for (const c of result.CoinRanks) {
-        log.debug("After:"+JSON.stringify(c));
-    }
-    result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection,result.CollectionRanks, copy);
-    result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
-    result.LevelRanks = changeRankDatas(KEY_Statistics_Level,result.LevelRanks, copy);
-   
 
-   
-    result.id=Func_Code.SC_GET_RANKS;
-   return result;
+    result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
+
+    result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
+    result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
+    result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
+
+
+
+    result.id = Func_Code.SC_GET_RANKS;
+    return result;
 }
 
 function getRankDatas(key: string, max: number, constranins: PlayFabServerModels.PlayerProfileViewConstraints, copy: { [key: string]: IStorage }): IRankData[] {
@@ -92,13 +88,13 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
             rank.Name = lb.DisplayName;
             rank.IsSelf = currentPlayerId == lb.PlayFabId;
             if (key == KEY_Statistics_Coin) {
-                rank.Coin= lb.StatValue;
+                rank.Coin = lb.StatValue;
             } else if (key == KEY_Statistics_Collection) {
                 rank.Collection = lb.StatValue
             } else if (key == KEY_Statistics_Instance) {
                 rank.Instance = lb.StatValue
             } else if (key == KEY_Statistics_Level) {
-                rank.Level= lb.StatValue;
+                rank.Level = lb.StatValue;
             }
             rankDatas.push(rank);
             let storage: IStorage;
@@ -110,11 +106,11 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
             if (key == KEY_Statistics_Coin) {
                 storage.Coin = lb.StatValue
             } else if (key == KEY_Statistics_Collection) {
-                storage.Collection= lb.StatValue;
+                storage.Collection = lb.StatValue;
             } else if (key == KEY_Statistics_Instance) {
                 storage.Instance = lb.StatValue;
             } else if (key == KEY_Statistics_Level) {
-                storage.Level= lb.StatValue;
+                storage.Level = lb.StatValue;
             }
             copy[rank.Guid] = storage;
         }
@@ -123,11 +119,26 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
     return null;
 }
 
-function changeRankDatas(key:string, datas: IRankData[], copy: { [key: string]: IStorage }): IRankData[] {
+function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]: IStorage }): IRankData[] {
     if (datas != null) {
+
+        if (key == KEY_Statistics_Coin) {
+           for (const key in copy) {
+               if (copy.hasOwnProperty(key)) {
+                   const element = copy[key];
+                   log.debug("Copy:" + JSON.stringify(element));
+               }
+           }
+        }
+        if (key == KEY_Statistics_Coin) {
+            for (const c of datas) {
+                log.debug("Before:" + JSON.stringify(c));
+            }
+        }
+       
         for (const r of datas) {
             if (copy.hasOwnProperty(r.Guid)) {
-                let index:number=datas.indexOf(r);
+                let index: number = datas.indexOf(r);
                 let storage = copy[r.Guid];
                 if (r.Coin <= 0) {
                     r.Coin = storage.Coin;
@@ -141,16 +152,18 @@ function changeRankDatas(key:string, datas: IRankData[], copy: { [key: string]: 
                 if (r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
-                datas[index]=r;
-            }          
+                datas[index] = r;
+            }
         }
-    }
-    if(key==KEY_Statistics_Coin){
-        for (const c of datas) {
-            log.debug("Center:"+JSON.stringify(c));
+        if (key == KEY_Statistics_Coin) {
+            for (const c of datas) {
+                log.debug("After:" + JSON.stringify(c));
+            }
         }
+
     }
-    
+
+
     return datas;
 }
 

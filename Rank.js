@@ -13,15 +13,7 @@ function getRank(args) {
     result.CollectionRanks = getRankDatas(KEY_Statistics_Collection, maxNum, constrains, copy);
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
-    for (var _i = 0, _a = result.CoinRanks; _i < _a.length; _i++) {
-        var c = _a[_i];
-        log.debug("Before:" + JSON.stringify(c));
-    }
     result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
-    for (var _b = 0, _c = result.CoinRanks; _b < _c.length; _b++) {
-        var c = _c[_b];
-        log.debug("After:" + JSON.stringify(c));
-    }
     result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
     result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
     result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
@@ -85,8 +77,22 @@ function getRankDatas(key, max, constranins, copy) {
 }
 function changeRankDatas(key, datas, copy) {
     if (datas != null) {
-        for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
-            var r = datas_1[_i];
+        if (key == KEY_Statistics_Coin) {
+            for (var key_1 in copy) {
+                if (copy.hasOwnProperty(key_1)) {
+                    var element = copy[key_1];
+                    log.debug("Copy:" + JSON.stringify(element));
+                }
+            }
+        }
+        if (key == KEY_Statistics_Coin) {
+            for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
+                var c = datas_1[_i];
+                log.debug("Before:" + JSON.stringify(c));
+            }
+        }
+        for (var _a = 0, datas_2 = datas; _a < datas_2.length; _a++) {
+            var r = datas_2[_a];
             if (copy.hasOwnProperty(r.Guid)) {
                 var index = datas.indexOf(r);
                 var storage = copy[r.Guid];
@@ -105,11 +111,11 @@ function changeRankDatas(key, datas, copy) {
                 datas[index] = r;
             }
         }
-    }
-    if (key == KEY_Statistics_Coin) {
-        for (var _a = 0, datas_2 = datas; _a < datas_2.length; _a++) {
-            var c = datas_2[_a];
-            log.debug("Center:" + JSON.stringify(c));
+        if (key == KEY_Statistics_Coin) {
+            for (var _b = 0, datas_3 = datas; _b < datas_3.length; _b++) {
+                var c = datas_3[_b];
+                log.debug("After:" + JSON.stringify(c));
+            }
         }
     }
     return datas;
