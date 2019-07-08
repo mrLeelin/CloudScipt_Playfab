@@ -121,54 +121,23 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
 
 function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]: IStorage }): IRankData[] {
     if (datas != null) {
-
-        if (key == KEY_Statistics_Coin) {
-           for (const key in copy) {
-               if (copy.hasOwnProperty(key)) {
-                   const element = copy[key];
-                   log.debug("Copy:" + JSON.stringify(element));
-               }
-           }
-        }
-        if (key == KEY_Statistics_Coin) {
-            for (const c of datas) {
-                log.debug("Before:" + JSON.stringify(c));
-            }
-        }
-       
         for (const r of datas) {
             if (copy.hasOwnProperty(r.Guid)) {
-                let index: number = datas.indexOf(r);
                 let storage = copy[r.Guid];
-                if (r.Coin <= 0) {
+                if (String(r.Coin)=='undefind'||r.Coin<=0) {
                     r.Coin = storage.Coin;
                 }
-                if (key == KEY_Statistics_Coin) {
-                    log.debug(String(r.Level));
-                }
-               
                 if (String(r.Level)=='undefind'||r.Level<=0) {
                     r.Level = storage.Level;
                 }
-                if (key == KEY_Statistics_Coin) {
-                    log.debug(r.Level.toString());
-                }
-              
-                if (r.Collection <= 0) {
+                if (String(r.Collection)=='undefind'||r.Collection<=0) {
                     r.Collection = storage.Collection;
                 }
-                if (r.Instance <= 0) {
+                if (String(r.Instance)=='undefind'||r.Instance<=0) {
                     r.Instance = storage.Instance;
                 }
-                datas[index] = r;
             }
         }
-        if (key == KEY_Statistics_Coin) {
-            for (const c of datas) {
-                log.debug("After:" + JSON.stringify(c));
-            }
-        }
-
     }
 
 

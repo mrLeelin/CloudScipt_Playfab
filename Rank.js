@@ -77,50 +77,22 @@ function getRankDatas(key, max, constranins, copy) {
 }
 function changeRankDatas(key, datas, copy) {
     if (datas != null) {
-        if (key == KEY_Statistics_Coin) {
-            for (var key_1 in copy) {
-                if (copy.hasOwnProperty(key_1)) {
-                    var element = copy[key_1];
-                    log.debug("Copy:" + JSON.stringify(element));
-                }
-            }
-        }
-        if (key == KEY_Statistics_Coin) {
-            for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
-                var c = datas_1[_i];
-                log.debug("Before:" + JSON.stringify(c));
-            }
-        }
-        for (var _a = 0, datas_2 = datas; _a < datas_2.length; _a++) {
-            var r = datas_2[_a];
+        for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
+            var r = datas_1[_i];
             if (copy.hasOwnProperty(r.Guid)) {
-                var index = datas.indexOf(r);
                 var storage = copy[r.Guid];
-                if (r.Coin <= 0) {
+                if (String(r.Coin) == 'undefind' || r.Coin <= 0) {
                     r.Coin = storage.Coin;
-                }
-                if (key == KEY_Statistics_Coin) {
-                    log.debug(String(r.Level));
                 }
                 if (String(r.Level) == 'undefind' || r.Level <= 0) {
                     r.Level = storage.Level;
                 }
-                if (key == KEY_Statistics_Coin) {
-                    log.debug(r.Level.toString());
-                }
-                if (r.Collection <= 0) {
+                if (String(r.Collection) == 'undefind' || r.Collection <= 0) {
                     r.Collection = storage.Collection;
                 }
-                if (r.Instance <= 0) {
+                if (String(r.Instance) == 'undefind' || r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
-                datas[index] = r;
-            }
-        }
-        if (key == KEY_Statistics_Coin) {
-            for (var _b = 0, datas_3 = datas; _b < datas_3.length; _b++) {
-                var c = datas_3[_b];
-                log.debug("After:" + JSON.stringify(c));
             }
         }
     }
