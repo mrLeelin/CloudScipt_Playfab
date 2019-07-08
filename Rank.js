@@ -21,7 +21,7 @@ function getRank(args) {
     result.CoinRanks.push(rank);
     result.LevelRanks.push(rank);
     result.InstanceRanks.push(rank);
-    result.LevelRanks.push(rank);
+    result.CollectionRanks.push(rank);
     result.id = Func_Code.SC_GET_RANKS;
     return result;
 }

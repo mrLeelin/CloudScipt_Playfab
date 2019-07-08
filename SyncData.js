@@ -64,6 +64,7 @@ function syncData(args) {
             PlayFabId: currentPlayerId,
             Data: s
         });
+        log.info("All SyncData Successful");
     }
     var keys = args.Keys;
     var Values = args.Values;

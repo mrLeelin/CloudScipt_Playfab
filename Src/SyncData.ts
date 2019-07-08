@@ -125,7 +125,8 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         server.UpdateUserPublisherInternalData({
             PlayFabId: currentPlayerId,
             Data: s
-        });    
+        }); 
+        log.info("All SyncData Successful");   
     }
     let keys: string[] = args.Keys;
     let Values: IData[] = args.Values;
