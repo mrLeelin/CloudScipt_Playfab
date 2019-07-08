@@ -80,6 +80,7 @@ function changeRankDatas(key, datas, copy) {
         for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
             var r = datas_1[_i];
             if (copy.hasOwnProperty(r.Guid)) {
+                var index = datas.indexOf(r);
                 var storage = copy[r.Guid];
                 if (String(r.Coin) == 'undefind' || r.Coin <= 0) {
                     r.Coin = storage.Coin;
@@ -93,6 +94,7 @@ function changeRankDatas(key, datas, copy) {
                 if (String(r.Instance) == 'undefind' || r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
+                datas[index] = r;
             }
         }
     }

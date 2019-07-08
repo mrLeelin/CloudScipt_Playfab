@@ -123,6 +123,7 @@ function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]:
     if (datas != null) {
         for (const r of datas) {
             if (copy.hasOwnProperty(r.Guid)) {
+                let index: number = datas.indexOf(r);
                 let storage = copy[r.Guid];
                 if (String(r.Coin)=='undefind'||r.Coin<=0) {
                     r.Coin = storage.Coin;
@@ -136,11 +137,10 @@ function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]:
                 if (String(r.Instance)=='undefind'||r.Instance<=0) {
                     r.Instance = storage.Instance;
                 }
+                datas[index] = r;
             }
         }
     }
-
-
     return datas;
 }
 
