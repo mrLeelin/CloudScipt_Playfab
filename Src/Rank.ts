@@ -86,13 +86,13 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
             rank.Name = lb.DisplayName;
             rank.IsSelf = currentPlayerId == lb.PlayFabId;
             if (key == KEY_Statistics_Coin) {
-                rank['Coin'] = lb.StatValue;
+                rank.Coin= String(lb.StatValue)=='undefined'?0:lb.StatValue;
             } else if (key == KEY_Statistics_Collection) {
-                rank['Collection'] = lb.StatValue;
+                rank.Collection = String(lb.StatValue)=='undefined'?0:lb.StatValue
             } else if (key == KEY_Statistics_Instance) {
-                rank['Instance'] = lb.StatValue;
+                rank.Instance = String(lb.StatValue)=='undefined'?0:lb.StatValue
             } else if (key == KEY_Statistics_Level) {
-                rank['Level'] = lb.StatValue;
+                rank.Level= String(lb.StatValue)=='undefined'?0:lb.StatValue;
             }
             rankDatas.push(rank);
             let storage: IStorage;
@@ -102,13 +102,13 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
                 storage = <IStorage>{}
             }
             if (key == KEY_Statistics_Coin) {
-                storage['Coin'] = lb.StatValue;
+                storage.Coin = String(lb.StatValue)=='undefined'?0:lb.StatValue
             } else if (key == KEY_Statistics_Collection) {
-                storage['Collection'] = lb.StatValue;
+                storage.Collection= String(lb.StatValue)=='undefined'?0:lb.StatValue;
             } else if (key == KEY_Statistics_Instance) {
-                storage['Instance'] = lb.StatValue;
+                storage.Instance = String(lb.StatValue)=='undefined'?0:lb.StatValue;
             } else if (key == KEY_Statistics_Level) {
-                storage['Level'] = lb.StatValue;
+                storage.Level= String(lb.StatValue)=='undefined'?0:lb.StatValue;
             }
             copy[rank.Guid] = storage;
         }
