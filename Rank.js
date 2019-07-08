@@ -106,5 +106,11 @@ function changeRankDatas(key, datas, copy) {
             }
         }
     }
+    if (key == KEY_Statistics_Coin) {
+        for (var _a = 0, datas_2 = datas; _a < datas_2.length; _a++) {
+            var c = datas_2[_a];
+            log.debug("Center:" + JSON.stringify(c));
+        }
+    }
     return datas;
 }

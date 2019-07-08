@@ -145,6 +145,11 @@ function changeRankDatas(key:string, datas: IRankData[], copy: { [key: string]: 
             }          
         }
     }
+    if(key==KEY_Statistics_Coin){
+        for (const c of datas) {
+            log.debug("Center:"+JSON.stringify(c));
+        }
+    }
     
     return datas;
 }
