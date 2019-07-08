@@ -55,13 +55,14 @@ function getRank(args: any) :IRankResult{
     result.CollectionRanks = getRankDatas(KEY_Statistics_Collection, maxNum, constrains, copy);
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
-    for (const key in copy) {
-        if (copy.hasOwnProperty(key)) {
-            const element = copy[key];
-            log.debug("Copy Json"+JSON.stringify(element));
-        }
+
+    for (const c of result.CoinRanks) {
+        log.debug("Before:"+JSON.stringify(c));
     }
     result.CoinRanks = changeRankDatas(KEY_Statistics_Coin,result.CoinRanks, copy);
+    for (const c of result.CoinRanks) {
+        log.debug("After:"+JSON.stringify(c));
+    }
     result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection,result.CollectionRanks, copy);
     result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
     result.LevelRanks = changeRankDatas(KEY_Statistics_Level,result.LevelRanks, copy);
@@ -91,13 +92,13 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
             rank.Name = lb.DisplayName;
             rank.IsSelf = currentPlayerId == lb.PlayFabId;
             if (key == KEY_Statistics_Coin) {
-                rank.Coin= String(lb.StatValue)=='undefined'?0:lb.StatValue;
+                rank.Coin= lb.StatValue;
             } else if (key == KEY_Statistics_Collection) {
-                rank.Collection = String(lb.StatValue)=='undefined'?0:lb.StatValue
+                rank.Collection = lb.StatValue
             } else if (key == KEY_Statistics_Instance) {
-                rank.Instance = String(lb.StatValue)=='undefined'?0:lb.StatValue
+                rank.Instance = lb.StatValue
             } else if (key == KEY_Statistics_Level) {
-                rank.Level= String(lb.StatValue)=='undefined'?0:lb.StatValue;
+                rank.Level= lb.StatValue;
             }
             rankDatas.push(rank);
             let storage: IStorage;
@@ -107,13 +108,13 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
                 storage = <IStorage>{}
             }
             if (key == KEY_Statistics_Coin) {
-                storage.Coin = String(lb.StatValue)=='undefined'?0:lb.StatValue
+                storage.Coin = lb.StatValue
             } else if (key == KEY_Statistics_Collection) {
-                storage.Collection= String(lb.StatValue)=='undefined'?0:lb.StatValue;
+                storage.Collection= lb.StatValue;
             } else if (key == KEY_Statistics_Instance) {
-                storage.Instance = String(lb.StatValue)=='undefined'?0:lb.StatValue;
+                storage.Instance = lb.StatValue;
             } else if (key == KEY_Statistics_Level) {
-                storage.Level= String(lb.StatValue)=='undefined'?0:lb.StatValue;
+                storage.Level= lb.StatValue;
             }
             copy[rank.Guid] = storage;
         }
@@ -126,6 +127,7 @@ function changeRankDatas(key:string, datas: IRankData[], copy: { [key: string]: 
     if (datas != null) {
         for (const r of datas) {
             if (copy.hasOwnProperty(r.Guid)) {
+                let index:number=datas.indexOf(r);
                 let storage = copy[r.Guid];
                 if (r.Coin <= 0) {
                     r.Coin = storage.Coin;
@@ -139,19 +141,11 @@ function changeRankDatas(key:string, datas: IRankData[], copy: { [key: string]: 
                 if (r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
-                
-                if(key==KEY_Statistics_Coin){
-                    log.debug("Copy:coin::"+storage.Coin);
-                    log.debug("Copy:Level:"+storage.Level);
-                    log.debug("Data:Coin:"+r.Coin);
-                    log.debug("Data:Level:"+r.Level);
-                }
-               
-            }
-           
+                datas[index]=r;
+            }          
         }
-
     }
+    
     return datas;
 }
 

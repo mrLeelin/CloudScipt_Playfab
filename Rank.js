@@ -13,13 +13,15 @@ function getRank(args) {
     result.CollectionRanks = getRankDatas(KEY_Statistics_Collection, maxNum, constrains, copy);
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
-    for (var key in copy) {
-        if (copy.hasOwnProperty(key)) {
-            var element = copy[key];
-            log.debug("Copy Json" + JSON.stringify(element));
-        }
+    for (var _i = 0, _a = result.CoinRanks; _i < _a.length; _i++) {
+        var c = _a[_i];
+        log.debug("Before:" + JSON.stringify(c));
     }
     result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
+    for (var _b = 0, _c = result.CoinRanks; _b < _c.length; _b++) {
+        var c = _c[_b];
+        log.debug("After:" + JSON.stringify(c));
+    }
     result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
     result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
     result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
@@ -44,16 +46,16 @@ function getRankDatas(key, max, constranins, copy) {
             rank.Name = lb.DisplayName;
             rank.IsSelf = currentPlayerId == lb.PlayFabId;
             if (key == KEY_Statistics_Coin) {
-                rank.Coin = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                rank.Coin = lb.StatValue;
             }
             else if (key == KEY_Statistics_Collection) {
-                rank.Collection = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                rank.Collection = lb.StatValue;
             }
             else if (key == KEY_Statistics_Instance) {
-                rank.Instance = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                rank.Instance = lb.StatValue;
             }
             else if (key == KEY_Statistics_Level) {
-                rank.Level = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                rank.Level = lb.StatValue;
             }
             rankDatas.push(rank);
             var storage = void 0;
@@ -64,16 +66,16 @@ function getRankDatas(key, max, constranins, copy) {
                 storage = {};
             }
             if (key == KEY_Statistics_Coin) {
-                storage.Coin = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                storage.Coin = lb.StatValue;
             }
             else if (key == KEY_Statistics_Collection) {
-                storage.Collection = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                storage.Collection = lb.StatValue;
             }
             else if (key == KEY_Statistics_Instance) {
-                storage.Instance = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                storage.Instance = lb.StatValue;
             }
             else if (key == KEY_Statistics_Level) {
-                storage.Level = String(lb.StatValue) == 'undefined' ? 0 : lb.StatValue;
+                storage.Level = lb.StatValue;
             }
             copy[rank.Guid] = storage;
         }
@@ -86,6 +88,7 @@ function changeRankDatas(key, datas, copy) {
         for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
             var r = datas_1[_i];
             if (copy.hasOwnProperty(r.Guid)) {
+                var index = datas.indexOf(r);
                 var storage = copy[r.Guid];
                 if (r.Coin <= 0) {
                     r.Coin = storage.Coin;
@@ -99,12 +102,7 @@ function changeRankDatas(key, datas, copy) {
                 if (r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
-                if (key == KEY_Statistics_Coin) {
-                    log.debug("Copy:coin::" + storage.Coin);
-                    log.debug("Copy:Level:" + storage.Level);
-                    log.debug("Data:Coin:" + r.Coin);
-                    log.debug("Data:Level:" + r.Level);
-                }
+                datas[index] = r;
             }
         }
     }
