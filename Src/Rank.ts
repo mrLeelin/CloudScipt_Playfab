@@ -143,9 +143,17 @@ function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]:
                 if (r.Coin <= 0) {
                     r.Coin = storage.Coin;
                 }
-                if (r.Level <= 0) {
+                if (key == KEY_Statistics_Coin) {
+                    log.debug(String(r.Level));
+                }
+               
+                if (String(r.Level)=='undefind'||r.Level<=0) {
                     r.Level = storage.Level;
                 }
+                if (key == KEY_Statistics_Coin) {
+                    log.debug(r.Level.toString());
+                }
+              
                 if (r.Collection <= 0) {
                     r.Collection = storage.Collection;
                 }
