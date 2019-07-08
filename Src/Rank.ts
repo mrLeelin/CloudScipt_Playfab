@@ -62,8 +62,11 @@ function getRank(args: any): IRankResult {
     changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
     changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
 
-
-
+    let rank:IRankData=getSelf(copy);
+    result.CoinRanks.push(rank);
+    result.LevelRanks.push(rank);
+    result.InstanceRanks.push(rank);
+    result.LevelRanks.push(rank);
     result.id = Func_Code.SC_GET_RANKS;
     return result;
 }
@@ -113,6 +116,7 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
             }
             copy[rank.Guid] = storage;
         }
+
         return rankDatas;
     }
     return null;
@@ -137,6 +141,28 @@ function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]:
                 }
             }
         }
+    }
+
+}
+
+function getSelf(copy:{[key:string]:IStorage}):IRankData{
+    let titleInfo= server.GetUserAccountInfo({ PlayFabId: currentPlayerId }).UserInfo.TitleInfo;
+
+    let storage:IStorage=null;
+    if(copy.hasOwnProperty(currentPlayerId)){
+        storage=copy[currentPlayerId];
+    }
+   
+    return{
+        Guid:currentPlayerId,
+        Rank:-1,
+        ImageUrl:titleInfo.AvatarUrl,
+        Name:titleInfo.DisplayName,
+        Level:storage==null?storage.Level:0,
+        Coin:storage==null?storage.Coin:0,
+        Instance:storage==null?storage.Instance:0,
+        Collection:storage==null?storage.Collection:0,
+        IsSelf:true,
     }
 }
 
