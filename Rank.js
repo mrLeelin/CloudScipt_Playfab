@@ -13,10 +13,11 @@ function getRank(args) {
     result.CollectionRanks = getRankDatas(KEY_Statistics_Collection, maxNum, constrains, copy);
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
-    result.CoinRanks = changeRankDatas(result.CoinRanks, copy);
-    result.CollectionRanks = changeRankDatas(result.CollectionRanks, copy);
-    result.InstanceRanks = changeRankDatas(result.InstanceRanks, copy);
-    result.LevelRanks = changeRankDatas(result.LevelRanks, copy);
+    result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
+    result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
+    result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
+    result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
+    log.debug(result.CoinRanks[0].Level.toString());
     result.id = Func_Code.SC_GET_RANKS;
     return result;
 }
@@ -75,7 +76,7 @@ function getRankDatas(key, max, constranins, copy) {
     }
     return null;
 }
-function changeRankDatas(datas, copy) {
+function changeRankDatas(key, datas, copy) {
     if (datas != null) {
         for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
             var r = datas_1[_i];
@@ -92,6 +93,12 @@ function changeRankDatas(datas, copy) {
                 }
                 if (r.Instance <= 0) {
                     r.Instance = storage.Instance;
+                }
+                if (key == KEY_Statistics_Coin) {
+                    log.debug("Copy:coin::" + storage.Coin);
+                    log.debug("Copy:Level:" + storage.Level);
+                    log.debug("Data:Coin:" + r.Coin);
+                    log.debug("Data:Level:" + r.Level);
                 }
             }
         }

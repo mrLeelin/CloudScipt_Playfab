@@ -55,10 +55,14 @@ function getRank(args: any) :IRankResult{
     result.CollectionRanks = getRankDatas(KEY_Statistics_Collection, maxNum, constrains, copy);
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
-    result.CoinRanks = changeRankDatas(result.CoinRanks, copy);
-    result.CollectionRanks = changeRankDatas(result.CollectionRanks, copy);
-    result.InstanceRanks = changeRankDatas(result.InstanceRanks, copy);
-    result.LevelRanks = changeRankDatas(result.LevelRanks, copy);
+    
+    result.CoinRanks = changeRankDatas(KEY_Statistics_Coin,result.CoinRanks, copy);
+    result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection,result.CollectionRanks, copy);
+    result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
+    result.LevelRanks = changeRankDatas(KEY_Statistics_Level,result.LevelRanks, copy);
+   
+    log.debug(result.CoinRanks[0].Level.toString());
+   
     result.id=Func_Code.SC_GET_RANKS;
    return result;
 }
@@ -113,7 +117,7 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
     return null;
 }
 
-function changeRankDatas(datas: IRankData[], copy: { [key: string]: IStorage }): IRankData[] {
+function changeRankDatas(key:string, datas: IRankData[], copy: { [key: string]: IStorage }): IRankData[] {
     if (datas != null) {
         for (const r of datas) {
             if (copy.hasOwnProperty(r.Guid)) {
@@ -130,8 +134,18 @@ function changeRankDatas(datas: IRankData[], copy: { [key: string]: IStorage }):
                 if (r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
+                
+                if(key==KEY_Statistics_Coin){
+                    log.debug("Copy:coin::"+storage.Coin);
+                    log.debug("Copy:Level:"+storage.Level);
+                    log.debug("Data:Coin:"+r.Coin);
+                    log.debug("Data:Level:"+r.Level);
+                }
+               
             }
+           
         }
+
     }
     return datas;
 }
