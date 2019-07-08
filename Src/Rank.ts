@@ -58,8 +58,11 @@ function getRank(args: any): IRankResult {
 
 
     result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
-
-    result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
+    for (const iterator of  result.CoinRanks) 
+{
+    log.info("After:"+JSON.stringify(iterator));
+}
+    changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
     result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
     result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
 
@@ -139,6 +142,9 @@ function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]:
                 }
                 datas[index] = r;
             }
+        }
+        for (const iterator of datas) {
+            log.debug("Centent:"+JSON.stringify(iterator));
         }
     }
     return datas;

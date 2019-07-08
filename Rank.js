@@ -14,7 +14,11 @@ function getRank(args) {
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
     result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
-    result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
+    for (var _i = 0, _a = result.CoinRanks; _i < _a.length; _i++) {
+        var iterator = _a[_i];
+        log.info("After:" + JSON.stringify(iterator));
+    }
+    changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
     result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
     result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
     result.id = Func_Code.SC_GET_RANKS;
@@ -96,6 +100,10 @@ function changeRankDatas(key, datas, copy) {
                 }
                 datas[index] = r;
             }
+        }
+        for (var _a = 0, datas_2 = datas; _a < datas_2.length; _a++) {
+            var iterator = datas_2[_a];
+            log.debug("Centent:" + JSON.stringify(iterator));
         }
     }
     return datas;
