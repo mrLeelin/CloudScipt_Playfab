@@ -15,6 +15,7 @@ var KEY_Inventory = "__InventoryDefaultImpSaveData__";
 var KEY_Currency = "__VirtualCurrencyKey__";
 var KEY_Account = "__SimpleAccount__";
 var KEY_Miscell = "Miscellaneous";
+var KEY_Guide = "__GuideService__";
 var KEY_GlobalSendGiftCount = "GlobalSendGiftCount";
 var KEY_GlobalGiveGiftCount = "GlobalGiveGiftCount";
 var KEY_GlobalAllPlayersSegmentId = "AllPlayersSegmentId";

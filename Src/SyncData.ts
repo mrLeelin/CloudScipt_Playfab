@@ -231,6 +231,8 @@ function get(entityId: string, entityType: string, key: string): IData {
             return getCurrencyData(key);
         case KEY_Account:
             return getAccountInfo(entityId, entityType, key);
+        case KEY_Guide:
+            return getTitleData(key);
         default:
             return getTitleData(key);
     }
@@ -254,6 +256,8 @@ function set(time: number, entityId: string, entityType: string, key: string, da
             return setCurrencyData(time, key, data);
         case KEY_Account:
             return setAccountInfo(time, entityId, entityType, key, data);
+        case KEY_Guide:
+            return setGuide(time,key,data);
         default:
             return setTitleData(time, key, data);
     }
@@ -626,6 +630,11 @@ function setLevelInfo(time: number, key: string, data: IData): IData {
     return data;
 }
 
+function setGuide(time:number,key:string,data:IData):IData{
+    //TODO
+
+    return setTitleData(time,key,data);
+}
 
 
 

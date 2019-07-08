@@ -112,6 +112,8 @@ function get(entityId, entityType, key) {
             return getCurrencyData(key);
         case KEY_Account:
             return getAccountInfo(entityId, entityType, key);
+        case KEY_Guide:
+            return getTitleData(key);
         default:
             return getTitleData(key);
     }
@@ -133,6 +135,8 @@ function set(time, entityId, entityType, key, data) {
             return setCurrencyData(time, key, data);
         case KEY_Account:
             return setAccountInfo(time, entityId, entityType, key, data);
+        case KEY_Guide:
+            return setGuide(time, key, data);
         default:
             return setTitleData(time, key, data);
     }
@@ -457,4 +461,7 @@ function setLevelInfo(time, key, data) {
     data.TimeStamp = time;
     setTimeStampForKey(key, time);
     return data;
+}
+function setGuide(time, key, data) {
+    return setTitleData(time, key, data);
 }

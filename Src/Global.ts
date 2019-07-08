@@ -26,6 +26,7 @@ const KEY_Inventory: string = "__InventoryDefaultImpSaveData__";
 const KEY_Currency: string = "__VirtualCurrencyKey__";
 const KEY_Account: string = "__SimpleAccount__";
 const KEY_Miscell:string="Miscellaneous";
+const KEY_Guide:string="__GuideService__";
 
 //////////////////////////GlobalKey///////////////////////////////////////////////
 const KEY_GlobalSendGiftCount: string = "GlobalSendGiftCount";
