@@ -86,16 +86,17 @@ function changeRankDatas(key, datas, copy) {
             if (copy.hasOwnProperty(r.Guid)) {
                 var index = datas.indexOf(r);
                 var storage = copy[r.Guid];
-                if (String(r.Coin) == 'undefind' || r.Coin <= 0) {
+                if (String(r.Coin) == 'undefined' || r.Coin <= 0) {
                     r.Coin = storage.Coin;
                 }
-                if (String(r.Level) == 'undefind' || r.Level <= 0) {
+                log.debug(String(r.Level) + " _______________");
+                if (String(r.Level) == 'undefined' || r.Level <= 0) {
                     r.Level = storage.Level;
                 }
-                if (String(r.Collection) == 'undefind' || r.Collection <= 0) {
+                if (String(r.Collection) == 'undefined' || r.Collection <= 0) {
                     r.Collection = storage.Collection;
                 }
-                if (String(r.Instance) == 'undefind' || r.Instance <= 0) {
+                if (String(r.Instance) == 'undefined' || r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
                 datas[index] = r;
