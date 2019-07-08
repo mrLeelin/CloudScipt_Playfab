@@ -57,14 +57,10 @@ function getRank(args: any): IRankResult {
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
 
 
-    result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
-    for (const iterator of  result.CoinRanks) 
-{
-    log.info("After:"+JSON.stringify(iterator));
-}
+    changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
     changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
-    result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
-    result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
+    changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
+    changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
 
 
 
@@ -122,16 +118,14 @@ function getRankDatas(key: string, max: number, constranins: PlayFabServerModels
     return null;
 }
 
-function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]: IStorage }): IRankData[] {
+function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]: IStorage }) {
     if (datas != null) {
         for (const r of datas) {
             if (copy.hasOwnProperty(r.Guid)) {
-                let index: number = datas.indexOf(r);
                 let storage = copy[r.Guid];
                 if (String(r.Coin)=='undefined'||r.Coin<=0) {
                     r.Coin = storage.Coin;
                 }
-                log.debug(String(r.Level)+" _______________");
                 if (String(r.Level)=='undefined'||r.Level<=0) {
                     r.Level = storage.Level;
                 }
@@ -141,14 +135,9 @@ function changeRankDatas(key: string, datas: IRankData[], copy: { [key: string]:
                 if (String(r.Instance)=='undefined'||r.Instance<=0) {
                     r.Instance = storage.Instance;
                 }
-                datas[index] = r;
             }
         }
-        for (const iterator of datas) {
-            log.debug("Centent:"+JSON.stringify(iterator));
-        }
     }
-    return datas;
 }
 
 

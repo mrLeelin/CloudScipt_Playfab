@@ -13,14 +13,10 @@ function getRank(args) {
     result.CollectionRanks = getRankDatas(KEY_Statistics_Collection, maxNum, constrains, copy);
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
-    result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
-    for (var _i = 0, _a = result.CoinRanks; _i < _a.length; _i++) {
-        var iterator = _a[_i];
-        log.info("After:" + JSON.stringify(iterator));
-    }
+    changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
     changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
-    result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
-    result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
+    changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
+    changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
     result.id = Func_Code.SC_GET_RANKS;
     return result;
 }
@@ -84,12 +80,10 @@ function changeRankDatas(key, datas, copy) {
         for (var _i = 0, datas_1 = datas; _i < datas_1.length; _i++) {
             var r = datas_1[_i];
             if (copy.hasOwnProperty(r.Guid)) {
-                var index = datas.indexOf(r);
                 var storage = copy[r.Guid];
                 if (String(r.Coin) == 'undefined' || r.Coin <= 0) {
                     r.Coin = storage.Coin;
                 }
-                log.debug(String(r.Level) + " _______________");
                 if (String(r.Level) == 'undefined' || r.Level <= 0) {
                     r.Level = storage.Level;
                 }
@@ -99,13 +93,7 @@ function changeRankDatas(key, datas, copy) {
                 if (String(r.Instance) == 'undefined' || r.Instance <= 0) {
                     r.Instance = storage.Instance;
                 }
-                datas[index] = r;
             }
         }
-        for (var _a = 0, datas_2 = datas; _a < datas_2.length; _a++) {
-            var iterator = datas_2[_a];
-            log.debug("Centent:" + JSON.stringify(iterator));
-        }
     }
-    return datas;
 }
