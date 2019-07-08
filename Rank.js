@@ -13,11 +13,16 @@ function getRank(args) {
     result.CollectionRanks = getRankDatas(KEY_Statistics_Collection, maxNum, constrains, copy);
     result.InstanceRanks = getRankDatas(KEY_Statistics_Instance, maxNum, constrains, copy);
     result.LevelRanks = getRankDatas(KEY_Statistics_Level, maxNum, constrains, copy);
+    for (var key in copy) {
+        if (copy.hasOwnProperty(key)) {
+            var element = copy[key];
+            log.debug("Copy Json" + JSON.stringify(element));
+        }
+    }
     result.CoinRanks = changeRankDatas(KEY_Statistics_Coin, result.CoinRanks, copy);
     result.CollectionRanks = changeRankDatas(KEY_Statistics_Collection, result.CollectionRanks, copy);
     result.InstanceRanks = changeRankDatas(KEY_Statistics_Instance, result.InstanceRanks, copy);
     result.LevelRanks = changeRankDatas(KEY_Statistics_Level, result.LevelRanks, copy);
-    log.debug(result.CoinRanks[0].Level.toString());
     result.id = Func_Code.SC_GET_RANKS;
     return result;
 }
