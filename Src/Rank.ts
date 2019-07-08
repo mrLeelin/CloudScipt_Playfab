@@ -158,10 +158,10 @@ function getSelf(copy:{[key:string]:IStorage}):IRankData{
         Rank:-1,
         ImageUrl:titleInfo.AvatarUrl,
         Name:titleInfo.DisplayName,
-        Level:storage==null?storage.Level:0,
-        Coin:storage==null?storage.Coin:0,
-        Instance:storage==null?storage.Instance:0,
-        Collection:storage==null?storage.Collection:0,
+        Level:storage!=null?storage.Level:0,
+        Coin:storage!=null?storage.Coin:0,
+        Instance:storage!=null?storage.Instance:0,
+        Collection:storage!=null?storage.Collection:0,
         IsSelf:true,
     }
 }
