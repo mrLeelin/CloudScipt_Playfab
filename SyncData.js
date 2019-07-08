@@ -52,16 +52,19 @@ function syncData(args) {
             Datas: null,
             TimeStamp: 0,
             Count: 0,
-            ClientToServer: args.ClientToServer
+            ClientToServer: args.ClientToServer,
+            FinalData: args.FinalData,
         };
     }
     var tS = GetTimeStamp();
-    var s = {};
-    s[KEY_SYNC_VERSION] = tS.toString();
-    server.UpdateUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
+    if (args.FinalData) {
+        var s = {};
+        s[KEY_SYNC_VERSION] = tS.toString();
+        server.UpdateUserPublisherInternalData({
+            PlayFabId: currentPlayerId,
+            Data: s
+        });
+    }
     var keys = args.Keys;
     var Values = args.Values;
     var entityId = args.EntityId;
@@ -92,7 +95,8 @@ function syncData(args) {
         Datas: ret,
         Count: count,
         TimeStamp: tS,
-        ClientToServer: args.ClientToServer
+        ClientToServer: args.ClientToServer,
+        FinalData: args.FinalData
     };
 }
 function get(entityId, entityType, key) {

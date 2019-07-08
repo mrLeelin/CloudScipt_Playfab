@@ -15,6 +15,7 @@ interface ISyncClientToServiceRequest {
     EntityType: string;
     ClientToServer: boolean;
     MaxClientTimeStamp: number;
+    FinalData:boolean;
 
 }
 interface ISyncClientToServiceResult extends IResult {
@@ -22,6 +23,7 @@ interface ISyncClientToServiceResult extends IResult {
     TimeStamp: number;
     ClientToServer: boolean;
     Count:number;
+    FinalData:boolean;
 }
 interface ICompareDataVersionsResult extends IResult {
     TimeStamp?: number;
@@ -112,18 +114,19 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
             Datas: null,
             TimeStamp: 0,
             Count:0,
-            ClientToServer: args.ClientToServer
+            ClientToServer: args.ClientToServer,
+            FinalData:args.FinalData,
         };
     }
-
     let tS: number = GetTimeStamp();
-    let s: { [ket: string]: string } = {};
-    s[KEY_SYNC_VERSION] = tS.toString();
-    server.UpdateUserPublisherInternalData({
-        PlayFabId: currentPlayerId,
-        Data: s
-    });
-
+    if(args.FinalData){       
+        let s: { [ket: string]: string } = {};
+        s[KEY_SYNC_VERSION] = tS.toString();
+        server.UpdateUserPublisherInternalData({
+            PlayFabId: currentPlayerId,
+            Data: s
+        });    
+    }
     let keys: string[] = args.Keys;
     let Values: IData[] = args.Values;
     let entityId: string = args.EntityId;
@@ -207,7 +210,8 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         Datas: ret,
         Count:count,
         TimeStamp: tS,
-        ClientToServer: args.ClientToServer
+        ClientToServer: args.ClientToServer,
+        FinalData:args.FinalData
     };
 }
 
