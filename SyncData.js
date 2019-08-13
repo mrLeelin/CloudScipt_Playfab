@@ -105,7 +105,6 @@ function get(entityId, entityType, key) {
         case KEY_Level:
             return getLevelInfo(key);
         case KEY_Inventory:
-            return getItems(key);
         case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
@@ -128,7 +127,6 @@ function set(time, entityId, entityType, key, data) {
         case KEY_Level:
             return setLevelInfo(time, key, data);
         case KEY_Inventory:
-            return setItems(time, key, data);
         case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
@@ -241,6 +239,31 @@ function setTitleData(time, key, data) {
         var progress = JSON.parse(data.Progress);
         var ids = progress['Keys'];
         refreshStatistics(KEY_Statistics_Instance, ids.length);
+    }
+    if (key == KEY_Inventory) {
+        var progress = JSON.parse(data.Progress);
+        var inventoryItems = progress['items'];
+        var version = getGlobalTitleData(true, KEY_GlobalCatalogVersion);
+        var catalogs = server.GetCatalogItems({ CatalogVersion: version }).Catalog;
+        var collection_number = 0;
+        for (var _i = 0, inventoryItems_1 = inventoryItems; _i < inventoryItems_1.length; _i++) {
+            var item = inventoryItems_1[_i];
+            if (item.ID <= 0) {
+                continue;
+            }
+            for (var _a = 0, catalogs_1 = catalogs; _a < catalogs_1.length; _a++) {
+                var log_1 = catalogs_1[_a];
+                if (log_1.ItemId == item.ID.toString()) {
+                    if (log_1.ItemClass == "Collection") {
+                        collection_number++;
+                    }
+                    break;
+                }
+            }
+        }
+        if (collection_number > 0) {
+            refreshStatistics(KEY_Statistics_Collection, collection_number);
+        }
     }
     return data;
 }
@@ -373,9 +396,9 @@ function setItems(time, key, data) {
     for (var _a = 0, inventoryItem_1 = inventoryItem; _a < inventoryItem_1.length; _a++) {
         var item = inventoryItem_1[_a];
         var isExist = false;
-        for (var _b = 0, catalogs_1 = catalogs; _b < catalogs_1.length; _b++) {
-            var log_1 = catalogs_1[_b];
-            if (item.ID.toString() == log_1.ItemId) {
+        for (var _b = 0, catalogs_2 = catalogs; _b < catalogs_2.length; _b++) {
+            var log_2 = catalogs_2[_b];
+            if (item.ID.toString() == log_2.ItemId) {
                 isExist = true;
                 break;
             }

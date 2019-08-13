@@ -15,15 +15,15 @@ interface ISyncClientToServiceRequest {
     EntityType: string;
     ClientToServer: boolean;
     MaxClientTimeStamp: number;
-    FinalData:boolean;
+    FinalData: boolean;
 
 }
 interface ISyncClientToServiceResult extends IResult {
     Datas: { [key: string]: IData };
     TimeStamp: number;
     ClientToServer: boolean;
-    Count:number;
-    FinalData:boolean;
+    Count: number;
+    FinalData: boolean;
 }
 interface ICompareDataVersionsResult extends IResult {
     TimeStamp?: number;
@@ -113,20 +113,20 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: null,
             TimeStamp: 0,
-            Count:0,
+            Count: 0,
             ClientToServer: args.ClientToServer,
-            FinalData:args.FinalData,
+            FinalData: args.FinalData,
         };
     }
     let tS: number = GetTimeStamp();
-    if(args.FinalData){       
+    if (args.FinalData) {
         let s: { [ket: string]: string } = {};
         s[KEY_SYNC_VERSION] = tS.toString();
         server.UpdateUserPublisherInternalData({
             PlayFabId: currentPlayerId,
             Data: s
-        }); 
-        log.info("All SyncData Successful");   
+        });
+        log.info("All SyncData Successful");
     }
     let keys: string[] = args.Keys;
     let Values: IData[] = args.Values;
@@ -161,9 +161,9 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
                 ret[key] = data;
             }
         }
-        log.info("Key: "+key+". "+(args.ClientToServer?"Client To Server Successful":"Server To Client Successful"));
+        log.info("Key: " + key + ". " + (args.ClientToServer ? "Client To Server Successful" : "Server To Client Successful"));
     }
-    
+
 
     /*
 
@@ -209,10 +209,10 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
     return {
         id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
         Datas: ret,
-        Count:count,
+        Count: count,
         TimeStamp: tS,
         ClientToServer: args.ClientToServer,
-        FinalData:args.FinalData
+        FinalData: args.FinalData
     };
 }
 
@@ -224,7 +224,6 @@ function get(entityId: string, entityType: string, key: string): IData {
         case KEY_Level:
             return getLevelInfo(key);
         case KEY_Inventory:
-            return getItems(key);
         case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
@@ -249,7 +248,6 @@ function set(time: number, entityId: string, entityType: string, key: string, da
         case KEY_Level:
             return setLevelInfo(time, key, data);
         case KEY_Inventory:
-            return setItems(time, key, data);
         case KEY_QuestData:
         case KEY_GeneralGameData:
         case KEY_AchievementData:
@@ -262,7 +260,7 @@ function set(time: number, entityId: string, entityType: string, key: string, da
         case KEY_Account:
             return setAccountInfo(time, entityId, entityType, key, data);
         case KEY_Guide:
-            return setGuide(time,key,data);
+            return setGuide(time, key, data);
         default:
             return setTitleData(time, key, data);
     }
@@ -374,6 +372,33 @@ function setTitleData(time: number, key: string, data: IData): IData {
         let ids: number[] = progress['Keys'];
         refreshStatistics(KEY_Statistics_Instance, ids.length);
     }
+    if (key == KEY_Inventory) {
+        let progress: { [key: string]: any } = JSON.parse(data.Progress);
+        let inventoryItems: IInventoryItem[] = progress['items'];
+
+        let version = getGlobalTitleData(true, KEY_GlobalCatalogVersion);
+        let catalogs = server.GetCatalogItems({ CatalogVersion: version }).Catalog;
+
+        let collection_number = 0;
+        for (const item of inventoryItems) {
+            if (item.ID <= 0) {
+                continue;
+            }
+            for (const log of catalogs) {
+
+                if (log.ItemId == item.ID.toString()) {
+                    if (log.ItemClass == "Collection") {
+                        collection_number++;
+                    }
+                    break;
+                }
+            }
+        }
+        if(collection_number>0){
+            refreshStatistics(KEY_Statistics_Collection, collection_number);
+        }
+    }
+
     return data;
 }
 
@@ -387,7 +412,7 @@ function getCurrencyData(key: string): IData {
     for (const key in result.VirtualCurrency) {
         if (result.VirtualCurrency.hasOwnProperty(key)) {
             const element = result.VirtualCurrency[key];
-            let new_key=key.slice(0,1)+key.substr(1,1).toLowerCase();
+            let new_key = key.slice(0, 1) + key.substr(1, 1).toLowerCase();
             type.push(CurrencyType[new_key]);
             count.push(element);
         }
@@ -635,10 +660,10 @@ function setLevelInfo(time: number, key: string, data: IData): IData {
     return data;
 }
 
-function setGuide(time:number,key:string,data:IData):IData{
+function setGuide(time: number, key: string, data: IData): IData {
     //TODO
 
-    return setTitleData(time,key,data);
+    return setTitleData(time, key, data);
 }
 
 
