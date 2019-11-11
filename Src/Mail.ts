@@ -9,11 +9,11 @@ interface IGetMailsResult extends IResult {
 
 interface IRmMailsResult extends IResult {
 
-    Code:RmMailsResultCode;
-    Count:number;
-    Mails?:IMail[];
-    ContentCurrency?:{[key:string]:number},
-    ContentItems?:{[key:number]:number};
+    Code: RmMailsResultCode;
+    Count: number;
+    Mails?: IMail[];
+    ContentCurrency?: { [key: string]: number },
+    ContentItems?: { [key: number]: number };
 }
 
 interface IMail {
@@ -24,6 +24,7 @@ interface IMail {
     ItemCount?: number[];
     ItemType?: ItemType[];
     Count: number;
+    Msg?: string;
 }
 
 interface ISender {
@@ -37,7 +38,7 @@ interface IClientRmEmailsRequest {
     MailIds: number[];
 }
 
-enum RmMailsResultCode{
+enum RmMailsResultCode {
     NoMail,
     Successful,
 }
@@ -65,52 +66,52 @@ function clientGetMails(args: any): IGetMailsResult {
 
 function clientRmEmails(args: IClientRmEmailsRequest): IRmMailsResult {
 
-    let mails= getMailsForIds(currentPlayerId,args.MailIds);
-    if(mails==null||mails.length<=0){
-        return{
-            id:Func_Code.SC_RM_MAILS,
-            Code:RmMailsResultCode.NoMail,
-            Count:0
+    let mails = getMailsForIds(currentPlayerId, args.MailIds);
+    if (mails == null || mails.length <= 0) {
+        return {
+            id: Func_Code.SC_RM_MAILS,
+            Code: RmMailsResultCode.NoMail,
+            Count: 0
         };
     }
     if (!rmMails(currentPlayerId, args.MailIds)) {
         log.error('you remove mail is invaild');
         return null;
     }
-    let currency:{[key:string]:number}={}
-    let items:{[key:number]:number}={}
+    let currency: { [key: string]: number } = {}
+    let items: { [key: number]: number } = {}
     for (const m of mails) {
-        if(m.Count>0){
+        if (m.Count > 0) {
             for (let i = 0; i < m.ItemType.length; i++) {
-                if(m.ItemType[i]==0){
+                if (m.ItemType[i] == 0) {
                     //Currency
-                    let key:string=CurrencyType[m.ItemId[i]];
-                    let oldCount:number=0;
-                    if(currency.hasOwnProperty(key)){
-                        oldCount=currency[key];
+                    let key: string = CurrencyType[m.ItemId[i]];
+                    let oldCount: number = 0;
+                    if (currency.hasOwnProperty(key)) {
+                        oldCount = currency[key];
                     }
-                    let count:number=oldCount+m.ItemCount[i];
-                    currency[key]=count;             
-                }else{
+                    let count: number = oldCount + m.ItemCount[i];
+                    currency[key] = count;
+                } else {
                     //Item
-                    let oldCount:number=0;
-                    if(items.hasOwnProperty(m.ItemId[i])){
-                        oldCount=items[m.ItemId[i]];
+                    let oldCount: number = 0;
+                    if (items.hasOwnProperty(m.ItemId[i])) {
+                        oldCount = items[m.ItemId[i]];
                     }
-                    let count:number=oldCount+m.ItemCount[i];
-                    items[m.ItemId[i]]=count;
-                }             
+                    let count: number = oldCount + m.ItemCount[i];
+                    items[m.ItemId[i]] = count;
+                }
             }
         }
     }
-    let allMails=getMails(currentPlayerId);
+    let allMails = getMails(currentPlayerId);
     return {
         id: Func_Code.SC_RM_MAILS,
-        Count:allMails==null?0:allMails.length,
-        Mails:allMails,
-        ContentCurrency:currency,
-        ContentItems:items,
-        Code:RmMailsResultCode.Successful
+        Count: allMails == null ? 0 : allMails.length,
+        Mails: allMails,
+        ContentCurrency: currency,
+        ContentItems: items,
+        Code: RmMailsResultCode.Successful
     }
 }
 
@@ -147,7 +148,7 @@ function refreshMails(timeTamp: number) {
  * @param count 物品数量
  * @param sender 发送人 
  */
-function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count?: number[], sender?: ISender) {
+function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count?: number[], msg?: string, sender?: ISender) {
 
     if (sender == null) {
         let userInfo = server.GetUserAccountInfo({
@@ -165,7 +166,8 @@ function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count
         ItemId: itemId,
         ItemCount: count,
         ItemType: itemType,
-        Count: itemId == null ? 0 : itemId.length
+        Count: itemId == null ? 0 : itemId.length,
+        Msg: msg,
     };
     if (!addMail(id, mail)) {
         log.error('you send Email is invaild');
@@ -181,7 +183,7 @@ function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count
  */
 function SendOneItemToEmail(id: string, itemType: ItemType, itemId: number, count: number, sender?: ISender) {
 
-    SendToEmail(id, [itemType], [itemId], [count], sender);
+    SendToEmail(id, [itemType], [itemId], [count],"",sender);
 }
 
 function getMails(playId: string): IMail[] {
@@ -205,15 +207,15 @@ function getMails(playId: string): IMail[] {
 }
 function getMailsForIds(playId: string, ids?: number[]): IMail[] {
     let allMalils = getMails(playId);
-    if(allMalils==null){
+    if (allMalils == null) {
         return null;
     }
-    if(ids==null||ids.length<=0){
+    if (ids == null || ids.length <= 0) {
         return allMalils;
     }
-    let mails:IMail[]=[]
+    let mails: IMail[] = []
     for (const m of allMalils) {
-        if(ids.indexOf(m.MailId)!=-1){
+        if (ids.indexOf(m.MailId) != -1) {
             mails.push(m);
         }
     }
@@ -275,7 +277,7 @@ function rmMails(playId: string, ids: number[]): boolean {
         let index: number = mails.indexOf(m);
         mails.splice(index, 1);
     }
-    let json_text: string = mails.length <= 0 ? '' : JSON.stringify(mails);
+    let json_text: string = mails.length <= 0 ? null : JSON.stringify(mails);
     server.UpdateUserData({
         PlayFabId: playId,
         Data: { [KEY_Mail]: json_text }

@@ -81,7 +81,7 @@ enum Func_Code {
 }
 
 interface IResult{
-    id:Func_Code;
+id:Func_Code;
 }
 
 enum ItemType {

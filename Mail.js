@@ -91,7 +91,7 @@ function refreshMails(timeTamp) {
         }
     }
 }
-function SendToEmail(id, itemType, itemId, count, sender) {
+function SendToEmail(id, itemType, itemId, count, msg, sender) {
     if (sender == null) {
         var userInfo = server.GetUserAccountInfo({
             PlayFabId: currentPlayerId
@@ -107,14 +107,15 @@ function SendToEmail(id, itemType, itemId, count, sender) {
         ItemId: itemId,
         ItemCount: count,
         ItemType: itemType,
-        Count: itemId == null ? 0 : itemId.length
+        Count: itemId == null ? 0 : itemId.length,
+        Msg: msg,
     };
     if (!addMail(id, mail)) {
         log.error('you send Email is invaild');
     }
 }
 function SendOneItemToEmail(id, itemType, itemId, count, sender) {
-    SendToEmail(id, [itemType], [itemId], [count], sender);
+    SendToEmail(id, [itemType], [itemId], [count], "", sender);
 }
 function getMails(playId) {
     var data = server.GetUserData({
@@ -208,7 +209,7 @@ function rmMails(playId, ids) {
         var index = mails.indexOf(m);
         mails.splice(index, 1);
     }
-    var json_text = mails.length <= 0 ? '' : JSON.stringify(mails);
+    var json_text = mails.length <= 0 ? null : JSON.stringify(mails);
     server.UpdateUserData({
         PlayFabId: playId,
         Data: (_a = {}, _a[KEY_Mail] = json_text, _a)

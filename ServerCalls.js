@@ -1,6 +1,7 @@
 handlers.SendMailFormServer = SendMailFormServer;
 handlers.RefreshEveryDay = RefreshEveryDay;
 function SendMailFormServer(args, content) {
+    var msg = args['Msg'];
     var type = args['Types'];
     var itemIds = args['ItemIds'];
     var counts = args['ItemCounts'];
@@ -9,7 +10,7 @@ function SendMailFormServer(args, content) {
         Level: 0,
         ImageUrl: ''
     };
-    SendToEmail(currentPlayerId, type, itemIds, counts, sender);
+    SendToEmail(currentPlayerId, type, itemIds, counts, msg, sender);
 }
 function RefreshEveryDay(args, content) {
     var timeTamp = GetTimeStamp();
