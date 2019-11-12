@@ -6,6 +6,7 @@ handlers.RefreshEveryDay=RefreshEveryDay;
  */
 function SendMailFormServer(args:any,content:IPlayFabContext){
 
+    let title:string=args['Title'];
     let msg:string=args['Msg'];
     let type:ItemType[]=args['Types'];
     let itemIds:number[]=args['ItemIds'];
@@ -15,7 +16,7 @@ function SendMailFormServer(args:any,content:IPlayFabContext){
         Level:0,
         ImageUrl:''
     };
-    SendToEmail(currentPlayerId,type,itemIds,counts,msg, sender);
+    SendToEmail(currentPlayerId,type,itemIds,counts,msg, title, sender);
 }
 
 /**

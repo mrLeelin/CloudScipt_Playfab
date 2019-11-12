@@ -91,7 +91,7 @@ function refreshMails(timeTamp) {
         }
     }
 }
-function SendToEmail(id, itemType, itemId, count, msg, sender) {
+function SendToEmail(id, itemType, itemId, count, msg, title, sender) {
     if (sender == null) {
         var userInfo = server.GetUserAccountInfo({
             PlayFabId: currentPlayerId
@@ -115,7 +115,7 @@ function SendToEmail(id, itemType, itemId, count, msg, sender) {
     }
 }
 function SendOneItemToEmail(id, itemType, itemId, count, sender) {
-    SendToEmail(id, [itemType], [itemId], [count], "", sender);
+    SendToEmail(id, [itemType], [itemId], [count], "", "", sender);
 }
 function getMails(playId) {
     var data = server.GetUserData({

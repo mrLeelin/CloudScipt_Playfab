@@ -25,6 +25,7 @@ interface IMail {
     ItemType?: ItemType[];
     Count: number;
     Msg?: string;
+    Title?:string;
 }
 
 interface ISender {
@@ -148,7 +149,7 @@ function refreshMails(timeTamp: number) {
  * @param count 物品数量
  * @param sender 发送人 
  */
-function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count?: number[], msg?: string, sender?: ISender) {
+function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count?: number[], msg?: string,title?:string, sender?: ISender) {
 
     if (sender == null) {
         let userInfo = server.GetUserAccountInfo({
@@ -183,7 +184,7 @@ function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count
  */
 function SendOneItemToEmail(id: string, itemType: ItemType, itemId: number, count: number, sender?: ISender) {
 
-    SendToEmail(id, [itemType], [itemId], [count],"",sender);
+    SendToEmail(id, [itemType], [itemId], [count],"","",sender);
 }
 
 function getMails(playId: string): IMail[] {
