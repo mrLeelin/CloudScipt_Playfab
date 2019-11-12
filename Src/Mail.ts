@@ -169,6 +169,7 @@ function SendToEmail(id: string, itemType?: ItemType[], itemId?: number[], count
         ItemType: itemType,
         Count: itemId == null ? 0 : itemId.length,
         Msg: msg,
+        Title:title,
     };
     if (!addMail(id, mail)) {
         log.error('you send Email is invaild');
