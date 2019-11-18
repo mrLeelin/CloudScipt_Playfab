@@ -16,6 +16,18 @@ function SendMailFormServer(args:any,content:IPlayFabContext){
         Level:0,
         ImageUrl:''
     };
+    //Check Args
+    let count:number=type.length;
+    
+    if(itemIds.length!=count){
+        log.error("you input arg error.Types Length:"+count+". ItemIds Length:"+itemIds.length);
+        return;
+    }
+    if(counts.length!=count){
+        log.error("you input arg error.Types Length:"+count+". ItemCounts Length:"+itemIds.length);
+        return;
+    }
+
     SendToEmail(currentPlayerId,type,itemIds,counts,msg, title, sender);
 }
 

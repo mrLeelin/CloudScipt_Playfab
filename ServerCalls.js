@@ -11,6 +11,15 @@ function SendMailFormServer(args, content) {
         Level: 0,
         ImageUrl: ''
     };
+    var count = type.length;
+    if (itemIds.length != count) {
+        log.error("you input arg error.Types Length:" + count + ". ItemIds Length:" + itemIds.length);
+        return;
+    }
+    if (counts.length != count) {
+        log.error("you input arg error.Types Length:" + count + ". ItemCounts Length:" + itemIds.length);
+        return;
+    }
     SendToEmail(currentPlayerId, type, itemIds, counts, msg, title, sender);
 }
 function RefreshEveryDay(args, content) {
