@@ -108,6 +108,17 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
 function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult {
 
     let count: number = args.Count;
+
+    let tS: number = GetTimeStamp();
+    if (args.FinalData) {
+        let s: { [ket: string]: string } = {};
+        s[KEY_SYNC_VERSION] = tS.toString();
+        server.UpdateUserPublisherInternalData({
+            PlayFabId: currentPlayerId,
+            Data: s
+        });
+        log.info("All SyncData Successful");       
+    }
     if (args.ClientToServer && count <= 0) {
         return {
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
@@ -117,16 +128,6 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
             ClientToServer: args.ClientToServer,
             FinalData: args.FinalData,
         };
-    }
-    let tS: number = GetTimeStamp();
-    if (args.FinalData) {
-        let s: { [ket: string]: string } = {};
-        s[KEY_SYNC_VERSION] = tS.toString();
-        server.UpdateUserPublisherInternalData({
-            PlayFabId: currentPlayerId,
-            Data: s
-        });
-        log.info("All SyncData Successful");
     }
     let keys: string[] = args.Keys;
     let Values: IData[] = args.Values;
