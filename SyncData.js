@@ -60,7 +60,7 @@ function syncData(args) {
         return {
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: null,
-            TimeStamp: 0,
+            TimeStamp: tS,
             Count: 0,
             ClientToServer: args.ClientToServer,
             FinalData: args.FinalData,

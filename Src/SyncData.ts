@@ -122,12 +122,13 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
         return {
             id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
             Datas: null,
-            TimeStamp: 0,
+            TimeStamp: tS,
             Count: 0,
             ClientToServer: args.ClientToServer,
             FinalData: args.FinalData,
         };
     }
+
     let keys: string[] = args.Keys;
     let Values: IData[] = args.Values;
     let entityId: string = args.EntityId;
