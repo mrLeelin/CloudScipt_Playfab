@@ -108,7 +108,6 @@ function compareDataVersions(args: any): ICompareDataVersionsResult {
 function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult {
 
     let count: number = args.Count;
-
     let tS: number = GetTimeStamp();
     if (args.FinalData) {
         let s: { [ket: string]: string } = {};
@@ -117,7 +116,7 @@ function syncData(args: ISyncClientToServiceRequest): ISyncClientToServiceResult
             PlayFabId: currentPlayerId,
             Data: s
         });
-        log.info("All SyncData Successful");       
+        log.info("All SyncData Successful");      
     }
     if (args.ClientToServer && count <= 0) {
         return {

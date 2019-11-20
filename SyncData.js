@@ -46,16 +46,6 @@ function compareDataVersions(args) {
 }
 function syncData(args) {
     var count = args.Count;
-    if (args.ClientToServer && count <= 0) {
-        return {
-            id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
-            Datas: null,
-            TimeStamp: 0,
-            Count: 0,
-            ClientToServer: args.ClientToServer,
-            FinalData: args.FinalData,
-        };
-    }
     var tS = GetTimeStamp();
     if (args.FinalData) {
         var s = {};
@@ -65,6 +55,16 @@ function syncData(args) {
             Data: s
         });
         log.info("All SyncData Successful");
+    }
+    if (args.ClientToServer && count <= 0) {
+        return {
+            id: Func_Code.SC_SYNC_CLIENTTOSERVICE,
+            Datas: null,
+            TimeStamp: 0,
+            Count: 0,
+            ClientToServer: args.ClientToServer,
+            FinalData: args.FinalData,
+        };
     }
     var keys = args.Keys;
     var Values = args.Values;
