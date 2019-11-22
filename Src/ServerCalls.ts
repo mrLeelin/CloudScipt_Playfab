@@ -47,7 +47,7 @@ function RefreshEveryDay(args:any,content:IPlayFabContext){
  * @param args |
  * @param content 
  */
-function TestExecuteCloudScriptFromPost(args:any,content:IPlayFabContext){
+function TestExecuteCloudScriptFromPost(args:any){
     
     log.debug("-----hahhahaha");
     return "hahaha";

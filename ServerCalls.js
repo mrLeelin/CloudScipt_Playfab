@@ -26,7 +26,7 @@ function RefreshEveryDay(args, content) {
     var timeTamp = GetTimeStamp();
     refreshMails(timeTamp);
 }
-function TestExecuteCloudScriptFromPost(args, content) {
+function TestExecuteCloudScriptFromPost(args) {
     log.debug("-----hahhahaha");
     return "hahaha";
 }
