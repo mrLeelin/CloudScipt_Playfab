@@ -1,5 +1,6 @@
 handlers.SendMailFormServer = SendMailFormServer;
 handlers.RefreshEveryDay = RefreshEveryDay;
+handlers.TestExecuteCloudScriptFromPost = TestExecuteCloudScriptFromPost;
 function SendMailFormServer(args, content) {
     var title = args['Title'];
     var msg = args['Msg'];
