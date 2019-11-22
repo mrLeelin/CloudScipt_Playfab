@@ -1,5 +1,6 @@
 handlers.SendMailFormServer=SendMailFormServer;
 handlers.RefreshEveryDay=RefreshEveryDay;
+handlers.TestExecuteCloudScriptFromPost=TestExecuteCloudScriptFromPost;
 
 /**
  * 服务器发送邮件
