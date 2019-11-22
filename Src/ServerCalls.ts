@@ -42,4 +42,15 @@ function RefreshEveryDay(args:any,content:IPlayFabContext){
     refreshMails(timeTamp);
 }
 
+/**
+ * 测试Post请求 请求云脚本Api
+ * @param args |
+ * @param content 
+ */
+function TestExecuteCloudScriptFromPost(args:any,content:IPlayFabContext){
+    
+    log.debug("-----hahhahaha");
+    return "hahaha";
+}
+
 
